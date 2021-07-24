@@ -23,12 +23,13 @@ class DateObject:
     
     self.day = jsonData[self.rd][self.a]['day']
     self.week = jsonData[self.rd][self.a]['week']
-    self.weekday = jsonData[self.rd][self.a]['weekday']
-    self.month = jsonData[self.rd][self.a]['month']
+    self.weekday = jsonData[self.rd][self.a]['weekday'].strip("('").strip("'),")
+    self.month = jsonData[self.rd][self.a]['month'].strip("('").strip("'),")
     self.yearArabic = jsonData[self.rd][self.a]['year_arabic']
-    self.yearRoman = jsonData[self.rd][self.a]['year_roman']
+    self.yearRoman = jsonData[self.rd][self.a]['year_roman'].strip("('").strip("'),")
     self.sansculottides = jsonData[self.rd][self.a]['sansculottides']
-    self.formatted = jsonData[self.rd]['formatted'],
+    self.formatted = jsonData[self.rd]['formatted'].strip("('").strip("'),"),
     self.thing = 'test',
-    self.image = 'http://{domain}/i/{month}{day}.png'.format(domain = self.userDomain,month = self.month, day = self.day),
-    self.guid = jsonData['standard']['timestamp']
+    self.image = 'http://{domain}/i/{month}{day}.png'.format(domain = self.userDomain,month = self.month, day = self.day).strip("('").strip("'),"),
+    self.time = jsonData['standard']['formatted']
+
