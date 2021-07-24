@@ -1,4 +1,2 @@
-urllib
 flask
-json
 feedgen

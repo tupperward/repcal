@@ -1,0 +1,7 @@
+/Scripts
+/Lib
+/Include
+/.vscode
+/__pycache__
+pyvenv.cfg
+rss.xml
