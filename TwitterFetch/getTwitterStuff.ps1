@@ -1,5 +1,5 @@
 
-$options = Import-Csv $PSScriptRoot\csv\Thermidor.csv
+$options = Import-Csv $PSScriptRoot\csv\Ventose.csv
 
 foreach ($option in $options) {
   $dailyItem = $option.item
