@@ -1,7 +1,10 @@
 from flask import Flask
-import pathlib, socket, genRSS, asyncio, datetime
+import genRSS, asyncio, datetime, nest_asyncio, buildDb
 from time import sleep
 from dateObject import DateObject
+
+nest_asyncio.apply()
+
 
 
 async def dataUpdater():
@@ -17,28 +20,28 @@ async def dataUpdater():
   confirmThumb = genRSS.addEntryToFeed()
 
   if thumbprint == confirmThumb:
-    print('waiting')
-    await asyncio.sleep(1)
+    print('----- Waiting for update to repcal feed -----')
+    print(datetime.now())
+    await asyncio.sleep(3600)
   else:
-    print('updating')
+    print('------------- UPDATING RSS.XML --------------')
     genRSS.renewRssFile()
-    await asyncio.sleep(1)
+    await asyncio.sleep(5)
+  
+  await dataUpdater()
 
 async def main():
   genRSS.initFeed()
-  asyncio.create_task(dataUpdater())
+  updateTask = asyncio.create_task(dataUpdater())
+  loop = asyncio.get_event_loop()
+  await loop.run_forever()
+  await updateTask
   
-  
-def getIpAddress():
-  #From https://stackoverflow.com/a/166589/379566
-  s = socket.socket(socket.AF_INET, socket.SOCK_DGRAM)
-  s.connect(("8.8.8.8", 80))
-  return s.getsockname()[0]
+if __name__ == "__main__":
+  asyncio.run(main())
 
-IMAGE_DIR = '/i/'
+IMAGE_DIR = '/images/'
 SERVER_HOME = 'http://{}'.format(getIpAddress())
 
 app = Flask(__name__)
 
-if __name__ == "__main__":
-  asyncio.run(main())
