@@ -1,13 +1,7 @@
-import sqlalchemy
 from sqlalchemy.engine.interfaces import CreateEnginePlugin
 from sqlalchemy.sql.annotation import SupportsWrappingAnnotations
 from sqlalchemy.sql.base import ColumnCollection
-from buildDb import createTable
-import sqlite3
-from sqlalchemy import text, create_engine, MetaData, Table, Column, Integer, String, insert, select
-import csv
-
-
+from sqlalchemy import text, create_engine, MetaData, Table, Column, Integer, String, insert, select, and_
 
 engine = create_engine("sqlite+pysqlite:///calendar.db", echo=True)
 meta = MetaData()
@@ -28,11 +22,11 @@ lastPost = Table(
   Column('lastPost', String)
 )
 
-
-test = calendar.select().where(calendar.c.month.like("Thermidor")).__and__.where(calendar.c.day.__eq__(6))
-with engine.connect() as conn:
-  result = conn.execute(test)
-print(result)
+def selectStatement(statement):
+  connection = engine.connect()
+  results = connection.execute(statement).fetchall()
+  return results
+  print(results)
 
 #meta.create_all(engine)
 

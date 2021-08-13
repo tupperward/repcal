@@ -5,8 +5,6 @@ from dateObject import DateObject
 
 nest_asyncio.apply()
 
-
-
 async def dataUpdater():
   try:
     f = open('rss.xml','r')
