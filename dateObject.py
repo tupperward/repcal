@@ -1,5 +1,6 @@
 import urllib.request, json, os
-from dbTools import selectStatement, engine, calendar
+from sqlalchemy.sql.type_api import UserDefinedType
+from dbTools import selectStatement,calendar
 from sqlalchemy import select, and_
 # This class creates a python object with attributes that match the values of today's 
 class DateObject:
@@ -8,7 +9,7 @@ class DateObject:
   repcalData = 'https://repcal.info/now.json'
   rd = 'republican_date'
   a = 'attributes'
-  userDomain = os.environ.get('DOMAIN')
+ 
   
   # Makes the HTTP request to pull raw json data
   def getJsonData(self,api):
@@ -22,8 +23,6 @@ class DateObject:
     # THIS EXISTS SO WE ONLY MAKE THE REQUEST ONCE 
     # Do not just call getJsonData() a half dozen times because it will take forever
     jsonData = self.getJsonData(self.repcalData)
-    getItemFromDb = select(calendar.columns.item).where(and_(calendar.columns.month == self.month,calendar.columns.day == self.day))
-    getUrlFromDb = select(calendar.columns.item_url).where(and_(calendar.columns.month == self.month,calendar.columns.day == self.day))
 
     self.day = jsonData[self.rd][self.a]['day']
     self.week = jsonData[self.rd][self.a]['week']
@@ -33,8 +32,16 @@ class DateObject:
     self.yearRoman = jsonData[self.rd][self.a]['year_roman'].strip("('").strip("'),")
     self.sansculottides = jsonData[self.rd][self.a]['sansculottides']
     self.formatted = jsonData[self.rd]['formatted'].strip("('").strip("'),"),
-    self.item = selectStatement(getItemFromDb),
-    self.item_url = selectStatement(getUrlFromDb),
-    self.image = 'http://{domain}/i/{month}{day}.png'.format(domain = self.userDomain,month = self.month, day = self.day).strip("('").strip("'),"),
     self.time = jsonData['standard']['formatted']
 
+def carpeDiem():
+  today = DateObject()
+  userDomain = os.environ.get('DOMAIN_REMOTE')
+  statement = calendar.select().where(calendar.c.month.ilike(today.month), calendar.c.day == today.day)
+  query = selectStatement(statement)
+  today.item = query.item
+  today.item_url = query.item_url 
+  today.image = 'http://{domain}/images/{month}/{item}.jpg'.format(domain = userDomain, month = today.month, item = today.item)
+  return today
+
+print(carpeDiem().image)

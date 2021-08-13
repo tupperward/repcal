@@ -1,5 +1,5 @@
 from flask import Flask
-import genRSS, asyncio, datetime, nest_asyncio, buildDb
+import genRSS, asyncio, datetime, nest_asyncio
 from time import sleep
 from dateObject import DateObject
 
@@ -38,8 +38,8 @@ async def main():
 if __name__ == "__main__":
   asyncio.run(main())
 
-IMAGE_DIR = '/images/'
-SERVER_HOME = 'http://{}'.format(getIpAddress())
+#IMAGE_DIR = '/images/'
+#SERVER_HOME = 'http://{}'.format(getIpAddress())
 
-app = Flask(__name__)
+#app = Flask(__name__)
 

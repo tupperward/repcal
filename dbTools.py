@@ -21,13 +21,19 @@ lastPost = Table(
   Column('id', Integer, primary_key=True),
   Column('lastPost', String)
 )
+#statement = calendar.select().where(calendar.c.month.ilike('thermidor'), calendar.c.day == 6)
 
 def selectStatement(statement):
   connection = engine.connect()
-  results = connection.execute(statement).fetchall()
+  results = connection.execute(statement).fetchone()
+  #for item, item_url in results:
+  #  print ("item:", item, "; item_url", item_url )
+  #return results
   return results
-  print(results)
 
+#test = selectStatement(statement)
+
+#print (test.item)
 #meta.create_all(engine)
 
 #with open('C:/Users/Ward/Desktop/repcalRSS/TwitterFetch/csv/aaaaaaa.csv','r') as file:

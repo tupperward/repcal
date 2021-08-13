@@ -1,3 +1,4 @@
 flask
 feedgen
 flask-sqlalchemy
+sqlalchemy
