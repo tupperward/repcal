@@ -1,7 +1,8 @@
 import urllib.request, json, os
+from sqlalchemy.sql.expression import insert, update
 from sqlalchemy.sql.type_api import UserDefinedType
-from dbTools import selectStatement,calendar
-from sqlalchemy import select, and_
+from dbTools import selectStatement,executeStatement,calendar, lastPost
+from sqlalchemy import exc, select, and_
 # This class creates a python object with attributes that match the values of today's 
 class DateObject:
 
@@ -44,4 +45,25 @@ def carpeDiem():
   today.image = 'http://{domain}/images/{month}/{item}.jpg'.format(domain = userDomain, month = today.month, item = today.item)
   return today
 
-print(carpeDiem().image)
+def generateThumbprint():
+  thumbprint = carpeDiem().formatted
+  return thumbprint
+
+def checkDate():
+  thumbprint = generateThumbprint()
+  queryDate = lastPost.select().where(lastPost.c.id == 1)
+  updateDate = lastPost.update().where(lastPost.c.id ==1).values(lastPost = thumbprint)
+  insertDate = lastPost.insert().values(id=1, lastPost=thumbprint)
+  
+  dateCheck = selectStatement(queryDate)
+  print (dateCheck)
+  if thumbprint == dateCheck:
+    print ("------------------------------Nailed it cowboy------------------------------")
+  else: 
+    executeStatement(updateDate)
+    print("------------------------------Wrote new Date------------------------------")
+
+    #executeStatement(insertDate)
+    #print("Inserted date")
+
+checkDate()

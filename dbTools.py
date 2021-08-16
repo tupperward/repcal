@@ -1,8 +1,8 @@
 from sqlalchemy.engine.interfaces import CreateEnginePlugin
 from sqlalchemy.sql.annotation import SupportsWrappingAnnotations
 from sqlalchemy.sql.base import ColumnCollection
-from sqlalchemy import text, create_engine, MetaData, Table, Column, Integer, String, insert, select, and_
-
+from sqlalchemy import text, create_engine, MetaData, Table, Column, Integer, String, insert, select, and_, update
+#from dateObject import generateThumbprint
 engine = create_engine("sqlite+pysqlite:///calendar.db", echo=True)
 meta = MetaData()
 
@@ -21,15 +21,15 @@ lastPost = Table(
   Column('id', Integer, primary_key=True),
   Column('lastPost', String)
 )
-#statement = calendar.select().where(calendar.c.month.ilike('thermidor'), calendar.c.day == 6)
 
 def selectStatement(statement):
   connection = engine.connect()
   results = connection.execute(statement).fetchone()
-  #for item, item_url in results:
-  #  print ("item:", item, "; item_url", item_url )
-  #return results
   return results
+
+def executeStatement(statement):
+  connection = engine.connect()
+  connection.execute(statement)
 
 #test = selectStatement(statement)
 

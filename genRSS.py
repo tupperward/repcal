@@ -29,10 +29,6 @@ def addEntryToFeed():
   thumbprint = today.formatted
   return thumbprint
 
-def generateThumbprint():
-  thumbprint = carpeDiem().formatted
-  return thumbprint
-
 # Generate an rss.xml file that is overwritten each time. Hopefully your reader keeps data locally I guess. But it's also a daily calendar so fuck you too.
 def renewRssFile():
   thumbprint = carpeDiem().formatted
