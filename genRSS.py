@@ -1,4 +1,4 @@
-from dateObject import carpeDiem, 
+from dateObject import carpeDiem, getDateFromTable, ad
 from os.path import exists
 from feedgen.feed import FeedGenerator
 import os, xml
@@ -9,8 +9,6 @@ today = carpeDiem()
 
 #Create the feed generator
 fg = FeedGenerator()
-
-
 
 
 

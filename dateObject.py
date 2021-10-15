@@ -1,14 +1,15 @@
 import urllib.request, json, os, csv
 from os.path import exists, dirname
-from sqlalchemy.sql.expression import insert, update
+from sqlalchemy.sql.expression import delete, insert, table, update
 from sqlalchemy.sql.functions import user
+from sqlalchemy.sql.schema import ForeignKey
 from sqlalchemy.sql.sqltypes import Boolean
 from sqlalchemy.sql.type_api import UserDefinedType
 
 from sqlalchemy.engine.interfaces import CreateEnginePlugin
 from sqlalchemy.sql.annotation import SupportsWrappingAnnotations
 from sqlalchemy.sql.base import ColumnCollection
-from sqlalchemy import text, create_engine, MetaData, Table, Column, Integer, String, insert, select, and_, update
+from sqlalchemy import text, create_engine, MetaData, Table, Column, Integer, String, insert, select, and_, update, delete
 
 from unidecode import unidecode 
 
@@ -37,6 +38,7 @@ class DateObject:
     # Do not just call getJsonData() a half dozen times because it will take forever
     jsonData = self.getJsonData(self.repcalData)
 
+    self.index = None
     self.day = jsonData[self.rd][self.a]['day']
     self.week = jsonData[self.rd][self.a]['week']
     self.weekday = jsonData[self.rd][self.a]['weekday'].strip("('").strip("'),")
@@ -50,17 +52,43 @@ class DateObject:
 calendar = Table(
 "calendar", meta,
 Column('id', Integer, primary_key=True),
+Column('day',Integer),
+Column('week', Integer),
 Column('month', String),
 Column('month_of', String),
-Column('day',Integer),
-Column('item',String),
-Column('item_url',String)
+Column('yearArabic', Integer),
+Column('yearRoman', String),
+Column('sansculottides', Boolean),
+Column('formatted', String),
+Column('item', String),
+Column('item_url', String),
+Column('image', String)
+)
+
+# Makes a collection of days that we can build into entries for the feed.
+fullCalendar = Table(
+"fullCalendar", meta,
+Column('id', Integer),
+Column('index', Integer),
+Column('day', Integer),
+Column('week', Integer),
+Column('weekday', String),
+Column('month', String),
+Column('month_of', String),
+Column('yearArabic', Integer),
+Column('yearRoman', String),
+Column('sansculottides', Boolean),
+Column('formatted', String),
+Column('item', String),
+Column('item_url', String),
+Column('image', String)
 )
 
 # Makes a collection of days that we can build into entries for the feed.
 top10 = Table(
 "top10", meta,
-Column('id', Integer,primary_key=True),
+Column('id', Integer),
+Column('index', Integer),
 Column('day', Integer),
 Column('week', Integer),
 Column('weekday', String),
@@ -92,51 +120,62 @@ def executeStatement(statement):
   connection = engine.connect()
   connection.execute(statement)
 
-# Add today to the top10 table, which
-def func():
-  statement = insert(calendar).values(month=i['month'].strip("'").strip("',"), month_of=i['month_of'].strip("'").strip("',"), day=i['day'].strip("'").strip("',"), item=i['item'].strip("'").strip("',"), item_url=i['item_url'].strip("'").strip("',"))
-    with engine.connect() as conn:
-      result = conn.execute(statement)
+# Retrieves date object from specified table.
+def getDateFromTable(tableName, month, day):
+  statement = tableName.select().where(tableName.c.month.ilike(unidecode(month)), tableName.c.day == int(day))
+  return selectStatement(statement)
 
 # Seize the Day! Creates the today object from a combination of creating a DateObject and querying the sqlite3 database.
 def carpeDiem():
   today = DateObject()
-  userDomain = os.environ.get('DOMAIN_NAME')
-  if userDomain == None:
-    userDomain = 'localhost'
-  statement = calendar.select().where(calendar.c.month.ilike(unidecode(today.month)), calendar.c.day == int(today.day))
-  query = selectStatement(statement)
-  print(query)
+
+  query = getDateFromTable(calendar, today.month, today.day)
   today.id = query.id
   today.item = query.item
   today.item_url = query.item_url 
-  today.image = 'http://{domain}/i/{item}.jpg'.format(domain = userDomain, item = today.item.lower())
+  today.image = '/i/{}.jpg'.format(today.item.lower())  # I think this needs to be rethought at some point
   today.month_of = query.month_of
+
   return today
 
-def addToTop10():
-  today = carpeDiem()
+def addTodayToTable(tableName, day):
   
-  addItemStmnt = insert(top10).values(
-    day = today.day,
-    week = today.week,
-    weekday = today.weekday,
-    month = today.month,
-    month_of = today.month_of,
-    yearArabic = today.yearArabic,
-    yearRoman = today.yearRoman,
-    sansculottides = today.sansculottides,
-    formatted = today.formatted, 
-    item = today.item,
-    item_url = today.item_url,
-    image = today.image,
+  if tableName == top10:
+    day.index = 1
+
+  statement = tableName.insert.values(
+    id = day.id,
+    index = day.index,
+    day = day.day,
+    week = day.week,
+    weekday = day.weekday,
+    month = day.month,
+    month_of = day.month_of,
+    yearArabic = day.yearArabic,
+    yearRoman = day.yearRoman,
+    sansculottides = day.sansculottides,
+    formatted = day.formatted, 
+    item = day.item,
+    item_url = day.item_url,
+    image = day.image,
     )
+  
+  executeStatement(statement)
+
+def incrementAllPrimaryKeys(tableName):
+  for i in range(0, 9):
+      statement = tableName.update().where(tableName.c.index == i).values(id= i + 1)
+      executeStatement(statement)
+
+def removeTenthDay(tableName):
+  statement = tableName.delete().where(tableName.c.id == 9)
+  executeStatement(statement)
 
 
 #Creating the calendar DB if it hasn't already been created
 if not exists ('./calendar.db'):
   touch('./calendar.db')
-  engine = create_engine("sqlite+pysqlite:///calendar.db")
+  engine = create_engine("sqlite+pysqlite:///calendar.db", echo=True)
 
   meta.create_all(engine)
 
@@ -146,6 +185,7 @@ if not exists ('./calendar.db'):
       statement = insert(calendar).values(month=i['month'].strip("'").strip("',"), month_of=i['month_of'].strip("'").strip("',"), day=i['day'].strip("'").strip("',"), item=i['item'].strip("'").strip("',"), item_url=i['item_url'].strip("'").strip("',"))
       with engine.connect() as conn:
         result = conn.execute(statement)
+
 else:
   engine = create_engine("sqlite+pysqlite:///calendar.db", echo=True)
 
