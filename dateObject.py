@@ -1,22 +1,23 @@
 import urllib.request, json, os, csv
 from os.path import exists, dirname
-from sqlalchemy.sql.expression import delete, insert, table, update
-from sqlalchemy.sql.functions import user
-from sqlalchemy.sql.schema import ForeignKey
-from sqlalchemy.sql.sqltypes import Boolean
-from sqlalchemy.sql.type_api import UserDefinedType
-
-from sqlalchemy.engine.interfaces import CreateEnginePlugin
-from sqlalchemy.sql.annotation import SupportsWrappingAnnotations
-from sqlalchemy.sql.base import ColumnCollection
-from sqlalchemy import text, create_engine, MetaData, Table, Column, Integer, String, insert, select, and_, update, delete
+from flask import Flask
+from flask_sqlalchemy import SQLAlchemy
 
 from unidecode import unidecode 
 
+# Creating a blank file.
+def touch(path):
+  with open(path, 'a'):
+    os.utime(path, None)
+
+### Initialize Flask ###
+
+app = Flask(__name__)
+
+app.config['SQLALCHEMY_DATABASE_URI'] = "sqlite+pysqlite:///calendar.db"
+db = SQLAlchemy(app)
+
 # # # # # Classes # # # # # 
-
-meta = MetaData()
-
 # This class creates a python object with attributes that match the values of today's 
 class DateObject:
 
@@ -49,65 +50,93 @@ class DateObject:
     self.formatted = jsonData[self.rd]['formatted'].strip("('").strip("'),")
 
 # Calendar Table for the sqlite3 db
-calendar = Table(
-"calendar", meta,
-Column('id', Integer, primary_key=True),
-Column('day',Integer),
-Column('week', Integer),
-Column('month', String),
-Column('month_of', String),
-Column('yearArabic', Integer),
-Column('yearRoman', String),
-Column('sansculottides', Boolean),
-Column('formatted', String),
-Column('item', String),
-Column('item_url', String),
-Column('image', String)
-)
+class Calendar(db.Model):
+  id = db.Column(db.Integer, primary_key=True),
+  day = db.Column(db.Integer),
+  week = db.Column(db.Integer),
+  month = db.Column( db.String),
+  month_of = db.Column( db.String),
+  yearArabic = db.Column( db.Integer),
+  yearRoman = db.Column(db.String),
+  sansculottides = db.Column(db.Boolean),
+  formatted = db.Column( db.String),
+  item = db.Column( db.String),
+  item_url = db.Column( db.String),
+  image = db.Column( db.String)
+
+  def __init__(self, month, month_of, day, item, item_url):
+    self.month = month
+    self.month_of = month_of
+    self.day = day
+    self.item = item
+    self.item_url = item_url
+
 
 # Makes a collection of days that we can build into entries for the feed.
-fullCalendar = Table(
-"fullCalendar", meta,
-Column('id', Integer),
-Column('index', Integer),
-Column('day', Integer),
-Column('week', Integer),
-Column('weekday', String),
-Column('month', String),
-Column('month_of', String),
-Column('yearArabic', Integer),
-Column('yearRoman', String),
-Column('sansculottides', Boolean),
-Column('formatted', String),
-Column('item', String),
-Column('item_url', String),
-Column('image', String)
-)
+class FullCalendar(db.Model):
+  id = db.Column(db.Integer, primary_key=True),
+  index = db.Colunm(db.Integer)
+  day = db.Column(db.Integer),
+  week = db.Column(db.Integer),
+  month = db.Column( db.String),
+  month_of = db.Column( db.String),
+  yearArabic = db.Column( db.Integer),
+  yearRoman = db.Column(db.String),
+  sansculottides = db.Column(db.Boolean),
+  formatted = db.Column( db.String),
+  item = db.Column( db.String),
+  item_url = db.Column( db.String),
+  image = db.Column( db.String)
+
+  def __init__(self, id, index, day, week, month, month_of, yearArabic, yearRoman, sansculottides, formatted, item, item_url, image):
+    self. id = id
+    self.index = index
+    self.day = day
+    self.week = week
+    self.month = month
+    self.month_of = month_of
+    self.yearArabic = yearArabic
+    self.yearRoman = yearRoman
+    self.sansculottides = sansculottides
+    self.formatted = formatted
+    self.item = item
+    self.item_url = item_url
+    self.image = image
+
 
 # Makes a collection of days that we can build into entries for the feed.
-top10 = Table(
-"top10", meta,
-Column('id', Integer),
-Column('index', Integer),
-Column('day', Integer),
-Column('week', Integer),
-Column('weekday', String),
-Column('month', String),
-Column('month_of', String),
-Column('yearArabic', Integer),
-Column('yearRoman', String),
-Column('sansculottides', Boolean),
-Column('formatted', String),
-Column('item', String),
-Column('item_url', String),
-Column('image', String)
-)
+class  Top10(db.Model):
+  id = db.Column(db.Integer, primary_key=True),
+  index = db.Colunm(db.Integer)
+  day = db.Column(db.Integer),
+  week = db.Column(db.Integer),
+  month = db.Column( db.String),
+  month_of = db.Column( db.String),
+  yearArabic = db.Column( db.Integer),
+  yearRoman = db.Column(db.String),
+  sansculottides = db.Column(db.Boolean),
+  formatted = db.Column( db.String),
+  item = db.Column( db.String),
+  item_url = db.Column( db.String),
+  image = db.Column( db.String)
+
+  def __init__(self, id, index, day, week, month, month_of, yearArabic, yearRoman, sansculottides, formatted, item, item_url, image):
+    self. id = id
+    self.index = index
+    self.day = day
+    self.week = week
+    self.month = month
+    self.month_of = month_of
+    self.yearArabic = yearArabic
+    self.yearRoman = yearRoman
+    self.sansculottides = sansculottides
+    self.formatted = formatted
+    self.item = item
+    self.item_url = item_url
+    self.image = image
 # # # # # Functions # # # # # 
 
-# Creating a blank file.
-def touch(path):
-  with open(path, 'a'):
-    os.utime(path, None)
+
 
 #  Select statement helper function for sqlite3 usage
 def selectStatement(statement):
@@ -177,8 +206,6 @@ if not exists ('./calendar.db'):
   touch('./calendar.db')
   engine = create_engine("sqlite+pysqlite:///calendar.db", echo=True)
 
-  meta.create_all(engine)
-
   with open('./static/full_calendar.csv','r') as file:
     data = csv.DictReader(file)
     for i in data:
@@ -186,6 +213,5 @@ if not exists ('./calendar.db'):
       with engine.connect() as conn:
         result = conn.execute(statement)
 
-else:
-  engine = create_engine("sqlite+pysqlite:///calendar.db", echo=True)
+
 

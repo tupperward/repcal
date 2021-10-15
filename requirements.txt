@@ -1,6 +1,4 @@
 flask
+flask_sqlalchemy
 sqlalchemy
 unidecode
-starlette
-starlette-feedgen
-uvicorn
