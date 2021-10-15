@@ -1,41 +1,40 @@
-from dateObject import carpeDiem
+from dateObject import carpeDiem, 
+from os.path import exists
 from feedgen.feed import FeedGenerator
+import os, xml
+from copy import copy, deepcopy
 
-# Instantiate data for today, should be executed via cronjob once every 4 hours
-#today = DateObject()
+# Creating the today object by seizing the day
+today = carpeDiem()
 
 #Create the feed generator
 fg = FeedGenerator()
 
-# Instantiate the feed with attributes
-def initFeed():
-  fg.id('https://repcal.tupperward.net/')
-  fg.title('Republican Calendar RSS')
-  fg.author({'name':'tupperward', 'email':'tupperward@gmail.com'})
-  fg.language('en')
-  fg.link( href='https://repcal.tupperward.net/')
-  fg.description('The vulgar era is abolished for civil usage.')
-  fg.skipHours(hours=8,replace=False)
 
-#Add an item to the feed
-def addEntryToFeed():
-  today = carpeDiem()
-  imageUrl = "{}".format(today.image).strip("('").strip("',)")
 
-  fe = fg.add_entry()
-  fe.title("Today is {weekday} the {day} of {month} celebrating {item}.".format(weekday = today.weekday, day = today.day, month = today.month, item = today.item))
-  fe.link(href='https://repcal.info/', rel="self")
-  fe.enclosure(url=imageUrl, type='image/png')
-  thumbprint = today.formatted
-  return thumbprint
 
-def generateThumbprint():
-  thumbprint = carpeDiem().formatted
-  return thumbprint
 
-# Generate an rss.xml file that is overwritten each time. Hopefully your reader keeps data locally I guess. But it's also a daily calendar so fuck you too.
-def renewRssFile():
-  thumbprint = carpeDiem().formatted
-  fg.rss_file('rss.xml')
-  return thumbprint
-  
+def main():
+  if not exists('atom.xml'):
+    fg.author('tupperward')
+    fg.title('French Republican Calendar RSS')
+    fg.subtitle('The vulgar era is abolished for civil usage.')
+    fg.description('A small feed-style daily calendar inspired by twitter user @sansculotides')
+    fg.link(href='test')
+
+    fe = fg.add_entry()
+    fe.id(id='{year}_{month}_{day}'.format(year=today.yearArabic, month=today.month, day=today.day))
+    fe.title('')
+
+    assert len(fg.entry() == 11)
+    fg.remove_entry(10)
+    
+    
+
+    return
+  else: 
+    if not exists('atom.xml'):
+      return
+
+if __name__ == "__main__":
+  main()

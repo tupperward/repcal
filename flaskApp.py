@@ -1,42 +1,25 @@
-from flask import Flask
-import genRSS, asyncio, datetime, nest_asyncio
-from time import sleep
-from dateObject import DateObject
+from flask import Flask, render_template, request, url_for
+from flask.helpers import send_from_directory
+from unidecode import unidecode
+import dateObject
 
-nest_asyncio.apply()
+app = Flask(__name__)
 
-async def dataUpdater():
-  try:
-    f = open('rss.xml','r')
-    thumbprint = genRSS.generateThumbprint()
-    print('Less of a champion')
-  except FileNotFoundError:
-      print('You champion')
-      genRSS.addEntryToFeed()
-      thumbprint = genRSS.renewRssFile()
-      
-  confirmThumb = genRSS.addEntryToFeed()
+@app.route('/feed/')
+def feed():
+  return render_template('atom.xml')
 
-  if thumbprint == confirmThumb:
-    print('----- Waiting for update to repcal feed -----')
-    print(datetime.now())
-    await asyncio.sleep(3600)
-  else:
-    print('------------- UPDATING RSS.XML --------------')
-    genRSS.renewRssFile()
-    await asyncio.sleep(5)
-  
-  await dataUpdater()
+@app.route('/images/')
+def image():
+  today = dateObject.carpeDiem()
+  month = unidecode(today.month).lower()
+  item = today.item.lower()
+  #return send_from_directory('./static/images/{}'.format(unidecode(today.month).lower()), '{}.jpg'.format(today.item.lower()))
+  return render_template('image.html', month=month, item=item)
 
-async def main():
-  genRSS.initFeed()
-  updateTask = asyncio.create_task(dataUpdater())
-  loop = asyncio.get_event_loop()
-  await loop.run_forever()
-  await updateTask
-  
 if __name__ == "__main__":
-  asyncio.run(main())
+  #today = dateObject.carpeDiem()
+  app.run(debug=True, host="0.0.0.0", port=6942)
 
 #IMAGE_DIR = '/images/'
 #SERVER_HOME = 'http://{}'.format(getIpAddress())
