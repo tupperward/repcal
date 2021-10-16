@@ -7,7 +7,7 @@ app = Flask(__name__, static_url_path='/')
 
 port = os.environ.get('PORT')
 if port == None:
-  port = 6942
+  port = 8080
 
 @app.route('/feed')
 def feed():
