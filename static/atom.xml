@@ -1,0 +1,85 @@
+<?xml version='1.0' encoding='UTF-8'?>
+<feed xmlns="http://www.w3.org/2005/Atom">
+  <id>6942</id>
+  <title>French Republican Calendar RSS</title>
+  <updated>2021-10-16T04:10:44.486022+00:00</updated>
+  <author>
+    <name>tupperward</name>
+    <email>tupperward@gmail.com</email>
+  </author>
+  <link href="test"/>
+  <generator uri="https://lkiesow.github.io/python-feedgen" version="0.9.0">python-feedgen</generator>
+  <subtitle>A small feed-style daily calendar inspired by twitter user @sansculotides</subtitle>
+  <entry>
+    <id>230_Vendémiaire_25</id>
+    <title>Quintidi 25 vendémiaire an CCXXX</title>
+    <updated>2021-10-16T04:10:44.517323+00:00</updated>
+    <content>Today is 25 Vendémiaire, the month of Vintage. Today celebrates Oxen. You can learn more about Oxen here: https://en.wikipedia.org/wiki/Oxen</content>
+    <link href="http://localhost:6942/images/oxen.jpg" rel="alternate"/>
+    <published>2021-10-15T23:17:41.831632-04:00</published>
+  </entry>
+  <entry>
+    <id>230_Vendémiaire_25</id>
+    <title>Quintidi 25 vendémiaire an CCXXX</title>
+    <updated>2021-10-16T04:10:44.516720+00:00</updated>
+    <content>Today is 25 Vendémiaire, the month of Vintage. Today celebrates Oxen. You can learn more about Oxen here: https://en.wikipedia.org/wiki/Oxen</content>
+    <link href="http://localhost:6942/images/oxen.jpg" rel="alternate"/>
+    <published>2021-10-15T23:17:41.831632-04:00</published>
+  </entry>
+  <entry>
+    <id>230_Vendémiaire_25</id>
+    <title>Quintidi 25 vendémiaire an CCXXX</title>
+    <updated>2021-10-16T04:10:44.516117+00:00</updated>
+    <content>Today is 25 Vendémiaire, the month of Vintage. Today celebrates Oxen. You can learn more about Oxen here: https://en.wikipedia.org/wiki/Oxen</content>
+    <link href="http://localhost:6942/images/oxen.jpg" rel="alternate"/>
+    <published>2021-10-16T00:05:30.070454-04:00</published>
+  </entry>
+  <entry>
+    <id>230_Vendémiaire_25</id>
+    <title>Quintidi 25 vendémiaire an CCXXX</title>
+    <updated>2021-10-16T04:10:44.515511+00:00</updated>
+    <content>Today is 25 Vendémiaire, the month of Vintage. Today celebrates Oxen. You can learn more about Oxen here: https://en.wikipedia.org/wiki/Oxen</content>
+    <link href="http://localhost:6942/images/oxen.jpg" rel="alternate"/>
+    <published>2021-10-16T00:05:30.070454-04:00</published>
+  </entry>
+  <entry>
+    <id>230_Vendémiaire_25</id>
+    <title>Quintidi 25 vendémiaire an CCXXX</title>
+    <updated>2021-10-16T04:10:44.514905+00:00</updated>
+    <content>Today is 25 Vendémiaire, the month of Vintage. Today celebrates Oxen. You can learn more about Oxen here: https://en.wikipedia.org/wiki/Oxen</content>
+    <link href="http://localhost:6942/images/oxen.jpg" rel="alternate"/>
+    <published>2021-10-16T00:07:05.592390-04:00</published>
+  </entry>
+  <entry>
+    <id>230_Vendémiaire_25</id>
+    <title>Quintidi 25 vendémiaire an CCXXX</title>
+    <updated>2021-10-16T04:10:44.514299+00:00</updated>
+    <content>Today is 25 Vendémiaire, the month of Vintage. Today celebrates Oxen. You can learn more about Oxen here: https://en.wikipedia.org/wiki/Oxen</content>
+    <link href="http://localhost:6942/images/oxen.jpg" rel="alternate"/>
+    <published>2021-10-16T00:07:05.592390-04:00</published>
+  </entry>
+  <entry>
+    <id>230_Vendémiaire_25</id>
+    <title>Quintidi 25 vendémiaire an CCXXX</title>
+    <updated>2021-10-16T04:10:44.513683+00:00</updated>
+    <content>Today is 25 Vendémiaire, the month of Vintage. Today celebrates Oxen. You can learn more about Oxen here: https://en.wikipedia.org/wiki/Oxen</content>
+    <link href="http://localhost:6942/images/oxen.jpg" rel="alternate"/>
+    <published>2021-10-16T00:07:33.669982-04:00</published>
+  </entry>
+  <entry>
+    <id>230_Vendémiaire_25</id>
+    <title>Quintidi 25 vendémiaire an CCXXX</title>
+    <updated>2021-10-16T04:10:44.512892+00:00</updated>
+    <content>Today is 25 Vendémiaire, the month of Vintage. Today celebrates Oxen. You can learn more about Oxen here: https://en.wikipedia.org/wiki/Oxen</content>
+    <link href="http://localhost:6942/images/oxen.jpg" rel="alternate"/>
+    <published>2021-10-16T00:10:44.485990-04:00</published>
+  </entry>
+  <entry>
+    <id>230_Vendémiaire_25</id>
+    <title>Quintidi 25 vendémiaire an CCXXX</title>
+    <updated>2021-10-16T04:10:44.511995+00:00</updated>
+    <content>Today is 25 Vendémiaire, the month of Vintage. Today celebrates Oxen. You can learn more about Oxen here: https://en.wikipedia.org/wiki/Oxen</content>
+    <link href="http://localhost:6942/images/oxen.jpg" rel="alternate"/>
+    <published>2021-10-16T00:10:44.485990-04:00</published>
+  </entry>
+</feed>

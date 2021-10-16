@@ -1,21 +1,29 @@
 import urllib.request, json, os, csv
-from os.path import exists, dirname
-from sqlalchemy.sql.expression import insert, update
-from sqlalchemy.sql.functions import user
-from sqlalchemy.sql.sqltypes import Boolean
-from sqlalchemy.sql.type_api import UserDefinedType
-
-from sqlalchemy.engine.interfaces import CreateEnginePlugin
-from sqlalchemy.sql.annotation import SupportsWrappingAnnotations
-from sqlalchemy.sql.base import ColumnCollection
-from sqlalchemy import text, create_engine, MetaData, Table, Column, Integer, String, insert, select, and_, update
+from os.path import exists
+from flask import Flask
+from flask_sqlalchemy import SQLAlchemy
+from datetime import datetime 
+import pytz
 
 from unidecode import unidecode 
 
+# # # # # Helper Functions # # # # # 
+
+# Creating a blank file.
+def touch(path):
+  with open(path, 'a'):
+    os.utime(path, None)
+
+### Initialize Flask ###
+if not exists('./calendar.db'):
+  touch('./calendar.db')
+
+app = Flask(__name__)
+app.config['SQLALCHEMY_DATABASE_URI'] = "sqlite+pysqlite:///calendar.db"
+app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
+db = SQLAlchemy(app)
+
 # # # # # Classes # # # # # 
-
-meta = MetaData()
-
 # This class creates a python object with attributes that match the values of today's 
 class DateObject:
 
@@ -38,114 +46,106 @@ class DateObject:
     jsonData = self.getJsonData(self.repcalData)
 
     self.day = jsonData[self.rd][self.a]['day']
-    self.week = jsonData[self.rd][self.a]['week']
     self.weekday = jsonData[self.rd][self.a]['weekday'].strip("('").strip("'),")
     self.month = jsonData[self.rd][self.a]['month'].strip("('").strip("'),")
     self.yearArabic = jsonData[self.rd][self.a]['year_arabic']
     self.yearRoman = jsonData[self.rd][self.a]['year_roman'].strip("('").strip("'),")
-    self.sansculottides = jsonData[self.rd][self.a]['sansculottides']
     self.formatted = jsonData[self.rd]['formatted'].strip("('").strip("'),")
 
-# Calendar Table for the sqlite3 db
-calendar = Table(
-"calendar", meta,
-Column('id', Integer, primary_key=True),
-Column('month', String),
-Column('month_of', String),
-Column('day',Integer),
-Column('item',String),
-Column('item_url',String)
-)
+# Makes a collection of days that we can build into entries for the feed.
+class Calendar(db.Model):
+  __tablename__ = 'calendar'
+  id = db.Column(db.Integer, primary_key= True)
+  day = db.Column(db.Integer)
+  week = db.Column(db.Integer)
+  month = db.Column( db.String)
+  month_of = db.Column(db.String)
+  item = db.Column(db.String)
+  item_url = db.Column(db.String)
 
 # Makes a collection of days that we can build into entries for the feed.
-top10 = Table(
-"top10", meta,
-Column('id', Integer,primary_key=True),
-Column('day', Integer),
-Column('week', Integer),
-Column('weekday', String),
-Column('month', String),
-Column('month_of', String),
-Column('yearArabic', Integer),
-Column('yearRoman', String),
-Column('sansculottides', Boolean),
-Column('formatted', String),
-Column('item', String),
-Column('item_url', String),
-Column('image', String)
-)
-# # # # # Functions # # # # # 
+class  Top10(db.Model):
+  __tablename__ = 'top10'
+  index = db.Column(db.Integer, primary_key=True)
+  day = db.Column(db.Integer)
+  week = db.Column(db.Integer)
+  month = db.Column(db.String)
+  month_of = db.Column(db.String)
+  yearArabic = db.Column(db.Integer)
+  yearRoman = db.Column(db.String)
+  formatted = db.Column(db.String)
+  item = db.Column(db.String)
+  item_url = db.Column(db.String)
+  image = db.Column(db.String)
+  pub_date = db.Column(db.String)
 
-# Creating a blank file.
-def touch(path):
-  with open(path, 'a'):
-    os.utime(path, None)
-
-#  Select statement helper function for sqlite3 usage
-def selectStatement(statement):
-  connection = engine.connect()
-  results = connection.execute(statement).fetchone()
-  return results
-
-# Execute statement helper function for sqlite3 usage
-def executeStatement(statement):
-  connection = engine.connect()
-  connection.execute(statement)
-
-# Add today to the top10 table, which
-def func():
-  statement = insert(calendar).values(month=i['month'].strip("'").strip("',"), month_of=i['month_of'].strip("'").strip("',"), day=i['day'].strip("'").strip("',"), item=i['item'].strip("'").strip("',"), item_url=i['item_url'].strip("'").strip("',"))
-    with engine.connect() as conn:
-      result = conn.execute(statement)
-
-# Seize the Day! Creates the today object from a combination of creating a DateObject and querying the sqlite3 database.
-def carpeDiem():
-  today = DateObject()
-  userDomain = os.environ.get('DOMAIN_NAME')
-  if userDomain == None:
-    userDomain = 'localhost'
-  statement = calendar.select().where(calendar.c.month.ilike(unidecode(today.month)), calendar.c.day == int(today.day))
-  query = selectStatement(statement)
-  print(query)
-  today.id = query.id
-  today.item = query.item
-  today.item_url = query.item_url 
-  today.image = 'http://{domain}/i/{item}.jpg'.format(domain = userDomain, item = today.item.lower())
-  today.month_of = query.month_of
-  return today
-
-def addToTop10():
-  today = carpeDiem()
-  
-  addItemStmnt = insert(top10).values(
-    day = today.day,
-    week = today.week,
-    weekday = today.weekday,
-    month = today.month,
-    month_of = today.month_of,
-    yearArabic = today.yearArabic,
-    yearRoman = today.yearRoman,
-    sansculottides = today.sansculottides,
-    formatted = today.formatted, 
-    item = today.item,
-    item_url = today.item_url,
-    image = today.image,
-    )
+db.create_all()
 
 
-#Creating the calendar DB if it hasn't already been created
-if not exists ('./calendar.db'):
-  touch('./calendar.db')
-  engine = create_engine("sqlite+pysqlite:///calendar.db")
-
-  meta.create_all(engine)
-
+check = db.session.query(Calendar).filter_by(id = 1).first()
+if check == None:
   with open('./static/full_calendar.csv','r') as file:
     data = csv.DictReader(file)
     for i in data:
-      statement = insert(calendar).values(month=i['month'].strip("'").strip("',"), month_of=i['month_of'].strip("'").strip("',"), day=i['day'].strip("'").strip("',"), item=i['item'].strip("'").strip("',"), item_url=i['item_url'].strip("'").strip("',"))
-      with engine.connect() as conn:
-        result = conn.execute(statement)
-else:
-  engine = create_engine("sqlite+pysqlite:///calendar.db", echo=True)
+      dateEntry = Calendar(
+        id = i['id'].strip("'").strip("',"),
+        day = i['day'].strip("'").strip("',"),
+        week = i['week'].strip("'").strip("',"),
+        month = i['month'].strip("'").strip("',"),
+        month_of = i['month_of'].strip("'").strip("',"),
+        item = i['item'].strip("'").strip("',"),
+        item_url =i['item_url'].strip("'").strip("',"),
+      )  
+      db.session.add(dateEntry)
+    db.session.commit()
+
+def carpeDiem():
+  today = DateObject()
+  month = unidecode(today.month); day = today.day
+  query = db.session.query(Calendar).filter_by(month = month, day = day).first()
+
+  today.id = query.id
+  today.week = query.week
+  today.month_of = query.month_of
+  today.item = query.item
+  today.item_url = query.item_url
+  today.image = today.item.lower().replace('the ','').replace(' ','_')
+  today.pub_date = datetime.now(pytz.timezone('US/Eastern'))
+
+  return today    
+
+def addDayToTop10(today):
+
+  dateEntry = Top10(
+  index = 1,
+  day = today.day,
+  week = today.week,
+  month = today.month,
+  month_of = today.month_of,
+  yearArabic = today.yearArabic,
+  yearRoman = today.yearRoman,
+  formatted = today.formatted,
+  item = today.item,
+  item_url = today.item_url,
+  image = today.image,
+  pub_date = today.pub_date
+  )
+
+  db.session.add(dateEntry)
+
+  db.session.commit()
+
+def upkeepTop10():
+
+  last = db.session.query(Top10).filter_by(index=10).first()
+  if not last == None:
+    db.session.delete(last)
+
+  for i in range (9,0, -1):
+    row = db.session.query(Top10).filter_by(index=i).first()
+    if not row == None:
+      row.index += 1
+  db.session.commit()
+  
+
 
