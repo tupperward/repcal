@@ -58,32 +58,28 @@ class Calendar(db.Model):
   week = db.Column(db.Integer)
   month = db.Column( db.String)
   month_of = db.Column( db.String)
-  sansculottides = db.Column(db.Boolean)
   item = db.Column( db.String)
   item_url = db.Column( db.String)
 
 # Makes a collection of days that we can build into entries for the feed.
 class  Top10(db.Model):
   __tablename__ = 'top10'
-  id = db.Column(db.Integer, primary_key=True)
-  index = db.Column(db.Integer)
+  index = db.Column(db.Integer, primary_key=True)
   day = db.Column(db.Integer)
   week = db.Column(db.Integer)
   month = db.Column( db.String)
   month_of = db.Column( db.String)
   yearArabic = db.Column( db.Integer)
   yearRoman = db.Column(db.String)
-  sansculottides = db.Column(db.Boolean)
   formatted = db.Column( db.String)
   item = db.Column( db.String)
   item_url = db.Column( db.String)
 
 db.create_all()
 
-try: 
-  db.session.query(Calendar).filter_by(id = 1).first()
 
-except:
+check = db.session.query(Calendar).filter_by(id = 1).first()
+if check == None:
   with open('./static/full_calendar.csv','r') as file:
     data = csv.DictReader(file)
     for i in data:
@@ -93,10 +89,9 @@ except:
         week = i['week'].strip("'").strip("',"),
         month = i['month'].strip("'").strip("',"),
         month_of = i['month_of'].strip("'").strip("',"),
-        sansculottides = i['sansculottides'].strip("'").strip("',"),
         item = i['item'].strip("'").strip("',"),
         item_url =i['item_url'].strip("'").strip("',"),
-      )
+      )  
       db.session.add(dateEntry)
     db.session.commit()
 
@@ -108,8 +103,39 @@ def carpeDiem():
   today.id = query.id
   today.week = query.week
   today.month_of = query.month_of
-  today.sansculottides = query.sansculottides
   today.item = query.item
   today.item_url = query.item_url
 
-  return today
+  return today    
+
+def addDayToTop10(today):
+
+  dateEntry = Top10(
+  index = 1,
+  day = today.day,
+  week = today.week,
+  month = today.month,
+  month_of = today.month_of,
+  yearArabic = today.yearArabic,
+  yearRoman = today.yearRoman,
+  formatted = today.formatted,
+  item = today.item,
+  item_url = today.item_url)
+  db.session.add(dateEntry)
+
+  db.session.commit()
+
+def upkeepTop10():
+
+  last = db.session.query(Top10).filter_by(index=10).first()
+  if not last == None:
+    db.session.delete(last)
+
+  for i in range (9,0, -1):
+    row = db.session.query(Top10).filter_by(index=i).first()
+    if not row == None:
+      row.index += 1
+  db.session.commit()
+  
+
+
