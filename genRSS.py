@@ -23,7 +23,7 @@ def main():
     fg.link(href='test')
     fg.skipHours(12)
 
-    for i in range (10,1,-1):
+    for i in range (0,10):
       row = db.session.query(Top10).filter_by(index=i).first()
       if not row == None:
         stamp = "{}_{}_{}".format(row.yearArabic,row.month,row.day)
