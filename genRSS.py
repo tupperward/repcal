@@ -27,12 +27,12 @@ def main():
     fg.link(href='test')
     fg.skipHours(12)
 
-    for i in range (0,10):
+    for i in range (10,0, -1):
       row = db.session.query(Top10).filter_by(index=i).first()
       if not row == None:
-        stamp = "{}_{}_{}".format(row.yearArabic,row.month,row.day)
+        #stamp = row.index
         fe = fg.add_entry()
-        fe.id(id=stamp)
+        fe.id(str(row.index))
         fe.title(row.formatted)
         fe.link(href='http://{domain}/images/{image}.jpg'.format(domain = domain, image = row.image), rel='alternate')
         fe.published(row.pub_date)
