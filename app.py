@@ -9,7 +9,7 @@ port = os.environ.get('PORT')
 if port == None:
   port = 6942
 
-@app.route('/atom.xml')
+@app.route('/feed')
 def feed():
   return send_from_directory(app.static_folder, request.path[1:])
 

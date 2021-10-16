@@ -1,0 +1,2 @@
+0 5 * * * root python3 /etc/repcal/genRSS.python
+#blank line 
