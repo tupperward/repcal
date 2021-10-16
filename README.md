@@ -3,7 +3,7 @@ A Flask App that generates a robust RSS feed for the French Republican Calendar
 
 The docker container is public at tupperward/repcalrss and can be run with one easy line 
 
-`docker run -p 80:6942 -e DOMAIN=<your domain name> tupperward/repcalrss`
+`docker run -p 80:8080 -e DOMAIN=<your domain name> tupperward/repcalrss`
 
 DOMAIN is not needed, but if left blank will only provide localhost as the origin for your images in the feed.
 
