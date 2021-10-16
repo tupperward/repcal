@@ -1,4 +1,6 @@
+feedgen
 flask
 flask_sqlalchemy
+pytz
 sqlalchemy
 unidecode

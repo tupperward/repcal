@@ -2,6 +2,8 @@ import urllib.request, json, os, csv
 from os.path import exists
 from flask import Flask
 from flask_sqlalchemy import SQLAlchemy
+from datetime import datetime 
+import pytz
 
 from unidecode import unidecode 
 
@@ -57,9 +59,9 @@ class Calendar(db.Model):
   day = db.Column(db.Integer)
   week = db.Column(db.Integer)
   month = db.Column( db.String)
-  month_of = db.Column( db.String)
-  item = db.Column( db.String)
-  item_url = db.Column( db.String)
+  month_of = db.Column(db.String)
+  item = db.Column(db.String)
+  item_url = db.Column(db.String)
 
 # Makes a collection of days that we can build into entries for the feed.
 class  Top10(db.Model):
@@ -67,13 +69,15 @@ class  Top10(db.Model):
   index = db.Column(db.Integer, primary_key=True)
   day = db.Column(db.Integer)
   week = db.Column(db.Integer)
-  month = db.Column( db.String)
-  month_of = db.Column( db.String)
-  yearArabic = db.Column( db.Integer)
+  month = db.Column(db.String)
+  month_of = db.Column(db.String)
+  yearArabic = db.Column(db.Integer)
   yearRoman = db.Column(db.String)
-  formatted = db.Column( db.String)
-  item = db.Column( db.String)
-  item_url = db.Column( db.String)
+  formatted = db.Column(db.String)
+  item = db.Column(db.String)
+  item_url = db.Column(db.String)
+  image = db.Column(db.String)
+  pub_date = db.Column(db.String)
 
 db.create_all()
 
@@ -105,6 +109,8 @@ def carpeDiem():
   today.month_of = query.month_of
   today.item = query.item
   today.item_url = query.item_url
+  today.image = today.item.lower().replace('the ','').replace(' ','_')
+  today.pub_date = datetime.now(pytz.timezone('US/Eastern'))
 
   return today    
 
@@ -120,7 +126,11 @@ def addDayToTop10(today):
   yearRoman = today.yearRoman,
   formatted = today.formatted,
   item = today.item,
-  item_url = today.item_url)
+  item_url = today.item_url,
+  image = today.image,
+  pub_date = today.pub_date
+  )
+
   db.session.add(dateEntry)
 
   db.session.commit()
