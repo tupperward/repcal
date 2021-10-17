@@ -18,7 +18,7 @@ RUN cron /etc/crontab
 
 RUN pip3 install -r requirements.txt
 
-RUN python3 ./setup.py
+#RUN python3 ./setup.py
 
 EXPOSE 8080
 
