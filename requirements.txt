@@ -1,5 +1,7 @@
+apscheduler
 feedgen
 flask
+flask-apscheduler
 flask_sqlalchemy
 pytz
 sqlalchemy

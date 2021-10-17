@@ -1,10 +1,21 @@
-from flask import Flask, render_template, request, url_for, send_from_directory
-from unidecode import unidecode
-from dateObject import addDayToTop10, db, upkeepTop10
+from flask import Flask, request, send_from_directory
+from flask_apscheduler import APScheduler
 import os, genRSS
 from os.path import exists
 
+
 app = Flask(__name__, static_url_path='/')
+
+scheduler = APScheduler()
+scheduler.api_enabled = True
+scheduler.init_app(app)
+
+@scheduler.task('cron', id='do_job_2', hour='0')
+def job():
+  genRSS.main()
+  print('Job executed')
+
+scheduler.start()
 
 if not exists('./static/atom.xml'):
   genRSS.createFeed()
@@ -12,6 +23,10 @@ if not exists('./static/atom.xml'):
 port = os.environ.get('PORT')
 if port == None:
   port = 8080
+
+@app.route('/json')
+def json():
+  return genRSS.createJsonString()
 
 @app.route('/feed')
 def feed():
