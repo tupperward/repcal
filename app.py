@@ -10,7 +10,7 @@ scheduler = APScheduler()
 scheduler.api_enabled = True
 scheduler.init_app(app)
 
-@scheduler.task('cron', id='do_job_2', hour='0')
+@scheduler.task('cron', id='do_job', hour='0')
 def job():
   genRSS.main()
   print('Job executed')
@@ -24,17 +24,13 @@ port = os.environ.get('PORT')
 if port == None:
   port = 8080
 
-@app.route('/json')
-def json():
-  jsonString = genRSS.createJsonString()
-
-  res = make_response(jsonify(jsonString, 200))
-
-  return res
-
-@app.route('/feed')
+@app.route('/')
 def feed():
   return send_from_directory(app.static_folder, request.path[1:])
+  
+@app.route('/json')
+def json():
+  return genRSS.createJsonString()
 
 @app.route('/images/<image>')
 def image(image):
