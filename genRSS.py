@@ -27,7 +27,10 @@ def createJsonString():
         "image":row.image
       }
       jsonDict["day_{}".format(i)] = day
-  return json.dumps(jsonDict)
+    else: 
+      continue
+      
+  return json.dumps(jsonDict).strip("'")
 
 def createFeed():
   today = carpeDiem()
