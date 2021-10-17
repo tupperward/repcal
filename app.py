@@ -1,4 +1,4 @@
-from flask import Flask, request, send_from_directory
+from flask import Flask, request, send_from_directory, jsonify, make_response
 from flask_apscheduler import APScheduler
 import os, genRSS
 from os.path import exists
@@ -26,7 +26,11 @@ if port == None:
 
 @app.route('/json')
 def json():
-  return genRSS.createJsonString()
+  jsonString = genRSS.createJsonString()
+
+  res = make_response(jsonify(jsonString, 200))
+
+  return res
 
 @app.route('/feed')
 def feed():
