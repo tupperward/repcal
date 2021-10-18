@@ -10,7 +10,7 @@ jobs:
 
   build:
 
-    runs-on: python:
+    runs-on: python:3.10
 
     steps:
     - uses: actions/checkout@v2
