@@ -6,3 +6,4 @@
 pyvenv.cfg
 rss.xml
 /csv
+.gitignore
