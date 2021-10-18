@@ -1,8 +1,0 @@
-apscheduler
-feedgen
-flask
-flask-apscheduler
-flask_sqlalchemy==2.1
-pytz
-sqlalchemy
-unidecode
