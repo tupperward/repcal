@@ -24,7 +24,7 @@ port = os.environ.get('PORT')
 if port == None:
   port = 8080
 
-@app.route('/json')
+@app.route('/api')
 def json():
   return genRSS.createJsonString()
 
