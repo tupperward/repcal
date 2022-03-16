@@ -1,5 +1,7 @@
 FROM python:3.10
 
+ENV DOMAIN_NAME=repcal.tupperward.net
+
 RUN mkdir /etc/repcal
 
 WORKDIR /etc/repcal

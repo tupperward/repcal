@@ -10,7 +10,7 @@ if domainName == None:
 
 def createJsonString():
   jsonDict = {}
-  for i in range (0,10):
+  for i in range (0):
     row = db.session.query(Top10).filter_by(index=i).first()
     if not row == None:
       day = {
