@@ -10,5 +10,6 @@ RUN chmod 705 /etc/repcal
 RUN pip install -r requirements.txt
 
 EXPOSE 8000
+USER daemon
 CMD ["sh", "./startup.sh"]
 
