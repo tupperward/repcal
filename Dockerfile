@@ -4,7 +4,8 @@ RUN mkdir /etc/repcal
 
 WORKDIR /etc/repcal
 
-COPY . /etc/repcal/
+COPY ./app.py /etc/repcal/
+COPY ./static/ /etc/repcal/
 
 RUN chmod 0744 /etc/repcal
 
