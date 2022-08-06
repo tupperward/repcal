@@ -1,3 +1,4 @@
 flask
-flask_sqlalchemy==2.1
+flask_sqlalchemy
 unidecode
+gunicorn

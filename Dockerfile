@@ -1,18 +1,14 @@
-FROM python:3.10-alpine
+FROM python:3.10-slim-bullseye
 
 RUN mkdir /etc/repcal
 
 WORKDIR /etc/repcal
 
-COPY ./app.py /etc/repcal/
-COPY ./requirements.txt /etc/repcal/
-COPY ./static/ /etc/repcal/
+COPY . /etc/repcal/
 
-RUN chmod 0744 /etc/repcal
+RUN chmod 705 /etc/repcal
+RUN pip install -r requirements.txt
 
-RUN pip3 install -r requirements.txt
-
-EXPOSE 8080
-
-CMD ["python3", "app.py", "&"]
+EXPOSE 8000
+CMD ["sh", "./startup.sh"]
 

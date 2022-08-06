@@ -134,4 +134,4 @@ def image(image):
   return send_from_directory(app.static_folder, request.path[1:])
 
 if __name__ == "__main__":
-  app.run(debug=True, host="0.0.0.0", port=port)
+  app.run()
