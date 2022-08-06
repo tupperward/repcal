@@ -3,7 +3,6 @@ import urllib.request, json, os, csv
 from os.path import exists
 from flask import Flask, request, send_from_directory
 from flask_sqlalchemy import SQLAlchemy
-
 from unidecode import unidecode 
 
 # # # # # Helper Functions # # # # # 
@@ -14,10 +13,6 @@ def touch(path):
     os.utime(path, None)
 
 ### Initialize Flask ###
-port = os.environ.get('PORT')
-if port == None:
-  port = 80
-
 if not exists('./calendar.db'):
   touch('./calendar.db')
 
@@ -43,6 +38,23 @@ class DateObject:
     with urllib.request.urlopen(api) as url:
       data = json.loads(url.read())
       return data
+  
+  def jsonFormat(self):
+    """Genereate JSON format of the data."""
+    jsonDict = {
+      "day":self.day,
+      "weekday":self.weekday,
+      "week":self.week,
+      "month":self.month,
+      "month_of":self.month_of,
+      "yearArabic":self.yearArabic,
+      "yearRoman":self.yearRoman,
+      "formattedDate":self.formatted,
+      "item":self.item,
+      "item_url":self.item_url
+    }
+    return json.dumps(jsonDict)
+
 
   # When a new date object is created it will self-populate accurate information from the json
   def __init__(self):
@@ -57,6 +69,10 @@ class DateObject:
     self.yearArabic = jsonData[self.rd][self.a]['year_arabic']
     self.yearRoman = jsonData[self.rd][self.a]['year_roman'].strip("('").strip("'),")
     self.formatted = jsonData[self.rd]['formatted'].strip("('").strip("'),")
+    self.week = None
+    self.month_of = None
+    self.item = None
+    self.item_url = None
 
 # Makes a collection of days that we can build into entries for the feed.
 class Calendar(db.Model):
@@ -104,12 +120,13 @@ def carpeDiem():
   today.item_url = query.item_url
   today.image = today.item.lower().replace('the ','').replace(' ','_')
 
-  return json.dumps(today)
+  return today
 
-@app.route('/json')
-def json():
+@app.route('/data')
+def data():
   """Path for json object publication."""
-  return carpeDiem()
+  today = carpeDiem()
+  return today.jsonFormat()
 
 @app.route('/images/<image>')
 def image(image):

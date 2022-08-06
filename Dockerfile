@@ -1,10 +1,11 @@
-FROM python:3.10
+FROM python:3.10-alpine
 
 RUN mkdir /etc/repcal
 
 WORKDIR /etc/repcal
 
 COPY ./app.py /etc/repcal/
+COPY ./requirements.txt /etc/repcal/
 COPY ./static/ /etc/repcal/
 
 RUN chmod 0744 /etc/repcal
