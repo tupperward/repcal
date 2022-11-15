@@ -2,24 +2,13 @@
 import urllib.request, json, os, csv
 from os.path import exists
 from flask import Flask, request, send_from_directory
-from flask_sqlalchemy import SQLAlchemy
+from sqlalchemy import create_engine, MetaData, Table, Column, Integer, String, text
+from sqlalchemy.orm import Session
 from unidecode import unidecode 
 
-# # # # # Helper Functions # # # # # 
-# Creating a blank file.
-def touch(path):
-  """Create a file at the given path."""
-  with open(path, 'a'):
-    os.utime(path, None)
-
-### Initialize Flask ###
-if not exists('./calendar.db'):
-  touch('./calendar.db')
-
 app = Flask(__name__)
-app.config['SQLALCHEMY_DATABASE_URI'] = "sqlite+pysqlite:///calendar.db"
-app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
-db = SQLAlchemy(app)
+engine = create_engine("sqlite+pysqlite:///calendar.db")
+meta = MetaData()
 
 # # # # # Classes # # # # # 
 # This class creates a python object with attributes that match the values of today's 
@@ -75,43 +64,26 @@ class DateObject:
     self.item_url = None
 
 # Makes a collection of days that we can build into entries for the feed.
-class Calendar(db.Model):
-  """Table that describes the interesting attributes of vulgar calendar."""
+calendar = Table(
+  'calendar', meta,
+  Column('id', Integer, unique=True, nullable=False),
+  Column('day', Integer),
+  Column('week',Integer),
+  Column('month', String),
+  Column('month_of', String),
+  Column('item', String),
+  Column('item_url', String)
+)
 
-  __tablename__ = 'calendar'
-  id = db.Column(db.Integer, primary_key= True)
-  day = db.Column(db.Integer)
-  week = db.Column(db.Integer)
-  month = db.Column( db.String)
-  month_of = db.Column(db.String)
-  item = db.Column(db.String)
-  item_url = db.Column(db.String)
-
-db.create_all()
-
-# Populates a freshly made calendar.db
-check = db.session.query(Calendar).filter_by(id = 1).first()
-if check == None:
-  with open('./static/full_calendar.csv','r') as file:
-    data = csv.DictReader(file)
-    for i in data:
-      dateEntry = Calendar(
-        id = i['id'].strip("'").strip("',"),
-        day = i['day'].strip("'").strip("',"),
-        week = i['week'].strip("'").strip("',"),
-        month = i['month'].strip("'").strip("',"),
-        month_of = i['month_of'].strip("'").strip("',"),
-        item = i['item'].strip("'").strip("',"),
-        item_url =i['item_url'].strip("'").strip("',"),
-      )  
-      db.session.add(dateEntry)
-    db.session.commit()
+meta.create_all(engine)
 
 def carpeDiem():
   """Seize the day."""
   today = DateObject()
   month = unidecode(today.month); day = today.day
-  query = db.session.query(Calendar).filter_by(month = month, day = day).first()
+  statement = 'SELECT id, day, week, month, month_of, item, item_url FROM calendar WHERE day == {} AND month LIKE "{}"'.format(day,month)
+  with Session(engine) as session:
+    query = session.execute(text(statement)).fetchone()
 
   today.id = query.id
   today.week = query.week
@@ -122,7 +94,7 @@ def carpeDiem():
 
   return today
 
-@app.route('/data')
+@app.route('/')
 def data():
   """Path for json object publication."""
   today = carpeDiem()

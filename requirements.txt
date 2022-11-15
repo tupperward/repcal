@@ -1,4 +1,4 @@
 flask
-flask_sqlalchemy
+sqlalchemy
 unidecode
 gunicorn
