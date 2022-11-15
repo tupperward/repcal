@@ -13,4 +13,3 @@ RUN pip install -r requirements.txt
 EXPOSE 80
 USER daemon
 CMD ["sh", "./startup.sh"]
-
