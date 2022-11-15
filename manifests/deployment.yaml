@@ -18,6 +18,7 @@ spec:
       containers:
       - name: repcal
         image: tupperward/repcal:latest
+        imagePullPolicy: Always
         resources:
           requests:
             cpu: 10m
