@@ -1,0 +1,28 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: repcal
+  labels:
+    app: repcal
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: repcal
+  template:
+    metadata:
+      labels:
+        app: repcal
+      namespace: repcal
+    spec:
+      containers:
+      - name: repcal
+        image: tupperward/repcal:latest
+        imagePullPolicy: Always
+        resources:
+          requests:
+            cpu: 10m
+            memory: 1Mi
+          limits:
+            cpu: 10m
+            memory: 1Mi
