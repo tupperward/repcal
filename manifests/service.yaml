@@ -6,6 +6,6 @@ spec:
   selector:
     app: repcal
   ports:
-  - targetPort: 80
+  - targetPort: 8000
     port: 32365
     protocol: TCP

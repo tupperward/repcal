@@ -19,10 +19,5 @@ spec:
       - name: repcal
         image: tupperward/repcal:latest
         imagePullPolicy: Always
-        resources:
-          requests:
-            cpu: 10m
-            memory: 1Mi
-          limits:
-            cpu: 10m
-            memory: 1Mi
+        ports:
+          - containerPort: 80

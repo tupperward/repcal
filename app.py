@@ -1,7 +1,6 @@
 """Create a and publish a json object at /json."""
-import urllib.request, json, os, csv
-from os.path import exists
-from flask import Flask, request, send_from_directory, render_template
+import json
+from flask import Flask, render_template
 from sqlalchemy import create_engine, MetaData, Table, Column, Integer, String, text
 from sqlalchemy.orm import Session
 from unidecode import unidecode 
@@ -48,20 +47,6 @@ class DateObject:
     self.item = None
     self.item_url = None
     self.is_sansculottides = rd.is_sansculottides(rd_date)
-
-# Makes a collection of days that we can build into entries for the feed.
-calendar = Table(
-  'calendar', meta,
-  Column('id', Integer, unique=True, nullable=False),
-  Column('day', Integer),
-  Column('week',Integer),
-  Column('month', String),
-  Column('month_of', String),
-  Column('item', String),
-  Column('item_url', String)
-)
-
-meta.create_all(engine)
 
 def carpeDiem():
   """Seize the day."""

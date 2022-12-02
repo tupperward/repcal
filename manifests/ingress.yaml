@@ -17,4 +17,4 @@ spec:
           service:
             name: repcal
             port: 
-              number: 80
+              number: 32365
