@@ -17,4 +17,8 @@ spec:
           service:
             name: repcal
             port: 
-              number: 32365
+              number: 80
+  tls:
+  - hosts:
+    - gifts.tupperward.net
+    secretName: repcal-tls

@@ -1,0 +1,15 @@
+apiVersion: cert-manager.io/v1
+kind: Issuer
+metadata:
+  name: ca-issuer
+  namespace: repcal
+spec:
+  acme:
+    email: alexander.m.ward@gmail.com
+    server: https://acme-v02.api.letsencrypt.org/directory
+    privateKeySecretRef:
+      name: issuer-private-key
+    solvers:
+      - http01:
+          ingress:
+            class: nginx

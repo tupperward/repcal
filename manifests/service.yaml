@@ -7,5 +7,5 @@ spec:
     app: repcal
   ports:
   - targetPort: 8000
-    port: 32365
+    port: 80
     protocol: TCP
