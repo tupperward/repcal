@@ -11,7 +11,7 @@
       margin-right: auto;
     }
     img{
-      max-width: 420px;
+      max-width: auto;
       max-height: 420px;
       text-align: center;
       vertical-align: middle;
@@ -20,6 +20,7 @@
     .civil{
       font-family: Palatino;
       text-align: center;
+      margin-top: 6%;
     }
     .vulgar{
       font-family: Palatino;
@@ -42,7 +43,7 @@
     a:hover { text-decoration: none; }
     a:active { text-decoration: none; }
   </style>
-  <body class="first-color">
+  <body class="first-color" class="center">
     <div class="civil">
       <h2>Today is:</h2>
       <h1>{{ today.weekday }} {{ today.day }} {{ today.month }} {{ today.yearArabic }}</h1>
@@ -50,6 +51,7 @@
     <div class="vulgar">
       <h3>{{ today.month }} is the month of {{ today.month_of.lower() }}.</h3>
       <img class="center" src="../static/images/{{ today.image }}.jpg">
+      <br>
       <p>Today we celebrate <a href="{{ today.item_url }}" target="_blank" rel="noopener noreferrer">{{ today.item.lower() }}</a>.</p> 
     </div>
   </body>
