@@ -1,1 +1,1 @@
-gunicorn --workers=2 --threads=2 --bind=0.0.0.0:8000 'repcal:app'
+gunicorn --workers=1 --threads=1 --bind=0.0.0.0:80 'app:app'
