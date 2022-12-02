@@ -76,5 +76,10 @@ def data():
   today = carpeDiem()
   return today.jsonFormat()
 
+@app.route('/about')
+def about():
+  """About page for the project."""
+  return render_template('about.html')
+
 if __name__ == "__main__":
   app.run()
