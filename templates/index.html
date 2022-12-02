@@ -4,11 +4,53 @@
     <meta charset="UTF-8">
     <title>French Republican Daily Calendar</title>
   </head>
-  <body>
-    <h2>Today is:</h2>
-    <h1>{{ today.weekday }} {{ today.day }} {{ today.month }} {{ today.yearArabic }}</h1>
-    <h3>{{ today.month }} is the month of {{ today.month_of.lower() }}.</h3>
-    <p>Today we celebrate <a href="{{ today.item_url }}">{{ today.item.lower() }}</a>.</p> 
-    <img src="../static/images/{{ today.image }}.jpg">
+  <style>
+    .center{
+      display: block;
+      margin-left: auto;
+      margin-right: auto;
+    }
+    img{
+      max-width: 420px;
+      max-height: 420px;
+      text-align: center;
+      vertical-align: middle;
+      box-shadow: 10px 10px 20px #5c715e;
+    }
+    .civil{
+      font-family: Palatino;
+      text-align: center;
+    }
+    .vulgar{
+      font-family: Palatino;
+      text-align: center;
+    }
+    .first-color { 
+      background: #f2f9f1; 
+    }
+    .second-color { 
+      background: #ddeedf; 
+    }
+    .third-color { 
+      background: #b6cdbd; 
+    }
+    .fourth-color { 
+      background: #5c715e; 
+    }
+    a:link { text-decoration: none; }
+    a:visited { text-decoration: none; }
+    a:hover { text-decoration: none; }
+    a:active { text-decoration: none; }
+  </style>
+  <body class="first-color">
+    <div class="civil">
+      <h2>Today is:</h2>
+      <h1>{{ today.weekday }} {{ today.day }} {{ today.month }} {{ today.yearArabic }}</h1>
+    </div>
+    <div class="vulgar">
+      <h3>{{ today.month }} is the month of {{ today.month_of.lower() }}.</h3>
+      <img class="center" src="../static/images/{{ today.image }}.jpg">
+      <p>Today we celebrate <a href="{{ today.item_url }}" target="_blank" rel="noopener noreferrer">{{ today.item.lower() }}</a>.</p> 
+    </div>
   </body>
 </html>
