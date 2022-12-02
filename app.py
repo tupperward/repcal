@@ -1,7 +1,7 @@
 """Create a and publish a json object at /json."""
 import urllib.request, json, os, csv
 from os.path import exists
-from flask import Flask, request, send_from_directory
+from flask import Flask, request, send_from_directory, render_template
 from sqlalchemy import create_engine, MetaData, Table, Column, Integer, String, text
 from sqlalchemy.orm import Session
 from unidecode import unidecode 
@@ -15,8 +15,6 @@ meta = MetaData()
 # This class creates a python object with attributes that match the values of today's 
 class DateObject:
   """Create the date and ingest its attributes."""
-
-  # Some quick variables to clean up what each attribute will be calling
   
   def jsonFormat(self):
     """Genereate JSON format of the data."""
@@ -34,7 +32,6 @@ class DateObject:
     }
     return json.dumps(jsonDict)
 
-
   # When a new date object is created it will self-populate accurate information from the json
   def __init__(self):
     """Initialize the object by getting data from the external endpoint."""
@@ -46,11 +43,11 @@ class DateObject:
     self.month = rd.get_month(rd_date)
     self.yearArabic = rd.get_year_arabic(rd_date)
     self.yearRoman = rd.get_year_roman(rd_date)
-    self.formatted = rd_date
     self.week = rd.get_week_number(rd_date)
     self.month_of = None
     self.item = None
     self.item_url = None
+    self.is_sansculottides = rd.is_sansculottides(rd_date)
 
 # Makes a collection of days that we can build into entries for the feed.
 calendar = Table(
@@ -70,7 +67,7 @@ def carpeDiem():
   """Seize the day."""
   today = DateObject()
   month = unidecode(today.month); day = today.day
-  statement = 'SELECT id, day, month, month_of, item, item_url FROM calendar WHERE day == {} AND month LIKE "{}"'.format(day,month)
+  statement = 'SELECT id, month_of, item, item_url FROM calendar WHERE day == {} AND month LIKE "{}"'.format(day,month)
   with Session(engine) as session:
     query = session.execute(text(statement)).fetchone()
 
@@ -83,15 +80,16 @@ def carpeDiem():
   return today
 
 @app.route('/')
+def index():
+  """Index page."""
+  today = carpeDiem()
+  return render_template('index.html', today=today )
+
+@app.route('/json')
 def data():
   """Path for json object publication."""
   today = carpeDiem()
   return today.jsonFormat()
-
-@app.route('/images/<image>')
-def image(image):
-  """Path for any given image for a day."""
-  return send_from_directory(app.static_folder, request.path[1:])
 
 if __name__ == "__main__":
   app.run()
