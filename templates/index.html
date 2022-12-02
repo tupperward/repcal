@@ -5,10 +5,10 @@
     <title>French Republican Daily Calendar</title>
   </head>
   <body>
-    <h2>Today is</h2>
+    <h2>Today is:</h2>
     <h1>{{ today.weekday }} {{ today.day }} {{ today.month }} {{ today.yearArabic }}</h1>
-    <h3>{{ today.month }} is the month of {{ today.month_of }}.</h3>
-    <p>Today we celebrate <a href="{{ today.item_url }}">{{ today.item }}</a>.</p> 
-    <img src="../static/images/{{ today.image }}.jpg" alt="">
+    <h3>{{ today.month }} is the month of {{ today.month_of.lower() }}.</h3>
+    <p>Today we celebrate <a href="{{ today.item_url }}">{{ today.item.lower() }}</a>.</p> 
+    <img src="../static/images/{{ today.image }}.jpg">
   </body>
 </html>
