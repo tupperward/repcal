@@ -1,5 +1,5 @@
 """Create a and publish a json object at /json."""
-from flask import Flask, render_template, request
+from flask import Flask, render_template, request, send_from_directory, url_for
 from sqlalchemy import create_engine, MetaData, Table, Column, Integer, String, text
 from sqlalchemy.orm import Session
 from unidecode import unidecode 
@@ -57,6 +57,11 @@ def index():
 def about():
   """About page for the project."""
   return render_template('about.html')
+
+@app.route('/favicon.ico')
+def favicon():
+  """Shutup linter."""
+  return send_from_directory('static/','favicon.ico')
 
 if __name__ == "__main__":
   app.run()
