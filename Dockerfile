@@ -1,13 +1,13 @@
 FROM python:3.10-slim-bullseye
 
-RUN mkdir /etc/repcal
+RUN mkdir /repcal
 
-WORKDIR /etc/repcal
+WORKDIR /repcal
 
-COPY . /etc/repcal/
+COPY . /repcal
 
-RUN chown daemon /etc/repcal
-RUN chmod 705 /etc/repcal
+RUN chown daemon /repcal
+RUN chmod 705 /repcal
 RUN pip install -r requirements.txt
 
 EXPOSE 8000

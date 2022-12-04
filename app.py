@@ -1,6 +1,5 @@
 """Create a and publish a json object at /json."""
-import json
-from flask import Flask, render_template
+from flask import Flask, render_template, request
 from sqlalchemy import create_engine, MetaData, Table, Column, Integer, String, text
 from sqlalchemy.orm import Session
 from unidecode import unidecode 
@@ -12,31 +11,13 @@ engine = create_engine("sqlite+pysqlite:///calendar.db")
 meta = MetaData()
 # # # # # Classes # # # # # 
 # This class creates a python object with attributes that match the values of today's 
-class DateObject:
+class DateObject():
   """Create the date and ingest its attributes."""
-  
-  def jsonFormat(self):
-    """Genereate JSON format of the data."""
-    jsonDict = {
-      "day":self.day,
-      "weekday":self.weekday,
-      "week":self.week,
-      "month":self.month,
-      "month_of":self.month_of,
-      "yearArabic":self.yearArabic,
-      "yearRoman":self.yearRoman,
-      "formattedDate":self.formatted,
-      "item":self.item,
-      "item_url":self.item_url
-    }
-    return json.dumps(jsonDict)
 
-  # When a new date object is created it will self-populate accurate information from the json
-  def __init__(self):
+  def __init__(self, now):
     """Initialize the object by getting data from the external endpoint."""
-    n = datetime.now()
-    rd_date = rd.from_gregorian(n.date())
-    
+    rd_date = rd.from_gregorian(now.date())
+
     self.day = rd.get_day(rd_date)
     self.weekday = rd.get_weekday(rd_date)
     self.month = rd.get_month(rd_date)
@@ -46,16 +27,17 @@ class DateObject:
     self.month_of = None
     self.item = None
     self.item_url = None
-    self.is_sansculottides = rd.is_sansculottides(rd_date)
+    self.is_sansculottides = rd.is_sansculottides(rd_date) 
 
-def carpeDiem():
+def carpeDiem(now):
   """Seize the day."""
-  today = DateObject()
+  today = DateObject(now)
+
   month = unidecode(today.month); day = today.day
   statement = 'SELECT id, month_of, item, item_url FROM calendar WHERE day == {} AND month LIKE "{}"'.format(day,month)
   with Session(engine) as session:
     query = session.execute(text(statement)).fetchone()
-
+  today.now = now
   today.id = query.id
   today.month_of = query.month_of
   today.item = query.item
@@ -67,14 +49,9 @@ def carpeDiem():
 @app.route('/')
 def index():
   """Index page."""
-  today = carpeDiem()
+  n = datetime.now()
+  today = carpeDiem(n)
   return render_template('index.html', today=today )
-
-@app.route('/json')
-def data():
-  """Path for json object publication."""
-  today = carpeDiem()
-  return today.jsonFormat()
 
 @app.route('/about')
 def about():

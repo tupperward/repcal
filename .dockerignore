@@ -1,3 +1,6 @@
 .vscode
 .github
 __pycache__
+LICENSE
+README.md
+.gitignore 
