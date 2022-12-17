@@ -1,6 +1,8 @@
 # repcal
-A Flask App that generates a JSON object detailing this date in the French Republican Calendar.
+A Flask App that displays todays date in the French Republican Calendar.
 
-Honestly, this is so pared down at this point that I don't know why the README is here.
+`docker pull tupperward/repcal:latest`
 
-`localhost:8000/data`
+Feel free to use the manifests here. Maybe I'll replace them with a helm chart at some point.
+
+`localhost:8000/`
