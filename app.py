@@ -1,6 +1,6 @@
 """Create a and publish a json object at /json."""
-from flask import Flask, render_template, request, send_from_directory, url_for
-from sqlalchemy import create_engine, MetaData, Table, Column, Integer, String, text
+from flask import Flask, request, render_template, send_from_directory
+from sqlalchemy import create_engine, MetaData, text
 from sqlalchemy.orm import Session
 from unidecode import unidecode 
 from repcal import RepublicanDate as rd
@@ -9,14 +9,15 @@ from datetime import datetime
 app = Flask(__name__)
 engine = create_engine("sqlite+pysqlite:///calendar.db")
 meta = MetaData()
+time = None
 # # # # # Classes # # # # # 
 # This class creates a python object with attributes that match the values of today's 
 class DateObject():
   """Create the date and ingest its attributes."""
 
-  def __init__(self, now):
+  def __init__(self, time):
     """Initialize the object by getting data from the external endpoint."""
-    rd_date = rd.from_gregorian(now.date())
+    rd_date = rd.from_gregorian(time.date())
 
     self.day = rd.get_day(rd_date)
     self.weekday = rd.get_weekday(rd_date)
@@ -37,7 +38,7 @@ def carpeDiem(now):
   statement = 'SELECT id, month_of, item, item_url FROM calendar WHERE day == {} AND month LIKE "{}"'.format(day,month)
   with Session(engine) as session:
     query = session.execute(text(statement)).fetchone()
-  today.now = now
+  today.now = time
   today.id = query.id
   today.month_of = query.month_of
   today.item = query.item
@@ -49,9 +50,23 @@ def carpeDiem(now):
 @app.route('/')
 def index():
   """Index page."""
-  n = datetime.now()
-  today = carpeDiem(n)
+  global time
+  if time is None:
+    time = datetime.now()
+  today = carpeDiem(time)
   return render_template('index.html', today=today )
+
+@app.route('/process_time', methods=['POST'])
+def process_time():
+  """Process the time parameter passed in an HTTP request and stores it as a datetime object.
+
+  The time parameter should be a Unix timestamp. It is converted to a datetime object and stored as a global variable for use in other routes.
+  """
+  global time
+  timestamp = request.form['time']
+  time = datetime.fromtimestamp(float(timestamp))
+  return
+
 
 @app.route('/about')
 def about():
