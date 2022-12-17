@@ -62,8 +62,21 @@
     a:hover { text-decoration: none; }
     a:active { text-decoration: none; }
   </style>
+  <script>
+    async function sendTime() {
+      var date = new Date();
+      var timestamp = date.getTime();
+      await fetch("/process_time", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/x-www-form-urlencoded"
+        },
+        body: "time=" + timestamp/1000;
+      });
+    }
+  </script>
   <div id="wrapper">
-  <body class="first-color">
+  <body onload="sendTime()" class="first-color">
 
       <div id="civil" class="center">
         <h2>Today is:</h2>
@@ -81,7 +94,7 @@
   <br>
   <footer>
     <div id="footer">
-      <p> <a href="/about">About</a> | <a href="http://github.com/tupperward/repcal">GitHub</a></p> 
+      <p> <a href="/about">About</a> | <a rel="me" href="https://hachyderm.io/@tupperward">Mastodon</a></p> 
     </div>
   </footer>
 </div>

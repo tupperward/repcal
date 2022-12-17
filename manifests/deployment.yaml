@@ -5,7 +5,7 @@ metadata:
   labels:
     app: repcal
 spec:
-  replicas: 1
+  replicas: 2
   selector:
     matchLabels:
       app: repcal
@@ -17,7 +17,7 @@ spec:
     spec:
       containers:
       - name: repcal
-        image: tupperward/repcal:v1
+        image: tupperward/repcal:v1.2
         imagePullPolicy: Always
         ports:
           - containerPort: 80
