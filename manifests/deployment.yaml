@@ -17,7 +17,7 @@ spec:
     spec:
       containers:
       - name: repcal
-        image: tupperward/repcal:v1
+        image: tupperward/repcal:v1.1
         imagePullPolicy: Always
         ports:
           - containerPort: 80
