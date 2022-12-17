@@ -66,8 +66,6 @@
     async function sendTime() {
       var date = new Date();
       var timestamp = date.getTime();
-      console.log("Sending time...")
-      console.log(timestamp)
       await fetch("/process_time", {
         method: "POST",
         headers: {

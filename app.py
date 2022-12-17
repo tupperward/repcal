@@ -30,7 +30,7 @@ class DateObject():
     self.item_url = None
     self.is_sansculottides = rd.is_sansculottides(rd_date) 
 
-async def carpeDiem(now):
+def carpeDiem(now):
   """Seize the day."""
   today = DateObject(now)
 
@@ -48,12 +48,12 @@ async def carpeDiem(now):
   return today
 
 @app.route('/')
-async def index():
+def index():
   """Index page."""
   global time
   if time is None:
     time = datetime.now()
-  today = await carpeDiem(time)
+  today = carpeDiem(time)
   return render_template('index.html', today=today )
 
 @app.route('/process_time', methods=['POST'])
