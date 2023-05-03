@@ -19,7 +19,7 @@ jobs:
       - name: Check out repository
         uses: actions/checkout@v3
         with:
-          repository: repcal
+          repository: ${{ vars.DOCKER_IMAGE }}
           ref: main
 
       # Build the image and push to public repo
@@ -29,7 +29,7 @@ jobs:
           username: ${{ secrets.DOCKERHUB_USERNAME }}
           password: ${{ secrets.DOCKERHUB_TOKEN }}
           registry: docker.io
-          image: tupperward/repcal
+          image: ${{ vars.DOCKER_IMAGE }}
           tags: v2, latest
 
   deploy:
