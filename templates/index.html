@@ -63,17 +63,27 @@
     a:active { text-decoration: none; }
   </style>
   <script>
-    async function sendTime() {
-      var date = new Date();
-      var timestamp = date.getTime();
-      await fetch("/process_time", {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/x-www-form-urlencoded"
-        },
-        body: "time=" + timestamp/1000,
-      });
-    }
+    // Retrieve local time from the browser
+    var localTime = new Date().toLocaleTimeString();
+
+    // Send the local time to the Flask app using a POST request
+    fetch('/process_time', {
+        method: 'POST',
+        body: new URLSearchParams({
+            'local_time': localTime
+        })
+    })
+    .then(response => {
+        // Handle the response from the Flask app
+        if (response.ok) {
+            console.log('Local time sent successfully.');
+        } else {
+            console.error('Failed to send local time.');
+        }
+    })
+    .catch(error => {
+        console.error('An error occurred while sending local time:', error);
+    });
   </script>
   <div id="wrapper">
   <body onload="sendTime()" class="first-color">
@@ -81,6 +91,7 @@
       <div id="civil" class="center">
         <h2>Today is:</h2>
         <h1>{{ today.weekday.lower() }} {{ today.day }} {{ today.month.lower() }} an {{ today.yearArabic }}</h1>
+        <h3>The current time is: {{ local_time }}</h3>
       </div>
       <div id="vulgar" class="center">
         <h3>{{ today.month }} is the month of {{ today.month_of.lower() }}.</h3>
