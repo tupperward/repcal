@@ -37,7 +37,6 @@ def carpeDiem(now):
   statement = 'SELECT id, month_of, item, item_url FROM calendar WHERE day == {} AND month LIKE "{}"'.format(day,month)
   with Session(engine) as session:
     query = session.execute(text(statement)).fetchone()
-  today.now = time
   today.id = query.id
   today.month_of = query.month_of
   today.item = query.item
