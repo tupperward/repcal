@@ -9,7 +9,6 @@ from datetime import datetime
 app = Flask(__name__)
 engine = create_engine("sqlite+pysqlite:///calendar.db")
 meta = MetaData()
-time = None
 # # # # # Classes # # # # # 
 # This class creates a python object with attributes that match the values of today's 
 class DateObject():
@@ -50,9 +49,7 @@ def carpeDiem(now):
 @app.route('/')
 def index():
   """Index page."""
-  global time
-  if time is None:
-    time = datetime.now()
+  time = datetime.now()
   today = carpeDiem(time)
   return render_template('index.html', today=today )
 
@@ -62,10 +59,8 @@ def process_time():
 
   The time parameter should be a Unix timestamp. It is converted to a datetime object and stored as a global variable for use in other routes.
   """
-  global time
-  timestamp = request.form['time']
-  time = datetime.fromtimestamp(float(timestamp))
-  return
+  local_time = request.form['local_time']
+  return render_template('index.html', local_time=local_time)
 
 
 @app.route('/about')
