@@ -1,10 +1,10 @@
-"""Create a and publish a json object at /json."""
 from flask import Flask, request, render_template, send_from_directory, session
 from sqlalchemy import create_engine, MetaData, text
 from sqlalchemy.orm import Session
 from unidecode import unidecode 
 from repcal import RepublicanDate as rd
 from datetime import datetime
+import json
 
 app = Flask(__name__)
 engine = create_engine("sqlite+pysqlite:///calendar.db")
@@ -46,29 +46,47 @@ def carpeDiem(now):
 
   return today
 
-@app.route('/', methods=["POST","GET"])
+@app.route('/', methods=["GET"])
 def index():
   """Index page."""
   return render_template('loading.html' )
+
 @app.route('/get_local_time', methods=['POST'])
 def get_local_time():
   """Get time from JS."""
   local_time = request.form.get('local_time', str)
+  # Store the timestamp variable to the session
   session['timestamp'] = local_time
-  print(f"Time: {local_time}   int(local_time): {type(local_time)}")
   return 'OK'
 
 @app.route('/today', methods=["GET"])
 def today():
   """Finished rendered page."""
-  #print("request.form.get('local_time',str): " + request.form.get('local_time', str))
-  #local_time = request.form.get('local_time', str)
-  #print("type(local_time): " + type(local_time))
+  # Retrieving the timestamp variable from the session
   time = session.get('timestamp')
-  int_time = int(time)
-  date = datetime.utcfromtimestamp(int_time)
+  date = datetime.utcfromtimestamp(int(time))
   today = carpeDiem(date)
-  return render_template('index.html', today=today, local_time=time )
+  return render_template('today.html', today=today )
+
+@app.route('/data')
+def data():
+  """Return raw data to construct Discord embeds."""
+  time = datetime.now()
+  today = carpeDiem(time)
+  data = {
+    "day": today.day,
+    "weekday": unidecode(today.weekday),
+    "month": unidecode(today.month),
+    "yearArabic": today.yearArabic,
+    "yearRoman": today.yearRoman,
+    "week": today.week,
+    "month_of": today.month_of,
+    "item": today.item, 
+    "item_url": today.item_url + ".jpg",
+    "is_sansculottides": today.is_sansculottides
+  }
+  json_data = json.dumps(data)
+  return json_data
 
 @app.route('/about')
 def about():
