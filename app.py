@@ -82,7 +82,7 @@ def data():
     "week": today.week,
     "month_of": today.month_of,
     "item": today.item, 
-    "item_url": today.item_url + ".jpg",
+    "item_url": today.item_url,
     "is_sansculottides": today.is_sansculottides
   }
   json_data = json.dumps(data)
