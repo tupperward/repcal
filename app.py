@@ -72,14 +72,6 @@ def today():
 @app.route('/data')
 def data():
   """Return date data for constructing Discord embeds."""
-  def decodeSubstring(foo):
-    """Encode unicode substring."""
-    regexString = "[^\x00-\x7F]+"
-    subString = bytes(str(re.search(regexString, foo)).encode('utf-8'))
-    decodedSubString = subString.decode('utf-8')
-    finishedString = foo.replace(subString, decodedSubString)
-    return 
-  
   time = datetime.now()
   today = carpeDiem(time)
   data = {
