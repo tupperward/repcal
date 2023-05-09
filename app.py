@@ -4,7 +4,7 @@ from sqlalchemy.orm import Session
 from unidecode import unidecode 
 from repcal import RepublicanDate as rd
 from datetime import datetime
-import json, secrets
+import json, secrets, re
 
 # Set up Flask as app, generate a secret key using secrets.
 app = Flask(__name__)
@@ -36,9 +36,7 @@ def carpeDiem(now):
   """Seize the day."""
   # This instantiates a DateObject  
   today = DateObject(now)
-
-  month = unidecode(today.month); day = today.day
-  statement = 'SELECT id, month_of, item, item_url FROM calendar WHERE day == {} AND month LIKE "{}"'.format(day,month)
+  statement = 'SELECT id, month_of, item, item_url FROM calendar WHERE day == {} AND month LIKE "{}"'.format(today.day,unidecode(today.month))
   with Session(engine) as session:
     query = session.execute(text(statement)).fetchone()
   today.id = query.id
@@ -74,12 +72,20 @@ def today():
 @app.route('/data')
 def data():
   """Return date data for constructing Discord embeds."""
+  def decodeSubstring(foo):
+    """Encode unicode substring."""
+    regexString = "[^\x00-\x7F]+"
+    subString = bytes(str(re.search(regexString, foo)).encode('utf-8'))
+    decodedSubString = subString.decode('utf-8')
+    finishedString = foo.replace(subString, decodedSubString)
+    return 
+  
   time = datetime.now()
   today = carpeDiem(time)
   data = {
     "day": today.day,
-    "weekday": unidecode(today.weekday),
-    "month": unidecode(today.month),
+    "weekday": today.weekday.lower(),
+    "month": today.month,
     "yearArabic": today.yearArabic,
     "yearRoman": today.yearRoman,
     "week": today.week,
