@@ -12,6 +12,7 @@
           body: new URLSearchParams({
               'local_time': localTime
           }),
+          redirect: 'follow'
       })
       .then(response => {
           // Handle the response from the Flask app

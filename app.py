@@ -53,11 +53,15 @@ def index():
 @app.route('/today', methods=["POST","GET"])
 def today():
   """Finished rendered page."""
-  local_time = int(request.form['local_time'])
-  date = datetime.utcfromtimestamp(local_time)
-  print(f"Time: {local_time}      Type: {type(date)}")
+  print(request.data)
+  print(request.form.get('local_time', str))
+  local_time = request.form.get('local_time', str)
+  print(type(local_time))
+  int_time = int(local_time)
+  date = datetime.utcfromtimestamp(int_time)
+  print(f"Time: {local_time}   int(local_time): {type(int_time)}   dateType: {type(date)}")
   today = carpeDiem(date)
-  return render_template('index.html', today=today )
+  return render_template('index.html', today=today, local_time=local_time )
 
 @app.route('/about')
 def about():
