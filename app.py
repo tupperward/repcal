@@ -1,5 +1,5 @@
 """Create a and publish a json object at /json."""
-from flask import Flask, request, render_template, send_from_directory, redirect
+from flask import Flask, request, render_template, send_from_directory, session
 from sqlalchemy import create_engine, MetaData, text
 from sqlalchemy.orm import Session
 from unidecode import unidecode 
@@ -9,6 +9,7 @@ from datetime import datetime
 app = Flask(__name__)
 engine = create_engine("sqlite+pysqlite:///calendar.db")
 meta = MetaData()
+app.secret_key = 'test_key'
 # # # # # Classes # # # # # 
 # This class creates a python object with attributes that match the values of today's 
 class DateObject():
@@ -48,20 +49,26 @@ def carpeDiem(now):
 @app.route('/', methods=["POST","GET"])
 def index():
   """Index page."""
-  return render_template('loading.html', today=today )
+  return render_template('loading.html' )
+@app.route('/get_local_time', methods=['POST'])
+def get_local_time():
+  """Get time from JS."""
+  local_time = request.form.get('local_time', str)
+  session['timestamp'] = local_time
+  print(f"Time: {local_time}   int(local_time): {type(local_time)}")
+  return 'OK'
 
-@app.route('/today', methods=["POST","GET"])
+@app.route('/today', methods=["GET"])
 def today():
   """Finished rendered page."""
-  print(request.data)
-  print(request.form.get('local_time', str))
-  local_time = request.form.get('local_time', str)
-  print(type(local_time))
-  int_time = int(local_time)
+  #print("request.form.get('local_time',str): " + request.form.get('local_time', str))
+  #local_time = request.form.get('local_time', str)
+  #print("type(local_time): " + type(local_time))
+  time = session.get('timestamp')
+  int_time = int(time)
   date = datetime.utcfromtimestamp(int_time)
-  print(f"Time: {local_time}   int(local_time): {type(int_time)}   dateType: {type(date)}")
   today = carpeDiem(date)
-  return render_template('index.html', today=today, local_time=local_time )
+  return render_template('index.html', today=today, local_time=time )
 
 @app.route('/about')
 def about():
