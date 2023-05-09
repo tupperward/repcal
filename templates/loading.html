@@ -1,18 +1,20 @@
 <!DOCTYPE html>
 <html>
 <head>
-    <meta http-equiv="refresh" content="0; url=/today">
+    <meta http-equiv="refresh" content="0.5; url=/today">
     <title>Loading...</title>
     <script>
       // Retrieve local time from the browser
-      var localTime = new Date().toLocaleTimeString();
+      var localTime = Math.floor(Date.now() / 1000);
   
       // Send the local time to the Flask app using a POST request
       fetch('/today', {
           method: 'POST',
           body: new URLSearchParams({
               'local_time': localTime
-          })
+          }),
+          redirect: "follow",
+          mode: "cors"
       })
       .then(response => {
           // Handle the response from the Flask app
