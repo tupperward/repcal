@@ -1,14 +1,15 @@
-"""Create a and publish a json object at /json."""
-from flask import Flask, request, render_template, send_from_directory
+from flask import Flask, request, render_template, send_from_directory, session
 from sqlalchemy import create_engine, MetaData, text
 from sqlalchemy.orm import Session
 from unidecode import unidecode 
 from repcal import RepublicanDate as rd
 from datetime import datetime
+import json
 
 app = Flask(__name__)
 engine = create_engine("sqlite+pysqlite:///calendar.db")
 meta = MetaData()
+app.secret_key = 'test_key'
 # # # # # Classes # # # # # 
 # This class creates a python object with attributes that match the values of today's 
 class DateObject():
@@ -45,22 +46,47 @@ def carpeDiem(now):
 
   return today
 
-@app.route('/')
+@app.route('/', methods=["GET"])
 def index():
   """Index page."""
+  return render_template('loading.html' )
+
+@app.route('/get_local_time', methods=['POST'])
+def get_local_time():
+  """Get time from JS."""
+  local_time = request.form.get('local_time', str)
+  # Store the timestamp variable to the session
+  session['timestamp'] = local_time
+  return 'OK'
+
+@app.route('/today', methods=["GET"])
+def today():
+  """Finished rendered page."""
+  # Retrieving the timestamp variable from the session
+  time = session.get('timestamp')
+  date = datetime.utcfromtimestamp(int(time))
+  today = carpeDiem(date)
+  return render_template('today.html', today=today )
+
+@app.route('/data')
+def data():
+  """Return raw data to construct Discord embeds."""
   time = datetime.now()
   today = carpeDiem(time)
-  return render_template('index.html', today=today )
-
-@app.route('/process_time', methods=['POST'])
-def process_time():
-  """Process the time parameter passed in an HTTP request and stores it as a datetime object.
-
-  The time parameter should be a Unix timestamp. It is converted to a datetime object and stored as a global variable for use in other routes.
-  """
-  local_time = request.form['local_time']
-  return render_template('index.html', local_time=local_time)
-
+  data = {
+    "day": today.day,
+    "weekday": unidecode(today.weekday),
+    "month": unidecode(today.month),
+    "yearArabic": today.yearArabic,
+    "yearRoman": today.yearRoman,
+    "week": today.week,
+    "month_of": today.month_of,
+    "item": today.item, 
+    "item_url": today.item_url,
+    "is_sansculottides": today.is_sansculottides
+  }
+  json_data = json.dumps(data)
+  return json_data
 
 @app.route('/about')
 def about():
