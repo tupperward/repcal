@@ -4,12 +4,14 @@ from sqlalchemy.orm import Session
 from unidecode import unidecode 
 from repcal import RepublicanDate as rd
 from datetime import datetime
-import json
+import json, secrets
 
+# Set up Flask as app, generate a secret key using secrets.
 app = Flask(__name__)
+app.secret_key = secrets.token_urlsafe(16)
 engine = create_engine("sqlite+pysqlite:///calendar.db")
 meta = MetaData()
-app.secret_key = 'test_key'
+
 # # # # # Classes # # # # # 
 # This class creates a python object with attributes that match the values of today's 
 class DateObject():
@@ -32,6 +34,7 @@ class DateObject():
 
 def carpeDiem(now):
   """Seize the day."""
+  # This instantiates a DateObject  
   today = DateObject(now)
 
   month = unidecode(today.month); day = today.day
@@ -48,7 +51,7 @@ def carpeDiem(now):
 
 @app.route('/', methods=["GET"])
 def index():
-  """Index page."""
+  """Root path page that contains JS script."""
   return render_template('loading.html' )
 
 @app.route('/get_local_time', methods=['POST'])
@@ -70,7 +73,7 @@ def today():
 
 @app.route('/data')
 def data():
-  """Return raw data to construct Discord embeds."""
+  """Return date data for constructing Discord embeds."""
   time = datetime.now()
   today = carpeDiem(time)
   data = {
