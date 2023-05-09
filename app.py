@@ -1,5 +1,5 @@
 """Create a and publish a json object at /json."""
-from flask import Flask, request, render_template, send_from_directory
+from flask import Flask, request, render_template, send_from_directory, redirect
 from sqlalchemy import create_engine, MetaData, text
 from sqlalchemy.orm import Session
 from unidecode import unidecode 
@@ -45,22 +45,18 @@ def carpeDiem(now):
 
   return today
 
-@app.route('/')
+@app.route('/', methods=["POST","GET"])
 def index():
   """Index page."""
-  time = datetime.now()
+  return render_template('loading.html', today=today )
+
+@app.route('/today', methods=["POST","GET"])
+def today():
+  """Finished rendered page."""
+  local_time = request.form['local_time']
+  time = local_time
   today = carpeDiem(time)
   return render_template('index.html', today=today )
-
-@app.route('/process_time', methods=['POST'])
-def process_time():
-  """Process the time parameter passed in an HTTP request and stores it as a datetime object.
-
-  The time parameter should be a Unix timestamp. It is converted to a datetime object and stored as a global variable for use in other routes.
-  """
-  local_time = request.form['local_time']
-  return render_template('index.html', local_time=local_time)
-
 
 @app.route('/about')
 def about():
