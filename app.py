@@ -54,8 +54,7 @@ def index():
 def today():
   """Finished rendered page."""
   local_time = request.form['local_time']
-  time = local_time
-  today = carpeDiem(time)
+  today = carpeDiem(local_time)
   return render_template('index.html', today=today )
 
 @app.route('/about')
