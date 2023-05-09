@@ -86,6 +86,7 @@ def data():
     "month_of": today.month_of,
     "item": today.item, 
     "item_url": today.item_url,
+    "image": today.image,
     "is_sansculottides": today.is_sansculottides
   }
   json_data = json.dumps(data)

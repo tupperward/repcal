@@ -1,9 +1,0 @@
-apiVersion: actions.summerwind.dev/v1alpha1
-kind: RunnerDeployment
-metadata:
-  name: duo-runnerdeploy
-spec:
-  replicas: 2
-  template:
-    spec:
-      repository: tupperward/repcal
