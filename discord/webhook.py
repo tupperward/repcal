@@ -17,9 +17,9 @@ data = json.loads(res)
 embed = Embed()
 embed.title = f"Today is: {data['weekday'].lower()} {data['day']} {data['month']} an {data['yearArabic']}"
 embed.color = Colour.green()
-embed.description = f"\n**{data['month']} is the month of {data['month_of']}.**\n\nToday we celebrate {data['item']}.\n\n {data['item_url']}"
+embed.description = f"\n**{data['month']} is the month of {data['month_of'].lower()}.**\n\nToday we celebrate {data['item'].lower()}.\n\n {data['item_url'].lower()}"
 embed.set_image(url=f"https://repcal.tupperward.net/static/images/{data['image']}.jpg")
-embed.set_footer(text=f"{data['weekday'].lower()} {data['day']} {data['month']} an {data['yearRoman'].upper()}", icon_url="https://repcal.tupperward.net")
+embed.set_footer(text=f"{data['weekday'].lower()} {data['day']} {data['month']} an {data['yearRoman'].upper()}", icon_url="https://repcal.tupperward.net/static/images/birch.jpg")
 embed.url = "https://repcal.tupperward.net"
 embed.type = "rich"
 embed.timestamp = datetime.now()
