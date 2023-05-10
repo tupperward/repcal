@@ -64,8 +64,12 @@ def get_local_time():
 def today():
   """Finished rendered page."""
   # Retrieving the timestamp variable from the session
-  time = session.get('timestamp')
-  date = datetime.utcfromtimestamp(int(time))
+  try:
+    time = session.get('timestamp')
+    date = datetime.utcfromtimestamp(int(time))
+  except:
+    date = datetime.now()
+  
   today = carpeDiem(date)
   return render_template('today.html', today=today )
 
