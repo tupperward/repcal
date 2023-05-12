@@ -2,7 +2,7 @@ body {
   margin-top: 5%;
   font-size: 14px;
   line-height: 1.42857143;
-  font-family: Palatino;
+  font-family: Cormorant;
 }
 
 .center {
@@ -60,7 +60,7 @@ img {
 
 #footer {
   max-height: 150px;
-  font-family: Palatino;
+  font-family: Cormorant;
   text-align: center;
   padding: 20px;
   margin-top: 70px;
@@ -78,12 +78,12 @@ img {
 }
 
 #civil {
-  font-family: Palatino;
+  font-family: Cormorant;
   text-align: center;
 }
 
 #vulgar {
-  font-family: Palatino;
+  font-family: Cormorant;
   text-align: center;
   font-size: large;
 }
@@ -124,7 +124,7 @@ h6 {
   font-weight: 500;
   line-height: 1.1;
   color: inherit;
-  font-family: Palatino;
+  font-family: Cormorant;
 }
 
 h1 {
@@ -154,5 +154,5 @@ h6 {
 
 p {
   margin: 0 0 10px;
-  font-family: Palatino;
+  font-family: Cormorant;
 }
