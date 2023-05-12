@@ -9,6 +9,7 @@ import json, secrets
 # Set up Flask as app, generate a secret key using secrets.
 app = Flask(__name__)
 app.secret_key = secrets.token_urlsafe(16)
+app.logger.setLevel('INFO')
 engine = create_engine("sqlite+pysqlite:///calendar.db")
 meta = MetaData()
 
