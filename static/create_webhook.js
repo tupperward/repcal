@@ -10,8 +10,8 @@ document.addEventListener('DOMContentLoaded', function() {
   }
 
   // Event listeners for the form inputs
-  document.getElementById('name').addEventListener('change', updateCronSchedule);
-  document.getElementById('url').addEventListener('change', updateCronSchedule);
+  document.getElementById('name').addEventListener('change', updateSchedule);
+  document.getElementById('url').addEventListener('change', updateSchedule);
   document.getElementById('timezone').addEventListener('change', updateSchedule);
   document.getElementById('time').addEventListener('change', updateSchedule);
 
