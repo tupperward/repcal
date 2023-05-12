@@ -1,4 +1,4 @@
-name: Docker Build/Push && Kubernetes Deploy
+name: Webhook Docker Build/Push 
 
 on:
   push:
@@ -29,22 +29,7 @@ jobs:
           username: ${{ secrets.DOCKERHUB_USERNAME }}
           password: ${{ secrets.DOCKERHUB_TOKEN }}
           registry: docker.io
+          dockerfile: discord/Dockerfile
           image: ${{ vars.DOCKER_IMAGE }}
-          tags: v2, latest
+          tags: discord
 
-  deploy:
-    needs: build
-    runs-on: self-hosted
-    permissions:
-      contents: read
-    steps:
-      # Set up the Kubernetes CLI with your DigitalOcean Kubernetes cluster.
-      - name: Set up kubectl
-        uses: matootie/dokube@v1.4.0
-        with:
-          personalAccessToken: ${{ secrets.DO_TOKEN }}
-          clusterName: ${{ vars.CLUSTER_NAME}}
-
-      # Run any kubectl commands you want!
-      - name: Roll Pods
-        run: kubectl rollout restart ${{ vars.RESOURCE }} -n ${{ vars.NAMESPACE }} ${{ vars.RESOURCE_NAME }} 

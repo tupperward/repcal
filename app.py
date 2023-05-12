@@ -1,11 +1,11 @@
-from flask import Flask, request, render_template, send_from_directory, session
+from flask import Flask, request, render_template, send_from_directory, session, redirect
 from sqlalchemy import create_engine, MetaData, text
 from sqlalchemy.orm import Session
 from unidecode import unidecode 
 from repcal import RepublicanDate as rd
 from datetime import datetime
-import json, secrets, re
-
+import json, secrets, pytz
+from collections import Counter
 # Set up Flask as app, generate a secret key using secrets.
 app = Flask(__name__)
 app.secret_key = secrets.token_urlsafe(16)
@@ -93,6 +93,37 @@ def data():
   }
   json_data = json.dumps(data)
   return json_data
+
+@app.route('/signup')
+def signup():
+  """Signup page to add the webhook to your discord."""
+  return render_template('signup.html')
+
+@app.route('/create_webhook', methods=['POST'])
+def create_webhook():
+  """Create Cronjob for Webhook."""
+  import modules.kubectl as k
+  from cron_validator import CronValidator
+  def check_timezone(zone):
+    """Validate timezone formatting."""
+    all_tz = pytz.all_timezones
+    frequency = Counter(all_tz)
+    # If the requested timezone has a frequency of 0, it doesn't exist.
+    if frequency[zone] > 0:
+      return True  
+
+  name = request.form.get('name', str)
+  time_zone = request.form.get('time_zone', str)
+  schedule = request.form.get('schedule', str)
+  # Use timezone validator
+  if not check_timezone(time_zone):
+    raise ValueError('Requested timzone is not available.')
+  # Validate cron formatting.
+  if CronValidator.parse(schedule) is None:
+    raise ValueError('Cron is formatted incorrectly.')
+  else:
+    k.create_cronjob(name=name, time_zone=time_zone, cron=schedule)
+    return 'OK'
 
 @app.route('/about')
 def about():

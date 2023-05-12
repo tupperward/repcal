@@ -1,0 +1,50 @@
+name: Website Docker Build/Push & Kubernetes Deploy
+
+on:
+  push:
+    branches: [ main ]
+  pull_request:
+    branches: [ main ]
+
+jobs:
+  build:
+    runs-on: self-hosted
+    permissions:
+      contents: read
+      packages: write
+      id-token: write 
+
+    steps:
+      # Check out the repo for building
+      - name: Check out repository
+        uses: actions/checkout@v3
+        with:
+          repository: ${{ vars.DOCKER_IMAGE }}
+          ref: main
+
+      # Build the image and push to public repo
+      - name: Build and push image
+        uses: mr-smithers-excellent/docker-build-push@v6
+        with:
+          username: ${{ secrets.DOCKERHUB_USERNAME }}
+          password: ${{ secrets.DOCKERHUB_TOKEN }}
+          registry: docker.io
+          image: ${{ vars.DOCKER_IMAGE }}
+          tags: v2, latest
+
+  deploy:
+    needs: build
+    runs-on: self-hosted
+    permissions:
+      contents: read
+    steps:
+      # Set up the Kubernetes CLI with your DigitalOcean Kubernetes cluster.
+      - name: Set up kubectl
+        uses: matootie/dokube@v1.4.0
+        with:
+          personalAccessToken: ${{ secrets.DO_TOKEN }}
+          clusterName: ${{ vars.CLUSTER_NAME}}
+
+      # Run any kubectl commands you want!
+      - name: Roll Pods
+        run: kubectl rollout restart ${{ vars.RESOURCE }} -n ${{ vars.NAMESPACE }} ${{ vars.RESOURCE_NAME }} 

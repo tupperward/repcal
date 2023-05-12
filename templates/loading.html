@@ -18,9 +18,6 @@
         .then((response) => {
           // Handle the response from the Flask app
         if (response.ok) {
-            console.log("Local time sent successfully.");
-            console.log("Origin: " + window.location.origin);
-            console.log("Url: " + url);
             window.location.assign(url + "/today");
         } else {
             console.error("Failed to send local time.");
