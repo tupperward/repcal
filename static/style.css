@@ -75,8 +75,10 @@ img {
   margin-bottom: 0;
   color: #777;
 }
-
-#celebrate {
+#above-image {
+  padding-bottom: 10px;
+}
+#below-image {
   padding-top: 15px;
 }
 
