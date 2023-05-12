@@ -1,4 +1,4 @@
-from flask import Flask, request, render_template, send_from_directory, session, redirect
+from flask import Flask, request, render_template, send_from_directory, session, redirect, url_for
 from sqlalchemy import create_engine, MetaData, text
 from sqlalchemy.orm import Session
 from unidecode import unidecode 
@@ -115,7 +115,7 @@ def create_webhook():
     app.logger.info('Successfully created cronjob.')
   except Exception as e:
     app.logger.error("Failed to create cronjob : %s" % e)
-  return render_template('today.html')
+  return redirect(url_for('today'))
 
 @app.route('/about')
 def about():
