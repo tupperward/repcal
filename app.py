@@ -5,7 +5,7 @@ from unidecode import unidecode
 from repcal import RepublicanDate as rd
 from datetime import datetime
 import json, secrets
-from collections import Counter
+
 # Set up Flask as app, generate a secret key using secrets.
 app = Flask(__name__)
 app.secret_key = secrets.token_urlsafe(16)
