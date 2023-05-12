@@ -10,6 +10,8 @@ document.addEventListener('DOMContentLoaded', function() {
   }
 
   // Event listeners for the form inputs
+  document.getElementById('name').addEventListener('change', updateCronSchedule);
+  document.getElementById('url').addEventListener('change', updateCronSchedule);
   document.getElementById('timezone').addEventListener('change', updateSchedule);
   document.getElementById('time').addEventListener('change', updateSchedule);
 
@@ -39,6 +41,7 @@ document.addEventListener('DOMContentLoaded', function() {
       if (response.ok) {
         // Handle success response here
         console.log(response);
+        window.location.assign(url + "/today");
       } else {
         // Handle error response here
         console.error('Failed to create webhook.');

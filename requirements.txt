@@ -4,4 +4,3 @@ unidecode
 gunicorn
 repcal
 kubernetes
-cron-validator
