@@ -103,7 +103,6 @@ def signup():
 def create_webhook():
   """Create Cronjob for Webhook."""
   import modules.kubectl as k
-  from cron_validator import CronValidator
 
   name = request.form.get('name', str)
   url = request.form.get('url', str)
