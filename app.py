@@ -104,7 +104,7 @@ def create_webhook():
   """Create Cronjob for Webhook."""
   import modules.kubectl as k
 
-  name = request.form.get('name', str)
+  name = request.form.get('name', str).strip().replace(' ','-')
   url = request.form.get('url', str)
   timezone = request.form.get('timezone', str)
   schedule = request.form.get('schedule', str)
@@ -115,7 +115,7 @@ def create_webhook():
     app.logger.info('Successfully created cronjob.')
   except Exception as e:
     app.logger.error("Failed to create cronjob : %s" % e)
-  return 'OK'
+  return render_template('today.html')
 
 @app.route('/about')
 def about():
