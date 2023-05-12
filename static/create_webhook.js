@@ -1,33 +1,34 @@
 document.addEventListener('DOMContentLoaded', function() {
   // Function to update the cron schedule based on the selected values
-  function updateCronSchedule() {
+  function updateSchedule() {
     var timezone = document.getElementById('timezone').value;
-    var hour = document.getElementById('hour').value;
-    var minute = document.getElementById('minute').value;
-    var cronSchedule = minute + ' ' + hour + ' * * *';
+    var time = document.getElementById('time').value;
+    var [hour, minute] = time.split(':');
+    var schedule = minute + ' ' + hour + ' * * *';
 
-    document.getElementById('cronSchedule').value = cronSchedule;
+    document.getElementById('schedule').value = schedule;
   }
 
   // Event listeners for the form inputs
-  document.getElementById('timezone').addEventListener('change', updateCronSchedule);
-  document.getElementById('hour').addEventListener('change', updateCronSchedule);
-  document.getElementById('minute').addEventListener('change', updateCronSchedule);
+  document.getElementById('timezone').addEventListener('change', updateSchedule);
+  document.getElementById('time').addEventListener('change', updateSchedule);
 
   // Submit event handler for the form
-  document.getElementById('webhookForm').addEventListener('submit', function(e) {
+  document.getElementById('webhook-form').addEventListener('submit', function(e) {
     e.preventDefault();
 
     // Retrieve form values
     var name = document.getElementById('name').value;
-    var webhookUrl = document.getElementById('webhookUrl').value;
-    var cronSchedule = document.getElementById('cronSchedule').value;
+    var url = document.getElementById('url').value;
+    var timezone = document.getElementById('timezone').value;
+    var schedule = document.getElementById('schedule').value;
 
     // Create URLSearchParams object with form data
     var formData = new URLSearchParams();
     formData.append('name', name);
-    formData.append('webhookUrl', webhookUrl);
-    formData.append('cronSchedule', cronSchedule);
+    formData.append('url', url);
+    formData.append('timezone', timezone);
+    formData.append('schedule', schedule);
 
     // Send data to the server using fetch
     fetch('/create_webhook', {

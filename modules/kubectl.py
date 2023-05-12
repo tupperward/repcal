@@ -8,7 +8,7 @@ import os, secrets
 #configuration.host = os.environ.get('K8S_HOST', default="http://localhost")
 conf = kubernetes.config.load_incluster_config()
 
-def create_cronjob(name, url, time_zone, cron):
+def create_cronjob(name, url, time_zone, schedule):
     """Create CronJob resource in kubernetes."""
     with kubernetes.client.ApiClient(configuration=conf) as api_client:
         api_instance = kubernetes.client.BatchV1Api(api_client=api_client)
@@ -25,7 +25,7 @@ def create_cronjob(name, url, time_zone, cron):
         pod_template = kubernetes.client.V1PodTemplateSpec(spec=pod_spec, metadata=metadata)
         job_spec = kubernetes.client.V1JobSpec(template=pod_template)
         job_template = kubernetes.client.V1JobTemplateSpec(spec=job_spec, metadata=metadata)
-        cronjob_spec = kubernetes.client.V1CronJobSpec(schedule=f"CRON_TZ={time_zone} {cron}", job_template=job_template)
+        cronjob_spec = kubernetes.client.V1CronJobSpec(schedule=f"CRON_TZ={time_zone} {schedule}", job_template=job_template)
         body = kubernetes.client.V1CronJob(spec=cronjob_spec, metadata=metadata)
         pretty = 'true'
     

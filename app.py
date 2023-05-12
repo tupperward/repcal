@@ -113,16 +113,17 @@ def create_webhook():
       return True  
 
   name = request.form.get('name', str)
-  time_zone = request.form.get('time_zone', str)
+  url = request.form.get('url', str)
+  timezone = request.form.get('timezone', str)
   schedule = request.form.get('schedule', str)
   # Use timezone validator
-  if not check_timezone(time_zone):
+  if not check_timezone(timezone):
     raise ValueError('Requested timzone is not available.')
   # Validate cron formatting.
   if CronValidator.parse(schedule) is None:
     raise ValueError('Cron is formatted incorrectly.')
   else:
-    k.create_cronjob(name=name, time_zone=time_zone, cron=schedule)
+    k.create_cronjob(name=name, url=url, time_zone=timezone, cron=schedule)
     return 'OK'
 
 @app.route('/about')
