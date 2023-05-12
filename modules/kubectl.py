@@ -3,10 +3,10 @@ from kubernetes.client.rest import ApiException
 from pprint import pprint
 import os, secrets
 
-#configuration = kubernetes.client.Configuration()
+configuration = kubernetes.client.Configuration()
 #configuration.api_key['authorization'] = os.environ.get('K8S_API_KEY')
 #configuration.host = os.environ.get('K8S_HOST', default="http://localhost")
-conf = kubernetes.config.load_incluster_config()
+conf = kubernetes.config.load_incluster_config(client_configuration=configuration)
 
 def create_cronjob(name, url, time_zone, schedule):
     """Create CronJob resource in kubernetes."""
@@ -14,7 +14,7 @@ def create_cronjob(name, url, time_zone, schedule):
         api_instance = kubernetes.client.BatchV1Api(api_client=api_client)
 
         namespace = os.environ.get('K8S_NAMESPACE')
-        salt = secrets.randbits(5)
+        salt = secrets.randbits(8)
         metadata = kubernetes.client.V1ObjectMeta(
             name=f"{name}-discord-{salt}",
             labels="discord webhook"
