@@ -2,8 +2,19 @@ name: Website Docker Build/Push & Kubernetes Deploy
 
 on:
   push:
+    paths:
+    - ./*
+    - static/**
+    - templates/**
+    - modules/**
     branches: [ main ]
   pull_request:
+    paths:
+    - ./*
+    - static/**
+    - templates/**
+    - modules/**
+    - .github/workflows/**
     branches: [ main ]
 
 jobs:
