@@ -49,10 +49,6 @@ body {
   text-align: center;
 }
 
-h1 {
-  text-align: center; /* Center align the h1 element */
-}
-
 img {
   max-width: 100%;
   max-height: 420px;
@@ -116,11 +112,13 @@ a:active {
   text-decoration: none;
 }
 
+h1,
 h2,
 h3,
 h4,
 h5,
 h6 {
+  text-align: center;
   margin-top: 0;
   margin-bottom: 10px;
   font-family: inherit;
