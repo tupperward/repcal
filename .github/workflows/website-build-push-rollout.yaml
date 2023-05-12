@@ -3,14 +3,22 @@ name: Website Docker Build/Push & Kubernetes Deploy
 on:
   push:
     paths:
-    - ./*
+    - app.py
+    - Dockerfile
+    - calendar.db
+    - requirements.txt
+    - startup.sh
     - static/**
     - templates/**
     - modules/**
     branches: [ main ]
   pull_request:
     paths:
-    - ./*
+    - app.py
+    - Dockerfile
+    - calendar.db
+    - requirements.txt
+    - startup.sh
     - static/**
     - templates/**
     - modules/**
