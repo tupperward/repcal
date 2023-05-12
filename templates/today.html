@@ -8,7 +8,7 @@
     <link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='style.css') }}">
   </head>
   <div id="wrapper">
-    <body onload="sendTime()" class="first-color">
+    <body class="first-color">
       <div id="civil" class="center">
         <h2>Today is:</h2>
         <h1>{{ today.weekday.lower() }} {{ today.day }} {{ today.month.lower() }} an {{ today.yearArabic }}</h1>
