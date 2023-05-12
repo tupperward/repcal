@@ -30,6 +30,6 @@ jobs:
           password: ${{ secrets.DOCKERHUB_TOKEN }}
           registry: docker.io
           directory: ./discord
-          image: ${{ vars.DOCKER_IMAGE }}
+          image: tupperward/repcal
           tags: discord
 
