@@ -13,47 +13,64 @@
 
     <!-- Include the Timepicker Addon CSS -->
     <link rel="stylesheet" href="{{ url_for('static', filename='clockpicker.css') }}" />
+
+    <!-- Include the custom style.css -->
+    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}" />
   </head>
-  <body>
-    <h1>Create Your Own French Republican Calendar Webhook</h1>
-    <form id="webhook-form">
-      <label for="name">Name:</label>
-      <input id="name" name="name" type="text" />
-
-      <label for="url">Webhook URL:</label>
-      <input id="url" name="url" type="text" />
-
-      <label for="timezone">Timezone:</label>
-      <select id="timezone" name="timezone">
-        <option value="America/New_York">Eastern Time (US &amp; Canada)</option>
-        <option value="America/Chicago">Central Time (US &amp; Canada)</option>
-        <option value="America/Denver">Mountain Time (US &amp; Canada)</option>
-        <option value="America/Los_Angeles">Pacific Time (US &amp; Canada)</option>
-        <option value="Europe/London">London</option>
-        <option value="Europe/Paris">Paris</option>
-        <option value="Africa/Cairo">Cairo</option>
-        <option value="Africa/Johannesburg">Johannesburg</option>
-        <option value="Asia/Tokyo">Tokyo</option>
-        <option value="Asia/Shanghai">Shanghai</option>
-      </select>
-
-      <label for="time">Time:</label>
-      <input id="time" name="time" type="text" />
-
+  <body class="first-color">
+    <div id="center-wrapper">
+      <h1>Create Your Own French Republican Calendar Webhook</h1>
+      <div id="options-wrapper">
+        <div id="name-wrapper">
+          <label for="name">Name:</label>
+          <input id="name" name="name" type="text" />
+        </div>
+        <div id="url-wrapper">
+          <label for="url">Webhook URL:</label>
+          <input id="url" name="url" type="text" />
+        </div>
+        <div id="timezone-wrapper">
+          <label for="timezone">Timezone:</label>
+          <select id="timezone" name="timezone">
+            <optgroup label="America">
+              <option value="America/New_York">Eastern Time (US &amp; Canada)</option>
+              <option value="America/Chicago">Central Time (US &amp; Canada)</option>
+              <option value="America/Denver">Mountain Time (US &amp; Canada)</option>
+              <option value="America/Los_Angeles">Pacific Time (US &amp; Canada)</option>
+            </optgroup>
+            <optgroup label="Europe">
+              <option value="Europe/London">London</option>
+              <option value="Europe/Paris">Paris</option>
+            </optgroup>
+            <optgroup label="Africa">
+              <option value="Africa/Cairo">Cairo</option>
+              <option value="Africa/Johannesburg">Johannesburg</option>
+            </optgroup>
+            <optgroup label="Asia">
+              <option value="Asia/Tokyo">Tokyo</option>
+              <option value="Asia/Shanghai">Shanghai</option>
+            </optgroup>
+          </select>
+        </div>
+        <div id="time-wrapper">
+          <label for="time">Time:</label>
+          <input id="time" name="time" type="text" />
+        </div>
+      </div>
       <button id="submit-button" type="submit">Create Webhook</button>
-    </form>
+    </div>
 
     <!-- Load the create_webhook.js script -->
     <script src="{{ url_for('static', filename='create_webhook.js') }}"></script>
 
     <!-- Initialize the clockpicker widget -->
     <script>
-      $(document).ready(function() {
-        $('.timepicker').clockpicker({
+      $(document).ready(function () {
+        $('#time').clockpicker({
           placement: 'bottom',
-          align: 'left',
+          align: 'right',
           donetext: 'Done',
-          autoclose: true
+          autoclose: true,
         });
       });
     </script>
