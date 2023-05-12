@@ -2,8 +2,12 @@ name: Webhook Docker Build/Push
 
 on:
   push:
+    paths:
+      - discord/**
     branches: [ main ]
   pull_request:
+    paths:
+      - discord/**
     branches: [ main ]
 
 jobs:
@@ -31,6 +35,6 @@ jobs:
           registry: docker.io
           directory: ./discord
           dockerfile: ./discord/Dockerfile
-          image: tupperward/repcal
+          image: ${{ vars.DOCKER_IMAGE }}
           tags: discord
 
