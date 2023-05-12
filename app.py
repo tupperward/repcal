@@ -124,12 +124,9 @@ def create_webhook():
   # Use timezone validator
   if not check_timezone(timezone):
     app.logger.error('Requested timezone is not available.')
-  # Validate cron formatting.
-  if CronValidator.parse(schedule) is None:
-    app.logger.error('Cron is formatted incorrectly.')
   else:
     try:
-      k.create_cronjob(name=name, url=url, time_zone=timezone, cron=schedule)
+      k.create_cronjob(name=name, url=url, time_zone=timezone, schedule=schedule)
       app.logger.info('Successfully created cronjob.')
     except Exception as e:
       app.logger.error("Failed to create cronjob : %s" % e)
