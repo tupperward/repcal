@@ -108,22 +108,31 @@ def create_webhook():
     """Validate timezone formatting."""
     all_tz = pytz.all_timezones
     frequency = Counter(all_tz)
+    app.logger.info('Validating timezone.')
     # If the requested timezone has a frequency of 0, it doesn't exist.
     if frequency[zone] > 0:
-      return True  
+      app.logger.info('Timezone is valid.')
+      return True
+    else:
+        app.logger.exception('Invalid Timezone.')
 
   name = request.form.get('name', str)
   url = request.form.get('url', str)
   timezone = request.form.get('timezone', str)
   schedule = request.form.get('schedule', str)
+  app.logger.info(f"Name: {name}   URL: {url}    TimeZone: {timezone}    Schedule: {schedule}")
   # Use timezone validator
   if not check_timezone(timezone):
-    raise ValueError('Requested timzone is not available.')
+    app.logger.error('Requested timezone is not available.')
   # Validate cron formatting.
   if CronValidator.parse(schedule) is None:
-    raise ValueError('Cron is formatted incorrectly.')
+    app.logger.error('Cron is formatted incorrectly.')
   else:
-    k.create_cronjob(name=name, url=url, time_zone=timezone, cron=schedule)
+    try:
+      k.create_cronjob(name=name, url=url, time_zone=timezone, cron=schedule)
+      app.logger.info('Successfully created cronjob.')
+    except Exception as e:
+      app.logger.error("Failed to create cronjob : %s" % e)
     return 'OK'
 
 @app.route('/about')
