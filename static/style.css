@@ -59,17 +59,16 @@ img {
 }
 
 #footer {
+  max-height: 150px;
   font-family: Palatino;
   text-align: center;
   padding: 20px;
   margin-top: 70px;
-  border-top: 1px solid #e5e5e5;
-  color: #777;
+  border-top: 2px solid #b6cdbd;
 }
 
 #footer p {
   margin-bottom: 0;
-  color: #777;
 }
 #above-image {
   padding-bottom: 10px;
