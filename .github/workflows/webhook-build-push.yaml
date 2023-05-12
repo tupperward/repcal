@@ -29,7 +29,7 @@ jobs:
           username: ${{ secrets.DOCKERHUB_USERNAME }}
           password: ${{ secrets.DOCKERHUB_TOKEN }}
           registry: docker.io
-          directory: discord
+          directory: ./discord
           image: ${{ vars.DOCKER_IMAGE }}
           tags: discord
 
