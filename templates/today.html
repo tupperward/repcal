@@ -5,66 +5,10 @@
   <head>
     <meta charset="UTF-8">
     <title>French Republican Daily Calendar</title>
+    <link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='style.css') }}">
   </head>
-  <style>
-    body{
-      margin-top: 5%;
-    }
-    .center{
-      margin: auto;
-      width: 50%;
-    }
-    #wrapper{
-      display: contents;
-      max-height: 600px;
-      max-width: 300px;
-      position: relative;
-      border-radius: 3px;
-    }
-    img{
-      max-width: 100%;
-      max-height: 420px;
-      box-shadow: 10px 10px 20px #5c715e;
-      border-radius: 3px;
-      margin-left: auto;
-      margin-right: auto;
-    }
-    #footer{
-      font-size: small;
-      opacity: 85%;
-      margin: 5%;
-      vertical-align: bottom;
-      text-align: center;
-    }
-    #civil{
-      font-family: Palatino;
-      text-align: center;
-    }
-    #vulgar{
-      font-family: Palatino;
-      text-align: center;
-      font-size: large;
-    }
-    .first-color { 
-      background: #f2f9f1; 
-    }
-    .second-color { 
-      background: #ddeedf; 
-    }
-    .third-color { 
-      background: #b6cdbd; 
-    }
-    .fourth-color { 
-      background: #5c715e; 
-    }
-    a:link { text-decoration: none; }
-    a:visited { text-decoration: none; }
-    a:hover { text-decoration: none; }
-    a:active { text-decoration: none; }
-  </style>
   <div id="wrapper">
-  <body onload="sendTime()" class="first-color">
-
+    <body onload="sendTime()" class="first-color">
       <div id="civil" class="center">
         <h2>Today is:</h2>
         <h1>{{ today.weekday.lower() }} {{ today.day }} {{ today.month.lower() }} an {{ today.yearArabic }}</h1>
@@ -73,16 +17,14 @@
         <h3>{{ today.month }} is the month of {{ today.month_of.lower() }}.</h3>
         <img src="../static/images/{{ today.image }}.jpg">
         <br>
-        <p>Today we celebrate <a href="{{ today.item_url }}" target="_blank" rel="noopener noreferrer">{{ today.item.lower() }}</a>.</p> 
+        <p id="celebrate">Today we celebrate <a href="{{ today.item_url }}" target="_blank" rel="noopener noreferrer">{{ today.item.lower() }}</a>.</p> 
       </div>
-
-
-  </body>
-  <br>
-  <footer>
-    <div id="footer">
-      <p> <a href="/about">About</a> | <a rel="me" href="https://jorts.horse/@tupperward">Mastodon</a></p> 
-    </div>
-  </footer>
-</div>
+    </body>
+    <br>
+    <footer>
+      <div id="footer">
+        <p> <a href="/about">About</a> | <a rel="me" href="https://jorts.horse/@tupperward">Mastodon</a></p> 
+      </div>
+    </footer>
+  </div>
 </html>

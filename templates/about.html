@@ -2,59 +2,7 @@
 <html>
   <link rel="shortcut icon" href="{{ url_for('static', filename='favicon.ico') }}">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <style>
-    .first-color { 
-      background: #f2f9f1; 
-    }
-    .second-color { 
-      background: #ddeedf; 
-    }
-    .third-color { 
-      background: #b6cdbd; 
-    }
-    .fourth-color { 
-      background: #5c715e; 
-    }
-    a:link { text-decoration: none; }
-    a:visited { text-decoration: none; }
-    a:hover { text-decoration: none; }
-    a:active { text-decoration: none; }
-    .body{
-      font-family: Palatino;
-      margin: auto;
-      max-width: 100%;
-      padding: 5px;
-      margin: auto;
-      margin-top: 5%;
-    }
-    #why{
-      padding: 15px;
-      text-align: left;
-      border: #b6cdbd 5px;
-      box-shadow: 10px 10px 20px #5c715e;
-      align-content: inherit;
-      margin: auto;
-      border-radius: 5px;
-    }
-    #thanks{
-      padding: 15px;
-      text-align: left;
-      border: #b6cdbd 5px;
-      box-shadow: 10px 10px 20px #5c715e;
-      align-items: center;
-      justify-content: center;
-      align-content: inherit;
-      margin: auto;
-      border-radius: 5px;
-    }
-    #footer{
-      font-size: small;
-      opacity: 85%;
-      margin: 5%;
-      vertical-align: bottom;
-      text-align: center;
-    }
-  </style>
+  <link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='style.css') }}">
   <head>
     <title>What is the French Republican Calendar?</title>
   </head>
