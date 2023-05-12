@@ -1,6 +1,9 @@
 document.addEventListener('DOMContentLoaded', function() {
   // Function to update the cron schedule based on the selected values
-  function updateSchedule() {
+  // Function to update the cron schedule based on the selected values
+  function updateData() {
+    var name = document.getElementById('name').value;
+    var url = document.getElementById('url').value;
     var timezone = document.getElementById('timezone').value;
     var time = document.getElementById('time').value;
     var [hour, minute] = time.split(':');
@@ -10,10 +13,10 @@ document.addEventListener('DOMContentLoaded', function() {
   }
 
   // Event listeners for the form inputs
-  document.getElementById('name').addEventListener('change', updateSchedule);
-  document.getElementById('url').addEventListener('change', updateSchedule);
-  document.getElementById('timezone').addEventListener('change', updateSchedule);
-  document.getElementById('time').addEventListener('change', updateSchedule);
+  document.getElementById('name').addEventListener('change', updateData);
+  document.getElementById('url').addEventListener('change', updateData);
+  document.getElementById('timezone').addEventListener('change', updateData);
+  document.getElementById('time').addEventListener('change', updateData);
 
   // Submit event handler for the form
   document.getElementById('webhook-form').addEventListener('submit', function(e) {
