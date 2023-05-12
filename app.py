@@ -105,10 +105,10 @@ def create_webhook():
   """Create Cronjob for Webhook."""
   import modules.kubectl as k
 
-  name = request.form.get('name', str).strip().replace(' ','-')
-  url = request.form.get('url', str)
-  timezone = request.form.get('timezone', str)
-  schedule = request.form.get('schedule', str)
+  name = request.form.get('name').strip().replace(' ','-')
+  url = request.form.get('url')
+  timezone = request.form.get('timezone')
+  schedule = request.form.get('schedule')
   app.logger.info(f"Name: {name}   URL: {url}    TimeZone: {timezone}    Schedule: {schedule}")
   
   try:
