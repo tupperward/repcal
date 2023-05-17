@@ -105,14 +105,14 @@ def create_webhook():
   """Create Cronjob for Webhook."""
   import modules.kubectl as k
 
-  name = request.form.get('name', '').strip().replace(' ', '-')
-  url = request.form.get('url', '')
-  timezone = request.form.get('timezone', '')
-  schedule = request.form.get('schedule', '')
-  app.logger.info(f"Name: {name}   URL: {url}    TimeZone: {timezone}    Schedule: {schedule}")
+  session['name'] = request.form.get('name', '').strip().replace(' ', '-')
+  session['url'] = request.form.get('url', '')
+  session['timezone'] = request.form.get('timezone', '')
+  session['schedule' ]= request.form.get('schedule', '')
+  app.logger.info(f"Name: {session.get('name')}   URL: {session.get('url')}    TimeZone: {session.get('timezone')}    Schedule: {session.get('schedule')}")
   
   try:
-    k.create_cronjob(name=name, url=url, time_zone=timezone, schedule=schedule)
+    k.create_cronjob(name=session.get('name'), url=session.get('url'), time_zone=session.get('timezone'), schedule=session.get('schedule'))
     app.logger.info('Successfully created cronjob.')
   except Exception as e:
     app.logger.error("Failed to create cronjob : %s" % e)
