@@ -5,7 +5,7 @@ var localTime = Math.floor(Date.now() / 1000);
 var url = window.location.origin;
 
 // Send the local time to the Flask app using a POST request
-fetch(url + "/get_local_time", {
+fetch(url + "/set_local_time", {
     method: "POST",
     body: new URLSearchParams({
         local_time: localTime,

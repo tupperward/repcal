@@ -53,8 +53,8 @@ def index():
   """Root path page that contains JS script."""
   return render_template('loading.html' )
 
-@app.route('/get_local_time', methods=['POST'])
-def get_local_time():
+@app.route('/set_local_time', methods=['POST'])
+def set_local_time():
   """Get time from JS."""
   local_time = request.form.get('local_time', str)
   # Store the timestamp variable to the session
