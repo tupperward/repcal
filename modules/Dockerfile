@@ -5,6 +5,6 @@ ENV 'REPCAL_DATA_URL'='https://repcal.tupperward.net/data'
 
 COPY webhook.py .
 
-RUN pip install discord requests
+RUN pip install discord requests flask
 
 CMD ["python", "webhook.py"]

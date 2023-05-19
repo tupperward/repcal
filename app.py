@@ -122,7 +122,7 @@ def create_webhook():
   try:
     check_webhook_url(url)
   except Exception as err:
-    app.logger.error(f"Could not reach webhook: {err}")
+    app.logger.error(f"Check Webhook Failure: {err}")
     return render_template('failure.html', error=err)
 
   try:

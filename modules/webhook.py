@@ -3,6 +3,7 @@ import requests
 import json
 from discord import Embed, SyncWebhook, Colour
 from datetime import datetime
+from flask import current_app
 
 # Get data from /data route
 def get_data():
@@ -26,20 +27,25 @@ def construct_embed(data):
   embed.url = "https://repcal.tupperward.net"
   embed.type = "rich"
   embed.timestamp = datetime.now()
+  current_app.logger.info("Embed created.")
   return embed
 
-def use_webhook(url, message: Embed):
+def use_webhook(webhook_url, message: Embed):
   """Instantiate webhook and send message."""
-  hook = SyncWebhook.from_url(url)
-  hook.send(embed=message)
-  return 'OK'
+  hook = SyncWebhook.from_url(webhook_url)
+  try:
+    current_app.logger.info('Sending discord message via webhook.')
+    hook.send(embed=message)
+    current_app.logger.info('Successfully sent discord message with embed.')
+  except Exception as err:
+    current_app.logger.error(f"Could not send discord message: {err}")
 
 
 # Send embed via hook
 if __name__ == "__main__":
   # Construct Webhook
   webhook_url = os.environ.get('DISCORD_WEBHOOK_URL')
-  
+
   data = get_data()
   message = construct_embed(data)
   use_webhook(webhook_url, message=message)
