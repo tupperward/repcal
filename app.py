@@ -118,7 +118,8 @@ def create_webhook():
   app.logger.info(f"Name: {session.get('name')}   URL: {session.get('url')}    TimeZone: {session.get('timezone')}    Schedule: {session.get('schedule')}")
   
   try:
-    k.create_cronjob(name=session.get('name'), url=session.get('url'), time_zone=session.get('timezone'), schedule=session.get('schedule'))
+    app.logger.info(f"Name: {name}   Session Name: {session.get('name')}")
+    k.create_cronjob(name=name, url=url, time_zone=timezone, schedule=schedule)
     app.logger.info('Successfully created cronjob.')
   except Exception as err:
     app.logger.error(f"Failed to create cronjob : {err}")
