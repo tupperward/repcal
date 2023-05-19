@@ -34,6 +34,6 @@ def create_cronjob(name: str, url: str, time_zone: str, schedule: str):
     
     try:
         api_response = api_instance.create_namespaced_cron_job(namespace=namespace, body=body, pretty=pretty)
-        pprint(api_response)
+        return api_response
     except ApiException as error:
-        print(f"Exception when calling BatchV1Api->create_namespaced_cron_job: {error}\n")
+        return f"Exception when calling BatchV1Api->create_namespaced_cron_job: {error}\n"

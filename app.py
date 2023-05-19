@@ -119,7 +119,8 @@ def create_webhook():
   
   try:
     app.logger.info(f"Name: {name}   Session Name: {session.get('name')}")
-    modules.kubectl.create_cronjob(name=name, url=url, time_zone=timezone, schedule=schedule)
+    api_response = modules.kubectl.create_cronjob(name=name, url=url, time_zone=timezone, schedule=schedule)
+    app.logger.info(api_response)
     app.logger.info('Successfully created cronjob.')
   except Exception as err:
     app.logger.error(f"Failed to create cronjob : {err}")
