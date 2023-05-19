@@ -120,12 +120,6 @@ def create_webhook():
   app.logger.info(f"\nName: {name}\nWebhook Url: {url}\nTimezone: {timezone}\nSchedule: {schedule}")
 
   try:
-    check_webhook_url(url)
-  except Exception as err:
-    app.logger.error(f"Check Webhook Failure: {err}")
-    return render_template('failure.html', error=err)
-
-  try:
     api_response = modules.kubectl.create_cronjob(name=name, url=url, time_zone=timezone, schedule=schedule)
     app.logger.info(api_response)
     return render_template('success.html')
