@@ -29,9 +29,6 @@ document.addEventListener('DOMContentLoaded', function() {
     // Create cron string
     var schedule = minute + ' ' + hour + ' * * *';
 
-    // Update the value of the schedule input field
-    document.getElementById('schedule').value = schedule;
-
     // Create URLSearchParams object with form data
     var formData = new URLSearchParams();
     formData.append('name', name);
