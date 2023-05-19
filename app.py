@@ -105,9 +105,10 @@ def create_webhook():
   """Create Cronjob for Webhook."""
   import modules.kubectl
 
-  def check_webhook_url(url: str):
+  def check_webhook_url(url):
     """Create Embed message to send to Webhook URL."""
     from modules.webhook import construct_embed, use_webhook, get_data
+    app.logger.info(f"Check Webhook URL: {url}")
     data = get_data()
     message = construct_embed(data)
     use_webhook(url=url, message=message)
