@@ -53,6 +53,7 @@ def check_webhook_url(url):
   from modules.webhook import construct_embed, use_webhook, get_data
   app.logger.info(f"Check Webhook URL: {url}")
   data = get_data()
+  app.logger.info(f"Data: {data}")
   message = construct_embed(data)
   use_webhook(url, message=message)
 
@@ -113,7 +114,7 @@ def create_webhook():
   """Create Cronjob for Webhook."""
   import modules.kubectl
     
-  name = request.form.get('name', type=str).strip().replace(' ', '-')
+  name = request.form.get('name', type=str).lower().strip().replace(' ', '-')
   url = request.form.get('url', type=str)
   timezone = request.form.get('timezone', type=str)
   schedule = request.form.get('schedule', type=str)
