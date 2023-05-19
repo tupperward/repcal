@@ -53,8 +53,8 @@ def index():
   """Root path page that contains JS script."""
   return render_template('loading.html' )
 
-@app.route('/set_local_time', methods=['POST'])
-def set_local_time():
+@app.route('/local_time', methods=['POST'])
+def local_time():
   """Get time from JS."""
   local_time = request.form.get('local_time', str)
   # Store the timestamp variable to the session
@@ -105,17 +105,23 @@ def create_webhook():
   """Create Cronjob for Webhook."""
   import modules.kubectl as k
 
-  session['name'] = request.form.get('name', '').strip().replace(' ', '-')
-  session['url'] = request.form.get('url', '')
-  session['timezone'] = request.form.get('timezone', '')
-  session['schedule' ]= request.form.get('schedule', '')
+  name = request.form.get('name', type=str).strip().replace(' ', '-')
+  url = request.form.get('url', type=str)
+  timezone = request.form.get('timezone', type=str)
+  schedule = request.form.get('schedule', type=str)
+
+  session['name'] = name
+  session['url'] = url
+  session['timezone'] = timezone
+  session['schedule' ] = schedule
+
   app.logger.info(f"Name: {session.get('name')}   URL: {session.get('url')}    TimeZone: {session.get('timezone')}    Schedule: {session.get('schedule')}")
   
   try:
     k.create_cronjob(name=session.get('name'), url=session.get('url'), time_zone=session.get('timezone'), schedule=session.get('schedule'))
     app.logger.info('Successfully created cronjob.')
-  except Exception as e:
-    app.logger.error("Failed to create cronjob : %s" % e)
+  except Exception as err:
+    app.logger.error(f"Failed to create cronjob : {err}")
   return redirect(url_for('today'))
 
 @app.route('/about')
