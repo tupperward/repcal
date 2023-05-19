@@ -4,10 +4,12 @@ on:
   push:
     paths:
       - modules/webhook.py
+      - .github/workflows/webhook-build-push.yaml
     branches: [ main ]
   pull_request:
     paths:
       - modules/webhook.py
+      - .github/workflows/webhook-build-push.yaml
     branches: [ main ]
 
 jobs:
