@@ -9,7 +9,7 @@ document.addEventListener('DOMContentLoaded', function() {
     e.preventDefault();
 
     // Retrieve form values
-    var baseUrl = window.location.origin
+    // var baseUrl = window.location.origin
     var name = document.getElementById('name').value;
     var url = document.getElementById('url').value;
     var timezone = document.getElementById('timezone').value;
@@ -46,7 +46,7 @@ document.addEventListener('DOMContentLoaded', function() {
       if (response.ok) {
         // Handle success response here
         console.log(response);
-        window.location.assign(baseUrl + "/today");
+        // window.location.assign(baseUrl + "/today");
       } else {
         // Handle error response here
         console.error('Failed to create webhook.');

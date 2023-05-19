@@ -1,4 +1,4 @@
-from flask import Flask, request, render_template, send_from_directory, session, redirect, url_for
+from flask import Flask, request, render_template, send_from_directory, session
 from sqlalchemy import create_engine, MetaData, text
 from sqlalchemy.orm import Session
 from unidecode import unidecode 
@@ -116,6 +116,7 @@ def create_webhook():
   url = request.form.get('url', type=str)
   timezone = request.form.get('timezone', type=str)
   schedule = request.form.get('schedule', type=str)
+  app.logger.info(f"Name: {name}\nWebhook Url: {url}\nTimezone: {timezone}\nSchedule: {schedule}")
 
   try:
     check_webhook_url(url)
