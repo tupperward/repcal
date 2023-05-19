@@ -20,7 +20,7 @@ def create_cronjob(name: str, url: str, time_zone: str, schedule: str):
             labels="discord webhook"
         )
         webhook_url = kubernetes.client.V1EnvVar(name='DISCORD_WEBHOOK_URL', value=url)
-        container = kubernetes.client.V1Container(image='tupperward/repcal:discord', env=[webhook_url])
+        container = kubernetes.client.V1Container(image='tupperward/repcal:discord', env=[webhook_url], name="repcal-webhook")
         pod_spec = kubernetes.client.V1PodSpec(containers=[container])
         pod_template = kubernetes.client.V1PodTemplateSpec(spec=pod_spec, metadata=metadata)
         job_spec = kubernetes.client.V1JobSpec(template=pod_template)
