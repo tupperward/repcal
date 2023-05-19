@@ -20,7 +20,7 @@ def create_cronjob(name: str, url: str, time_zone: str, schedule: str):
         salt = secrets.randbits(8)
         metadata = kubernetes.client.V1ObjectMeta(
             name=f"{name}-discord-{salt}",
-            labels="discord webhook"
+            labels="discord-webhook"
         )
         webhook_url = kubernetes.client.V1EnvVar(name='DISCORD_WEBHOOK_URL', value=url)
         container = kubernetes.client.V1Container(image='tupperward/repcal:discord', env=[webhook_url], name=f"{name}-discord-{salt}")
