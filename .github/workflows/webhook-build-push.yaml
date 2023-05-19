@@ -3,11 +3,11 @@ name: Webhook Docker Build/Push
 on:
   push:
     paths:
-      - discord/**
+      - modules/webhook.py
     branches: [ main ]
   pull_request:
     paths:
-      - discord/**
+      - modules/webhook.py
     branches: [ main ]
 
 jobs:

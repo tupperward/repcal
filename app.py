@@ -105,22 +105,31 @@ def create_webhook():
   """Create Cronjob for Webhook."""
   import modules.kubectl
 
+  def check_webhook_url(url: str):
+    """Create Embed message to send to Webhook URL."""
+    from modules.webhook import construct_embed, use_webhook, get_data
+    data = get_data()
+    message = construct_embed(data)
+    use_webhook(url=url, message=message)
+    
   name = request.form.get('name', type=str).strip().replace(' ', '-')
   url = request.form.get('url', type=str)
   timezone = request.form.get('timezone', type=str)
   schedule = request.form.get('schedule', type=str)
 
-  session['name'] = name
-  session['url'] = url
-  session['timezone'] = timezone
-  session['schedule' ] = schedule
-  
+  try:
+    check_webhook_url(url)
+  except Exception as err:
+    app.logger.error(f"Could not reach webhook: {err}")
+    return render_template('failure.html', error=err)
+
   try:
     api_response = modules.kubectl.create_cronjob(name=name, url=url, time_zone=timezone, schedule=schedule)
     app.logger.info(api_response)
+    return render_template('success.html')
   except Exception as err:
     app.logger.error(f"Failed to create cronjob : {err}")
-  return 'OK'
+    return render_template('failure.html', error=err)
 
 @app.route('/about')
 def about():

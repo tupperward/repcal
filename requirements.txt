@@ -4,3 +4,4 @@ unidecode
 gunicorn
 repcal
 kubernetes
+discord
