@@ -13,7 +13,11 @@ def create_cronjob(name: str, url: str, time_zone: str, schedule: str):
     with kubernetes.client.ApiClient(configuration=conf) as api_client:
         api_instance = kubernetes.client.BatchV1Api(api_client=api_client)
 
-        namespace = os.environ.get('K8S_NAMESPACE')
+        if not os.environ.get('K8S_NAMESPACE') == None:
+            namespace = os.environ.get('K8S_NAMESPACE')
+        else:
+            namespace = 'repcal'
+            
         salt = secrets.randbits(8)
         metadata = kubernetes.client.V1ObjectMeta(
             name=f"{name}-discord-{salt}",
