@@ -24,21 +24,28 @@
 <body class="first-color">
   <div id="center-wrapper">
     <h1>Create Your Own French Republican Calendar Webhook</h1>
-    <br>
+    <br><br>
+    <p>I'm happy to announce that you can now get the Republican Calendar right in your own Discord server! Simply create a webhook, paste the URL and select the time and timezone you'd like to have your calendar item.</p>
+    <br><br>
     <form id="webhook-form" action="/create_webhook" method="POST">
       <div id="options-wrapper">
         <div id="name-wrapper">
-          <label for="name">Server Name (e.g. paris-commune):</label>
+          <label for="name">Server Name:</label>
+          <br>
+          <small>(e.g. paris-commune)</small>
+          <br>
           <input id="name" name="name" type="text" />
         </div>
         <div id="url-wrapper">
           <label for="url">Webhook URL:</label>
-          <input id="url" name="url" type="text" />
           <br>
-          <small>Don't have a webhook URL? <a href="https://support.discord.com/hc/en-us/articles/228383668-Intro-to-Webhooks" target="_blank">Learn how to create a webhook in Discord</a></small><br><br>
+          <small>Don't have a webhook URL? <a href="https://support.discord.com/hc/en-us/articles/228383668-Intro-to-Webhooks" target="_blank">Learn how to create a webhook in Discord</a></small>
+          <br>
+          <input id="url" name="url" type="text" />
         </div>
         <div id="timezone-wrapper">
           <label for="timezone">Timezone:</label>
+          <br><br>
           <select id="timezone" name="timezone">
             <optgroup label="America">
               <option value="America/New_York">Eastern Time (US &amp; Canada)</option>
@@ -59,12 +66,11 @@
               <option value="Asia/Shanghai">Shanghai</option>
             </optgroup>
           </select>
-          <br><br>
         </div>
         <div id="time-wrapper">
           <label for="time">Time:</label>
+          <br><small>Clock will appear when you click the form.</small><br>
           <input id="time" name="time" type="text" />
-          <br><br>
         </div>
       </div>
       <br><br>
@@ -78,6 +84,7 @@
       <button id="submit-button" type="submit">Create Webhook</button>
     </form>
   </div>
+  <br><br>
 
   <!-- Load the create_webhook.js script -->
   <script src="{{ url_for('static', filename='create_webhook.js') }}"></script>
