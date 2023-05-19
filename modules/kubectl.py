@@ -8,7 +8,7 @@ configuration = kubernetes.client.Configuration()
 #configuration.host = os.environ.get('K8S_HOST', default="http://localhost")
 conf = kubernetes.config.load_incluster_config(client_configuration=configuration)
 
-def create_cronjob(name, url, time_zone, schedule):
+def create_cronjob(name: str, url: str, time_zone: str, schedule: str):
     """Create CronJob resource in kubernetes."""
     with kubernetes.client.ApiClient(configuration=conf) as api_client:
         api_instance = kubernetes.client.BatchV1Api(api_client=api_client)

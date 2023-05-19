@@ -103,7 +103,7 @@ def signup():
 @app.route('/create_webhook', methods=['POST'])
 def create_webhook():
   """Create Cronjob for Webhook."""
-  import modules.kubectl as k
+  import modules.kubectl
 
   name = request.form.get('name', type=str).strip().replace(' ', '-')
   url = request.form.get('url', type=str)
@@ -119,7 +119,7 @@ def create_webhook():
   
   try:
     app.logger.info(f"Name: {name}   Session Name: {session.get('name')}")
-    k.create_cronjob(name=name, url=url, time_zone=timezone, schedule=schedule)
+    modules.kubectl.create_cronjob(name=name, url=url, time_zone=timezone, schedule=schedule)
     app.logger.info('Successfully created cronjob.')
   except Exception as err:
     app.logger.error(f"Failed to create cronjob : {err}")
