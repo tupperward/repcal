@@ -3,14 +3,13 @@ from kubernetes.client.rest import ApiException
 from pprint import pprint
 import os, secrets
 
-configuration = kubernetes.client.Configuration(host=os.environ.get('K8S_HOST'), api_key=os.environ.get('K8S_API_KEY'))
 #configuration.api_key['authorization'] = os.environ.get('K8S_API_KEY')
 #configuration.host = os.environ.get('K8S_HOST', default="http://localhost")
-conf = kubernetes.config.load_incluster_config(client_configuration=configuration)
+kubernetes.config.load_incluster_config()
 
 def create_cronjob(name: str, url: str, time_zone: str, schedule: str):
     """Create CronJob resource in kubernetes."""
-    with kubernetes.client.ApiClient(configuration=conf) as api_client:
+    with kubernetes.client.ApiClient() as api_client:
         api_instance = kubernetes.client.BatchV1Api(api_client=api_client)
 
         if not os.environ.get('K8S_NAMESPACE') == None:

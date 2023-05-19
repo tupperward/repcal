@@ -123,7 +123,7 @@ def create_webhook():
     app.logger.info('Successfully created cronjob.')
   except Exception as err:
     app.logger.error(f"Failed to create cronjob : {err}")
-  return redirect(url_for('today'))
+  return 'OK'
 
 @app.route('/about')
 def about():
