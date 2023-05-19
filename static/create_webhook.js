@@ -1,25 +1,11 @@
 document.addEventListener('DOMContentLoaded', function() {
   // Function to update the cron schedule based on the selected values
-  // Function to update the cron schedule based on the selected values
   function updateData() {
-    var name = document.getElementById('name').value;
-    var url = document.getElementById('url').value;
-    var timezone = document.getElementById('timezone').value;
-    var time = document.getElementById('time').value;
-    var [hour, minute] = time.split(':');
-    var schedule = minute + ' ' + hour + ' * * *';
-
-    document.getElementById('schedule').value = schedule;
+    // Update schedule and other data here
   }
 
-  // Event listeners for the form inputs
-  document.getElementById('name').addEventListener('change', updateData);
-  document.getElementById('url').addEventListener('change', updateData);
-  document.getElementById('timezone').addEventListener('change', updateData);
-  document.getElementById('time').addEventListener('change', updateData);
-
-  // Submit event handler for the form
-  document.getElementById('webhook-form').addEventListener('submit', function(e) {
+  // Event listener for the form submit button
+  document.getElementById('submit-button').addEventListener('click', function(e) {
     e.preventDefault();
 
     // Retrieve form values
@@ -55,4 +41,10 @@ document.addEventListener('DOMContentLoaded', function() {
       console.error('An error occurred while creating webhook:', error);
     });
   });
+
+  // Event listeners for the form inputs
+  document.getElementById('name').addEventListener('change', updateData);
+  document.getElementById('url').addEventListener('change', updateData);
+  document.getElementById('timezone').addEventListener('change', updateData);
+  document.getElementById('time').addEventListener('change', updateData);
 });
