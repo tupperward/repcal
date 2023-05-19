@@ -4,9 +4,6 @@ import json
 from discord import Embed, SyncWebhook, Colour
 from datetime import datetime
 
-# Construct Webhook
-webhook_url = os.environ.get('DISCORD_WEBHOOK_URL')
-
 # Get data from /data route
 def get_data():
   """Get data from data API."""
@@ -40,6 +37,9 @@ def use_webhook(url, message: Embed):
 
 # Send embed via hook
 if __name__ == "__main__":
+  # Construct Webhook
+  webhook_url = os.environ.get('DISCORD_WEBHOOK_URL')
+  
   data = get_data()
   message = construct_embed(data)
   use_webhook(webhook_url, message=message)

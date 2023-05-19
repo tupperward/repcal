@@ -111,7 +111,7 @@ def create_webhook():
     app.logger.info(f"Check Webhook URL: {url}")
     data = get_data()
     message = construct_embed(data)
-    use_webhook(url=url, message=message)
+    use_webhook(url, message=message)
     
   name = request.form.get('name', type=str).strip().replace(' ', '-')
   url = request.form.get('url', type=str)
