@@ -116,7 +116,7 @@ def create_webhook():
   url = request.form.get('url', type=str)
   timezone = request.form.get('timezone', type=str)
   schedule = request.form.get('schedule', type=str)
-  app.logger.info(f"Name: {name}\nWebhook Url: {url}\nTimezone: {timezone}\nSchedule: {schedule}")
+  app.logger.info(f"\nName: {name}\nWebhook Url: {url}\nTimezone: {timezone}\nSchedule: {schedule}")
 
   try:
     check_webhook_url(url)

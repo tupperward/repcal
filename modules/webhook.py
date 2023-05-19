@@ -31,10 +31,11 @@ def construct_embed(data):
   embed.timestamp = datetime.now()
   return embed
 
-def use_webhook(url: str, message: Embed):
+def use_webhook(url, message: Embed):
   """Instantiate webhook and send message."""
   hook = SyncWebhook.from_url(url)
   hook.send(embed=message)
+  return 'OK'
 
 
 # Send embed via hook
