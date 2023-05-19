@@ -12,7 +12,25 @@ document.addEventListener('DOMContentLoaded', function() {
     var name = document.getElementById('name').value;
     var url = document.getElementById('url').value;
     var timezone = document.getElementById('timezone').value;
-    var schedule = document.getElementById('schedule').value;
+    var time = document.getElementById('time').value;
+
+    // Extract hour and minute from the time string
+    var [hour, minute, meridian] = time.split(':');
+    hour = parseInt(hour);
+    minute = parseInt(minute);
+
+    // Convert hour to 24-hour format if needed (for AM/PM selection)
+    if (meridian === 'PM' && hour < 12) {
+      hour += 12;
+    } else if (meridian === 'AM' && hour === 12) {
+      hour = 0;
+    }
+
+    // Create cron string
+    var schedule = minute + ' ' + hour + ' * * *';
+
+    // Update the value of the schedule input field
+    document.getElementById('schedule').value = schedule;
 
     // Create URLSearchParams object with form data
     var formData = new URLSearchParams();
