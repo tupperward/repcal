@@ -5,6 +5,7 @@
  */
 
 ;(function(){
+	'use strict';
 	var $ = window.jQuery,
 		$win = $(window),
 		$doc = $(document),
@@ -727,3 +728,4 @@
 		});
 	};
 }());
+// TODO #18 Fix this so it works in strict mode

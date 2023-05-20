@@ -21,67 +21,65 @@
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Cormorant&family=Cormorant+Garamond:wght@400;500;600;700&family=EB+Garamond&display=swap" rel="stylesheet">
+</head>
 <body class="first-color">
+  <style>
+    .input-wrapper {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+    }
+
+    #submit-button {
+      display: block;
+      margin: 0 auto;
+      text-align: center;
+    }
+  </style>
   <div id="center-wrapper">
     <h1>Create Your Own French Republican Calendar Webhook</h1>
     <br><br>
-    <p>I'm happy to announce that you can now get the Republican Calendar right in your own Discord server! Simply create a webhook, paste the URL and select the time and timezone you'd like to have your calendar item.</p>
+    <p>I'm happy to announce that you can now get the Republican Calendar right in your own Discord server! Simply create a webhook, paste the URL, and select the time and timezone you'd like to have your calendar item.</p>
     <br><br>
-    <form id="webhook-form" action="/create_webhook" method="POST">
-      <div id="options-wrapper">
-        <div id="name-wrapper">
-          <label for="name">Server Name:</label>
-          <br>
-          <small>(e.g. paris-commune)</small>
-          <br>
-          <input id="name" name="name" type="text" />
-        </div>
-        <div id="url-wrapper">
-          <label for="url">Webhook URL:</label>
-          <br>
-          <small>Don't have a webhook URL? <a href="https://support.discord.com/hc/en-us/articles/228383668-Intro-to-Webhooks" target="_blank">Learn how to create a webhook in Discord</a></small>
-          <br>
-          <input id="url" name="url" type="text" />
-        </div>
-        <div id="timezone-wrapper">
-          <label for="timezone">Timezone:</label>
-          <br><br>
-          <select id="timezone" name="timezone">
-            <optgroup label="America">
-              <option value="America/New_York">Eastern Time (US &amp; Canada)</option>
-              <option value="America/Chicago">Central Time (US &amp; Canada)</option>
-              <option value="America/Denver">Mountain Time (US &amp; Canada)</option>
-              <option value="America/Los_Angeles">Pacific Time (US &amp; Canada)</option>
-            </optgroup>
-            <optgroup label="Europe">
-              <option value="Europe/London">London</option>
-              <option value="Europe/Paris">Paris</option>
-            </optgroup>
-            <optgroup label="Africa">
-              <option value="Africa/Cairo">Cairo</option>
-              <option value="Africa/Johannesburg">Johannesburg</option>
-            </optgroup>
-            <optgroup label="Asia">
-              <option value="Asia/Tokyo">Tokyo</option>
-              <option value="Asia/Shanghai">Shanghai</option>
-            </optgroup>
-          </select>
-        </div>
-        <div id="time-wrapper">
-          <label for="time">Time:</label>
-          <br><small>Clock will appear when you click the form.</small><br>
-          <input id="time" name="time" type="text" />
-        </div>
+    <form id="webhook-form" action="{{ url_for('create_webhook') }}" method="POST">
+      <div id="url-wrapper" class="input-wrapper">
+        <label for="url">Webhook URL:</label>
+        <br>
+        <small>Don't have a webhook URL? <a href="https://support.discord.com/hc/en-us/articles/228383668-Intro-to-Webhooks" target="_blank">Learn how to create a webhook in Discord</a></small>
+        <br>
+        <input id="url" name="url" type="text" class="form-control" placeholder="Enter URL" required>
+      </div>
+      <div id="timezone-wrapper" class="input-wrapper">
+        <label for="timezone">Timezone:</label>
+        <br><br>
+        <select id="timezone" name="timezone" class="form-control">
+          <optgroup label="America">
+            <option value="America/New_York">Eastern Time (US &amp; Canada)</option>
+            <option value="America/Chicago">Central Time (US &amp; Canada)</option>
+            <option value="America/Denver">Mountain Time (US &amp; Canada)</option>
+            <option value="America/Los_Angeles">Pacific Time (US &amp; Canada)</option>
+          </optgroup>
+          <optgroup label="Europe">
+            <option value="Europe/London">London</option>
+            <option value="Europe/Paris">Paris</option>
+          </optgroup>
+          <optgroup label="Africa">
+            <option value="Africa/Cairo">Cairo</option>
+            <option value="Africa/Johannesburg">Johannesburg</option>
+          </optgroup>
+          <optgroup label="Asia">
+            <option value="Asia/Tokyo">Tokyo</option>
+            <option value="Asia/Shanghai">Shanghai</option>
+          </optgroup>
+        </select>
+      </div>
+      <div id="time-wrapper" class="input-wrapper">
+        <label for="time">Desired Post Time:</label>
+        <br><small>Time webhook will post to your Discord. Clock will appear when you click the form.</small><br>
+        <input id="time" name="time" type="text" class="form-control" placeholder="Enter Posting Time" required>
       </div>
       <br><br>
-      <style>
-        #submit-button {
-          display: block;
-          margin: 0 auto;
-          text-align: center;
-        }
-      </style>
-      <button id="submit-button" type="submit">Create Webhook</button>
+      <button id="submit-button" type="submit" class="btn btn-primary">Create Webhook</button>
     </form>
   </div>
   <br><br>

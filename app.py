@@ -1,4 +1,4 @@
-from flask import Flask, request, render_template, send_from_directory, session
+from flask import Flask, request, render_template, send_from_directory, session, redirect, url_for
 from sqlalchemy import create_engine, MetaData, text
 from sqlalchemy.orm import Session
 from unidecode import unidecode 
@@ -114,19 +114,29 @@ def create_webhook():
   """Create Cronjob for Webhook."""
   import modules.kubectl
     
-  name = request.form.get('name', type=str).lower().strip().replace(' ', '-')
   url = request.form.get('url', type=str)
   timezone = request.form.get('timezone', type=str)
-  schedule = request.form.get('schedule', type=str)
-  app.logger.info(f"\nName: {name}\nWebhook Url: {url}\nTimezone: {timezone}\nSchedule: {schedule}")
+  time  = request.form.get('time', type=str)
+
+  # Process time into component parts, create a cron compatible schedule string.
+  hours, minutes = time.split(':')
+  schedule = f"{hours} {minutes} * * *"
+
+  app.logger.info(f"\nWebhook Url: {url}\nTimezone: {timezone}\nSchedule: {schedule}")
 
   try:
-    api_response = modules.kubectl.create_cronjob(name=name, url=url, time_zone=timezone, schedule=schedule)
+    api_response = modules.kubectl.create_cronjob(url=url, time_zone=timezone, schedule=schedule)
     app.logger.info(api_response)
-    return render_template('success.html')
+    # TODO #19 success and failure templates aren't loading or being redirected to
+    return redirect(url_for('success'))
   except Exception as err:
     app.logger.error(f"Failed to create cronjob : {err}")
     return render_template('failure.html', error=err)
+  
+@app.route('/success')
+def success():
+  """Render successful webhook creation page."""
+  return render_template('success.html')
 
 @app.route('/about')
 def about():

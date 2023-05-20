@@ -33,6 +33,9 @@ body {
   width: 50%;
 }
 
+.input-group .form-control.url {
+  flex-grow: 1;
+}
 
 #name-wrapper,
 #url-wrapper,
