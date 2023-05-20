@@ -1,5 +1,5 @@
 from flask import Flask, request, render_template, send_from_directory, session, redirect, url_for
-from wtforms import validators
+from urllib.parse import urlparse
 from sqlalchemy import create_engine, MetaData, text
 from sqlalchemy.orm import Session
 from unidecode import unidecode 
@@ -49,14 +49,10 @@ def carpeDiem(now):
 
   return today
 
-def check_webhook_url(url):
-  """Create Embed message to send to Webhook URL."""
-  from modules.webhook import construct_embed, use_webhook, get_data
-  app.logger.info(f"Check Webhook URL: {url}")
-  data = get_data()
-  app.logger.info(f"Data: {data}")
-  message = construct_embed(data)
-  use_webhook(url, message=message)
+def is_valid_url(url):
+  """Validate URL."""
+  parsed_url = urlparse(url)
+  return all([parsed_url.scheme, parsed_url.netloc, parsed_url.path])
 
 @app.route('/', methods=["GET"])
 def index():
@@ -120,8 +116,7 @@ def create_webhook():
   time  = request.form.get('time', type=str)
 
   # Validate the URL
-  url_validator = validators.URL(require_tld=True, message="Invalid URL")
-  if not url_validator(url):
+  if not is_valid_url(url):
       error = "Invalid URL"
       app.logger.error(f"Invalid URL: {url}")
       return render_template('failure.html', error=error)
