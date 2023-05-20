@@ -1,6 +1,5 @@
 import kubernetes.client, kubernetes.config
 from kubernetes.client.rest import ApiException
-from pprint import pprint
 import os, secrets
 
 #configuration.api_key['authorization'] = os.environ.get('K8S_API_KEY')

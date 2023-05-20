@@ -140,8 +140,22 @@ def create_webhook():
 @app.route('/success')
 def success():
   """Render successful webhook creation page."""
-  from modules.webhook import get_data, construct_embed, use_webhook
-  data = get_data()
+  from modules.webhook import construct_embed, use_webhook
+  time = datetime.now()
+  today = carpeDiem(time)
+  data = {
+    "day": today.day,
+    "weekday": today.weekday.lower(),
+    "month": today.month,
+    "yearArabic": today.yearArabic,
+    "yearRoman": today.yearRoman,
+    "week": today.week,
+    "month_of": today.month_of,
+    "item": today.item, 
+    "item_url": today.item_url,
+    "image": today.image,
+    "is_sansculottides": today.is_sansculottides
+  }
   message = construct_embed(data)
   url = session.get('url')
   use_webhook(webhook_url=url, message=message)
