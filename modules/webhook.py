@@ -8,10 +8,7 @@ from flask import current_app
 # Get data from /data route
 def get_data():
   """Get data from data API."""
-  if not os.environ.get('REPCAL_DATA_URL'):
-    data_url = os.environ.get('REPCAL_DATA_URL')
-  else: 
-    data_url = 'https://repcal.tupperward.net/data'
+  data_url = 'https://repcal.tupperward.net/data'
   res = requests.get(data_url).text 
   data = json.loads(res)
   return data
