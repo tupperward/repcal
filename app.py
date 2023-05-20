@@ -120,7 +120,7 @@ def create_webhook():
 
   # Process time into component parts, create a cron compatible schedule string.
   hours, minutes = time.split(':')
-  schedule = f"{hours} {minutes} * * *"
+  schedule = f"{minutes} {hours} * * *"
 
   app.logger.info(f"\nWebhook Url: {url}\nTimezone: {timezone}\nSchedule: {schedule}")
 
