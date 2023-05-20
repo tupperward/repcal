@@ -5,3 +5,4 @@ gunicorn
 repcal
 kubernetes
 discord
+wtforms

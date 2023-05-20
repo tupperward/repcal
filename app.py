@@ -1,4 +1,5 @@
 from flask import Flask, request, render_template, send_from_directory, session, redirect, url_for
+from wtforms import validators
 from sqlalchemy import create_engine, MetaData, text
 from sqlalchemy.orm import Session
 from unidecode import unidecode 
@@ -118,6 +119,15 @@ def create_webhook():
   timezone = request.form.get('timezone', type=str)
   time  = request.form.get('time', type=str)
 
+  # Validate the URL
+  url_validator = validators.URL(require_tld=True, message="Invalid URL")
+  if not url_validator(url):
+      error = "Invalid URL"
+      app.logger.error(f"Invalid URL: {url}")
+      return render_template('failure.html', error=error)
+
+  session['url'] = url
+
   # Process time into component parts, create a cron compatible schedule string.
   hours, minutes = time.split(':')
   schedule = f"{minutes} {hours} * * *"
@@ -127,7 +137,6 @@ def create_webhook():
   try:
     api_response = modules.kubectl.create_cronjob(url=url, time_zone=timezone, schedule=schedule)
     app.logger.info(api_response)
-    # TODO #19 success and failure templates aren't loading or being redirected to
     return redirect(url_for('success'))
   except Exception as err:
     app.logger.error(f"Failed to create cronjob : {err}")
@@ -136,6 +145,11 @@ def create_webhook():
 @app.route('/success')
 def success():
   """Render successful webhook creation page."""
+  from modules.webhook import get_data, construct_embed, use_webhook
+  data = get_data()
+  message = construct_embed(data)
+  url = session.get('url')
+  use_webhook(webhook_url=url, message=message)
   return render_template('success.html')
 
 @app.route('/about')
