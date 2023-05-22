@@ -12,7 +12,7 @@ def random_characters(k):
     letters = random.choices(string.ascii_lowercase, k=k)
 
     sample = random.sample(digits + letters, k=k)
-    return sample
+    return ''.join(sample)
 
 def create_cronjob(url: str, time_zone: str, schedule: str):
     """Create CronJob resource in kubernetes."""
