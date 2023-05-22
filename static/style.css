@@ -51,7 +51,9 @@ body {
   margin-top: 20px;
   text-align: center;
 }
-
+#thanks #why {
+  font-size: large;
+}
 img {
   max-width: 100%;
   max-height: 420px;
