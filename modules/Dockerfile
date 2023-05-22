@@ -1,4 +1,4 @@
-FROM faucet/python3
+FROM python:3.10-alpine
 
 COPY webhook.py .
 
