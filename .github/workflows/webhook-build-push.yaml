@@ -4,11 +4,13 @@ on:
   push:
     paths:
       - modules/webhook.py
+      - modules/Dockerfile
       - .github/workflows/webhook-build-push.yaml
     branches: [ main ]
   pull_request:
     paths:
       - modules/webhook.py
+      - modules/Dockerfile
       - .github/workflows/webhook-build-push.yaml
     branches: [ main ]
 

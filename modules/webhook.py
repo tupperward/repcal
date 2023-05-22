@@ -5,10 +5,12 @@ from discord import Embed, SyncWebhook, Colour
 from datetime import datetime
 from flask import current_app
 
+base_url = 'repcal.tupperward.net'
+
 # Get data from /data route
 def get_data():
   """Get data from data API."""
-  data_url = 'https://repcal.tupperward.net/data'
+  data_url = f'https://{base_url}/data'
   res = requests.get(data_url).text 
   data = json.loads(res)
   return data
@@ -19,9 +21,9 @@ def construct_embed(data, component = False):
   embed.title = f"Today is: {data['weekday'].lower()} {data['day']} {data['month']} an {data['yearArabic']}"
   embed.color = Colour.green()
   embed.description = f"\n**{data['month']} is the month of {data['month_of'].lower()}.**\nToday we celebrate {data['item'].lower()}.\n\n {data['item_url'].lower()}"
-  embed.set_image(url=f"https://repcal.tupperward.net/static/images/{data['image']}.jpg")
-  embed.set_footer(text=f"{data['weekday'].lower()} {data['day']} {data['month']} an {data['yearRoman'].upper()}", icon_url="https://repcal.tupperward.net/static/images/apricots.jpg")
-  embed.url = "https://repcal.tupperward.net"
+  embed.set_image(url=f"https://{base_url}/static/images/{data['image']}.jpg")
+  embed.set_footer(text=f"{data['weekday'].lower()} {data['day']} {data['month']} an {data['yearRoman'].upper()}", icon_url=f"https://{base_url}/static/images/apricots.jpg")
+  embed.url = f"https://{base_url}"
   embed.type = "rich"
   embed.timestamp = datetime.now()
   if component:
@@ -38,7 +40,10 @@ def use_webhook(webhook_url, message: Embed, component = False):
     if component:
       current_app.logger.info('Successfully sent discord message with embed.')
   except Exception as err:
-    current_app.logger.error(f"Could not send discord message: {err}")
+    if component:
+      current_app.logger.error(f"Could not send discord message: {err}")
+    else: 
+      print(err)
 
 
 # Send embed via hook
