@@ -13,7 +13,7 @@ def get_data():
   data = json.loads(res)
   return data
 
-def construct_embed(data):
+def construct_embed(data, component = False):
   """Construct embed to send to Discord."""
   embed = Embed()
   embed.title = f"Today is: {data['weekday'].lower()} {data['day']} {data['month']} an {data['yearArabic']}"
@@ -24,16 +24,19 @@ def construct_embed(data):
   embed.url = "https://repcal.tupperward.net"
   embed.type = "rich"
   embed.timestamp = datetime.now()
-  current_app.logger.info("Embed created.")
+  if component:
+    current_app.logger.info("Embed created.")
   return embed
 
-def use_webhook(webhook_url, message: Embed):
+def use_webhook(webhook_url, message: Embed, component = False):
   """Instantiate webhook and send message."""
   hook = SyncWebhook.from_url(webhook_url)
   try:
-    current_app.logger.info('Sending discord message via webhook.')
+    if component:
+      current_app.logger.info('Sending discord message via webhook.')
     hook.send(embed=message)
-    current_app.logger.info('Successfully sent discord message with embed.')
+    if component:
+      current_app.logger.info('Successfully sent discord message with embed.')
   except Exception as err:
     current_app.logger.error(f"Could not send discord message: {err}")
 

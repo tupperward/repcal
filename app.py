@@ -156,9 +156,9 @@ def success():
     "image": today.image,
     "is_sansculottides": today.is_sansculottides
   }
-  message = construct_embed(data)
+  message = construct_embed(data, component=True)
   url = session.get('url')
-  use_webhook(webhook_url=url, message=message)
+  use_webhook(webhook_url=url, message=message, component=True)
   return render_template('success.html')
 
 @app.route('/about')

@@ -1,12 +1,19 @@
 import kubernetes.client, kubernetes.config
 from kubernetes.client.rest import ApiException
-import os, secrets
+import os, random, string
 
 #configuration.api_key['authorization'] = os.environ.get('K8S_API_KEY')
 #configuration.host = os.environ.get('K8S_HOST', default="http://localhost")
 kubernetes.config.load_incluster_config()
 
-#TODO #16 Remove name, user doesn't need to set this at all. 
+def random_characters(k):
+    """Create a string of k random characters."""
+    digits = random.choices(string.digits, k=k)
+    letters = random.choices(string.ascii_lowercase, k=k)
+
+    sample = random.sample(digits + letters, k=k)
+    return sample
+
 def create_cronjob(url: str, time_zone: str, schedule: str):
     """Create CronJob resource in kubernetes."""
     with kubernetes.client.ApiClient() as api_client:
@@ -17,15 +24,15 @@ def create_cronjob(url: str, time_zone: str, schedule: str):
         else:
             namespace = 'repcal'
 
-        salty = secrets.randbits(5)
-        sweet = secrets.randbits(5)
+        salty = random_characters(5)
+        sweet = random_characters(5)
 
         metadata = kubernetes.client.V1ObjectMeta(
             name=f"webhook-{salty}-{sweet}",
             labels={"app":"discord-webhook"}
         )
         webhook_url = kubernetes.client.V1EnvVar(name='DISCORD_WEBHOOK_URL', value=url)
-        container = kubernetes.client.V1Container(image='tupperward/repcal:discord', env=[webhook_url], name=f"webhook-{salty}-{sweet}")
+        container = kubernetes.client.V1Container(image='tupperward/repcal:discord', env=[webhook_url], name=f"webhook-{salty}-{sweet}", image_pull_policy='Always')
         pod_spec = kubernetes.client.V1PodSpec(containers=[container], restart_policy="OnFailure")
         pod_template = kubernetes.client.V1PodTemplateSpec(spec=pod_spec, metadata=metadata)
         job_spec = kubernetes.client.V1JobSpec(template=pod_template)
