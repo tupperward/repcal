@@ -14,16 +14,14 @@
   <div id="wrapper">
     <body class="first-color">
       <div id="civil" class="center">
-        <b>
           <h1>Today is:</h1>
           <h2>{{ today.weekday.lower() }} {{ today.day }} {{ today.month.lower() }} an {{ today.yearArabic }}</h2>
-        </b>
       </div>
       <div id="vulgar" class="center">
         <b><h3 id="above-image">{{ today.month }} is the month of {{ today.month_of.lower() }}.</h3></b>
         <img src="../static/images/{{ today.image }}.jpg">
         <br>
-        <b><p id="below-image">Today we celebrate <a href="{{ today.item_url }}" target="_blank" rel="noopener noreferrer">{{ today.item.lower() }}</a>.</p> </b>
+        <p id="below-image">Today we celebrate <a href="{{ today.item_url }}" target="_blank" rel="noopener noreferrer">{{ today.item.lower() }}</a>.</p>
       </div>
     </body>
     <br>
