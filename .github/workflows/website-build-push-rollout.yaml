@@ -11,6 +11,7 @@ on:
     - static/**
     - templates/**
     - modules/**
+    - .github/workflows/**
     branches: [ main, sansculottides-domain-change ]
   pull_request:
     paths:
