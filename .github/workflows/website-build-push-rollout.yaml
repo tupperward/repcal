@@ -11,7 +11,7 @@ on:
     - static/**
     - templates/**
     - modules/**
-    branches: [ main ]
+    branches: [ main, sansculottides-domain-change ]
   pull_request:
     paths:
     - app.py
@@ -23,7 +23,7 @@ on:
     - templates/**
     - modules/**
     - .github/workflows/**
-    branches: [ main ]
+    branches: [ main, sansculottides-domain-change ]
 
 jobs:
   build:
