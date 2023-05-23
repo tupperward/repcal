@@ -49,7 +49,7 @@ jobs:
           password: ${{ secrets.DOCKERHUB_TOKEN }}
           registry: docker.io
           image: ${{ vars.DOCKER_IMAGE }}
-          tags: v2, latest
+          tags: v3, latest
 
   deploy:
     needs: build
