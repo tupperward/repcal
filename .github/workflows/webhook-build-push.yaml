@@ -6,13 +6,13 @@ on:
       - modules/webhook.py
       - modules/Dockerfile
       - .github/workflows/webhook-build-push.yaml
-    branches: [ main ]
+    branches: [ main , sansculottides-domain-change ]
   pull_request:
     paths:
       - modules/webhook.py
       - modules/Dockerfile
       - .github/workflows/webhook-build-push.yaml
-    branches: [ main ]
+    branches: [ main , sansculottides-domain-change ]
 
 jobs:
   build:
@@ -40,5 +40,5 @@ jobs:
           directory: ./modules
           dockerfile: ./modules/Dockerfile
           image: ${{ vars.DOCKER_IMAGE }}
-          tags: discord
+          tags: webhook
 
