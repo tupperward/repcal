@@ -5,7 +5,7 @@ from discord import Embed, SyncWebhook, Colour
 from datetime import datetime
 from flask import current_app
 
-base_url = 'repcal.tupperward.net'
+base_url = 'sansculottid.es'
 
 # Get data from /data route
 def get_data():
