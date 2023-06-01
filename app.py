@@ -4,8 +4,8 @@ from sqlalchemy import create_engine, MetaData, text
 from sqlalchemy.orm import Session
 from unidecode import unidecode 
 from repcal import RepublicanDate as rd
-from datetime import datetime
-import json, secrets
+from datetime import datetime, timedelta
+import json, secrets, pytz
 
 # Set up Flask as app, generate a secret key using secrets.
 app = Flask(__name__)
@@ -40,7 +40,9 @@ def check_if_js_time(time):
   server_date = now.date()
   server_hour = now.time().hour
   server_minute = now.time().minute
-  return all([time.date() == server_date, time.time().hour == server_hour, time.time().minute == server_minute])
+  server_second = now.time().second
+  server_microsecond = now.time().microsecond
+  return all([time.date() == server_date, time.time().hour == server_hour, time.time().minute == server_minute, time.time().second == server_second, time.time().microsecond == server_microsecond])
 
 def carpe_diem(time):
   """Seize the day. Create a RepublicanDate and then queries the calendar.db to add the natural details."""
@@ -69,9 +71,17 @@ def index():
 @app.route('/local_time', methods=['POST'])
 def local_time():
   """Get time from JS."""
-  local_time = request.form.get('local_time', str)
+  try:
+    local_time = request.form.get('local_time', str)
+    timezone_offset = request.form.get('timezone_offset')
+    app.logger.info(f"local_time: {local_time}  timezone_offset: {timezone_offset}")
+  except:
+    app.logger.error(f"Could not retrieve time data from browser. local_time: {local_time}  timezone_offset: {timezone_offset}")
   # Store the timestamp variable to the session
   session['timestamp'] = local_time
+
+  timezone_offset_hours = int(timezone_offset) // 60
+  session['timezone_offset'] = timezone_offset_hours
   return 'OK'
 
 @app.route('/today', methods=["GET"])
@@ -80,10 +90,19 @@ def today():
   # Retrieving the timestamp variable from the session
   server_time = False
   try:
-    time = session.get('timestamp')
-    date = datetime.fromtimestamp(int(time))
+    timestamp = int(session.get('timestamp'))
+    timezone_offset = int(session.get('timezone_offset'))
+
+    if timezone_offset >= 0:
+      timezone = pytz.timezone(f"Etc/GMT+{timezone_offset}")
+    else:
+      timezone = pytz.timezone(f"Etc/GMT{timezone_offset}")
+
+    date = datetime.fromtimestamp(timestamp, tz=timezone)
     server_time = check_if_js_time(date)
-  except:
+    app.logger.info(f"Timezone Offset: {timezone_offset}  Timezone: {timezone}  Local Time: {datetime.fromtimestamp(timestamp).time()}")
+  except Exception as e:
+    app.logger.info(f'Using UTC time. {e}')
     date = datetime.now()
     server_time = True
   
