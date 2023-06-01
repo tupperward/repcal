@@ -16,28 +16,28 @@ meta = MetaData()
 
 # # # # # Classes # # # # # 
 # This class creates a python object with attributes that match the values of today's 
-class DateObject():
+class RepublicanDate():
   """Create the date and ingest its attributes."""
 
-  def __init__(self, time):
+  def __init__(self, time: datetime.datetime):
     """Initialize the object by getting data from the external endpoint."""
     rd_date = rd.from_gregorian(time.date())
 
     self.day = rd.get_day(rd_date)
     self.weekday = rd.get_weekday(rd_date)
     self.month = rd.get_month(rd_date)
-    self.yearArabic = rd.get_year_arabic(rd_date)
-    self.yearRoman = rd.get_year_roman(rd_date)
+    self.year_arabic = rd.get_year_arabic(rd_date)
+    self.year_roman = rd.get_year_roman(rd_date)
     self.week = rd.get_week_number(rd_date)
     self.month_of = None
     self.item = None
     self.item_url = None
     self.is_sansculottides = rd.is_sansculottides(rd_date) 
 
-def carpeDiem(now):
-  """Seize the day."""
-  # This instantiates a DateObject  
-  today = DateObject(now)
+
+def carpe_diem(time: datetime.datetime):
+  """Seize the day. Create a RepublicanDate and then queries the calendar.db to add the natural details."""
+  today = RepublicanDate(time)
   statement = 'SELECT id, month_of, item, item_url FROM calendar WHERE day == {} AND month LIKE "{}"'.format(today.day,unidecode(today.month))
   with Session(engine) as session:
     query = session.execute(text(statement)).fetchone()
@@ -49,8 +49,8 @@ def carpeDiem(now):
 
   return today
 
-def is_valid_url(url):
-  """Validate URL."""
+def is_valid_url(url: str):
+  """Validate URL. Uses urlparse to validate that all the components are present in the provided string."""
   parsed_url = urlparse(url)
   return all([parsed_url.scheme, parsed_url.netloc, parsed_url.path])
 
@@ -73,24 +73,24 @@ def today():
   # Retrieving the timestamp variable from the session
   try:
     time = session.get('timestamp')
-    date = datetime.utcfromtimestamp(int(time))
+    date = datetime.fromtimestamp(int(time))
   except:
     date = datetime.now()
   
-  today = carpeDiem(date)
+  today = carpe_diem(date)
   return render_template('today.html', today=today )
 
 @app.route('/data')
 def data():
   """Return date data for constructing Discord embeds."""
   time = datetime.now()
-  today = carpeDiem(time)
+  today = carpe_diem(time)
   data = {
     "day": today.day,
     "weekday": today.weekday.lower(),
     "month": today.month,
-    "yearArabic": today.yearArabic,
-    "yearRoman": today.yearRoman,
+    "year_arabic": today.year_arabic,
+    "year_roman": today.year_roman,
     "week": today.week,
     "month_of": today.month_of,
     "item": today.item, 
@@ -142,13 +142,13 @@ def success():
   """Render successful webhook creation page."""
   from modules.webhook import construct_embed, use_webhook
   time = datetime.now()
-  today = carpeDiem(time)
+  today = carpe_diem(time)
   data = {
     "day": today.day,
     "weekday": today.weekday.lower(),
     "month": today.month,
-    "yearArabic": today.yearArabic,
-    "yearRoman": today.yearRoman,
+    "year_arabic": today.year_arabic,
+    "year_roman": today.year_roman,
     "week": today.week,
     "month_of": today.month_of,
     "item": today.item, 
