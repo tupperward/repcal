@@ -34,6 +34,13 @@ class RepublicanDate():
     self.item_url = None
     self.is_sansculottides = rd.is_sansculottides(rd_date) 
 
+def check_if_js_time(time):
+  """Validate time to make sure the JS time is not just UTC."""
+  now = datetime.now()
+  server_date = now.date()
+  server_hour = now.time().hour
+  server_minute = now.time().minute
+  return all([time.date() == server_date, time.time().hour == server_hour, time.time().minute == server_minute])
 
 def carpe_diem(time):
   """Seize the day. Create a RepublicanDate and then queries the calendar.db to add the natural details."""
@@ -71,14 +78,17 @@ def local_time():
 def today():
   """Finished rendered page."""
   # Retrieving the timestamp variable from the session
+  server_time = False
   try:
     time = session.get('timestamp')
     date = datetime.fromtimestamp(int(time))
+    server_time = check_if_js_time(date)
   except:
     date = datetime.now()
+    server_time = True
   
   today = carpe_diem(date)
-  return render_template('today.html', today=today )
+  return render_template('today.html', today=today, server_time=server_time)
 
 @app.route('/data')
 def data():

@@ -22,6 +22,10 @@
         <img src="../static/images/{{ today.image }}.jpg">
         <br>
         <p id="below-image">Today we celebrate <a href="{{ today.item_url }}" target="_blank" rel="noopener noreferrer">{{ today.item.lower() }}</a>.</p>
+        {% if server_time %}
+        <br><br>
+        <small><i>This browser is displaying the UTC date (i.e. Paris mean time).</i></small>
+        {% endif %}
       </div>
     </body>
     <br>
