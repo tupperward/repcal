@@ -18,11 +18,11 @@ def get_data():
 def construct_embed(data, component = False):
   """Construct embed to send to Discord."""
   embed = Embed()
-  embed.title = f"Today is: {data['weekday'].lower()} {data['day']} {data['month']} an {data['yearArabic']}"
+  embed.title = f"Today is: {data['weekday'].lower()} {data['day']} {data['month']} an {data['year_arabic']}"
   embed.color = Colour.green()
   embed.description = f"\n**{data['month']} is the month of {data['month_of'].lower()}.**\nToday we celebrate {data['item'].lower()}.\n\n {data['item_url'].lower()}"
   embed.set_image(url=f"https://{base_url}/static/images/{data['image']}.jpg")
-  embed.set_footer(text=f"{data['weekday'].lower()} {data['day']} {data['month']} an {data['yearRoman'].upper()}", icon_url=f"https://{base_url}/static/images/apricots.jpg")
+  embed.set_footer(text=f"{data['weekday'].lower()} {data['day']} {data['month']} an {data['year_roman'].upper()}", icon_url=f"https://{base_url}/static/images/apricots.jpg")
   embed.url = f"https://{base_url}"
   embed.type = "rich"
   embed.timestamp = datetime.now()

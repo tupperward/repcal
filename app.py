@@ -86,7 +86,6 @@ def local_time():
 @app.route('/today', methods=["GET"])
 def today():
   """Finished rendered page."""
-  # Retrieving the timestamp variable from the session
   server_time = False
   try:
     timestamp = int(session.get('timestamp'))
