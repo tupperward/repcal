@@ -74,9 +74,8 @@ def local_time():
   try:
     local_time = request.form.get('local_time', str)
     timezone_offset = request.form.get('timezone_offset')
-    app.logger.info(f"local_time: {local_time}  timezone_offset: {timezone_offset}")
-  except:
-    app.logger.error(f"Could not retrieve time data from browser. local_time: {local_time}  timezone_offset: {timezone_offset}")
+  except Exception as e:
+    app.logger.error(f"Could not retrieve time data from browser. {e}")
   # Store the timestamp variable to the session
   session['timestamp'] = local_time
 
@@ -106,6 +105,7 @@ def today():
     date = datetime.now()
     server_time = True
   
+  session['date'] = date
   today = carpe_diem(date)
   return render_template('today.html', today=today, server_time=server_time)
 
@@ -193,7 +193,12 @@ def success():
 @app.route('/about')
 def about():
   """About page for the project."""
-  return render_template('about.html')
+  try:
+    date = session.get('date')
+  except:
+    date = datetime.now()
+  today = carpe_diem(date)
+  return render_template('about.html', today=today)
 
 @app.route('/favicon.ico')
 def favicon():

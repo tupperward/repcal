@@ -17,14 +17,14 @@
           <h1>Today is:</h1>
           <h2>{{ today.weekday.lower() }} {{ today.day }} {{ today.month.lower() }} an {{ today.yearArabic }}</h2>
       </div>
-      <div id="vulgar" class="center">
+      <div id="natural" class="center">
         <b><h3 id="above-image">{{ today.month }} is the month of {{ today.month_of.lower() }}.</h3></b>
         <img src="../static/images/{{ today.image }}.jpg">
         <br>
         <p id="below-image">Today we celebrate <a href="{{ today.item_url }}" target="_blank" rel="noopener noreferrer">{{ today.item.lower() }}</a>.</p>
         {% if server_time %}
         <br><br>
-        <small><i>This browser is displaying the UTC date (i.e. Paris mean time).</i></small>
+        <small><i>This information is based off current UTC time (i.e. Paris mean time) and may not be accurate to your local time.</i></small>
         {% endif %}
       </div>
     </body>
