@@ -19,7 +19,7 @@ meta = MetaData()
 class RepublicanDate():
   """Create the date and ingest its attributes."""
 
-  def __init__(self, time: datetime.datetime):
+  def __init__(self, time):
     """Initialize the object by getting data from the external endpoint."""
     rd_date = rd.from_gregorian(time.date())
 
@@ -35,7 +35,7 @@ class RepublicanDate():
     self.is_sansculottides = rd.is_sansculottides(rd_date) 
 
 
-def carpe_diem(time: datetime.datetime):
+def carpe_diem(time):
   """Seize the day. Create a RepublicanDate and then queries the calendar.db to add the natural details."""
   today = RepublicanDate(time)
   statement = 'SELECT id, month_of, item, item_url FROM calendar WHERE day == {} AND month LIKE "{}"'.format(today.day,unidecode(today.month))
