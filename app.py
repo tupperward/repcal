@@ -100,7 +100,7 @@ def today():
 
     date = datetime.fromtimestamp(timestamp, tz=timezone)
     server_time = check_if_js_time(date)
-    app.logger.info(f"Timezone Offset: {timezone_offset}  Timezone: {timezone}  Local Time: {datetime.fromtimestamp(timestamp).time()}")
+    app.logger.info(f"Timezone Offset: {timezone_offset}  Timezone: {timezone}  Local Time: {datetime.fromtimestamp(timestamp, tz=timezone).time()}")
   except Exception as e:
     app.logger.info(f'Using UTC time. {e}')
     date = datetime.now()
