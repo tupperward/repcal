@@ -3,8 +3,8 @@
   <link rel="shortcut icon" href="{{ url_for('static', filename='favicon.ico') }}">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <meta content="The French Republican Daily Calendar" property="og:title" />
-  <meta content="Today is {{ today.weekday.lower() }} {{ today.day }} {{ today.month.lower() }} in the year {{ today.year_arabic }}.
-  {{ today.month }} is the month of  {{ today.month_of.lower() }}.
+  <meta content="Today is {{ today.weekday.capitalize() }} {{ today.day }} {{ today.month.capitalize() }} in the year {{ today.year_arabic }}.
+  {{ today.month.capitalize() }} is the month of  {{ today.month_of.lower() }}.
   Today we celebrate {{ today.item.lower() }}." property="og:description" />
   <meta content="https://sansculottid.es/" property="og.url" />
   <meta content="https://sansculottid.es/static/images/{{ today.image }}.jpg" property="og:image" />
