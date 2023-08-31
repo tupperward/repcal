@@ -129,6 +129,23 @@ def data():
   json_data = json.dumps(data)
   return json_data
 
+@app.route('/converter')
+def converter():
+  """Date converter so you can see what any given day was."""
+  return render_template('converter.html')
+
+@app.route('/your_date', methods=['POST','GET'])
+def specific_date_conversion():
+  """Return a page desdribing the date you wanted."""
+
+  year = int(request.form.get('year'))
+  month = int(request.form.get('month'))
+  day = int(request.form.get('day'))
+  specific_date = datetime(year=year, month=month, day=day)
+
+  today = carpe_diem(specific_date)
+  return render_template('today.html', today=today)
+
 @app.route('/signup')
 def signup():
   """Signup page to add the webhook to your discord."""
