@@ -9,6 +9,41 @@ body {
   margin: auto;
   width: 50%;
 }
+/* Adjustments for evenly spaced and same-sized input fields */
+#converter-wrapper {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 10px;
+}
+
+#converter-wrapper label {
+    display: block;
+}
+
+#converter-wrapper input {
+    width: 100%;
+    padding: 8px;
+    box-sizing: border-box;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+}
+#submit-button {
+  display: block;
+  margin: 20px auto 0; /* Adjusted margin to lower the button */
+  text-align: center;
+  padding: 10px 20px; /* Increased padding for a larger button */
+  font-size: 16px; /* Adjust font size */
+  background-color: #5c715e; /* Use your button color */
+  color: white; /* Text color */
+  border: none;
+  border-radius: 5px;
+  cursor: pointer;
+}
+
+.center {
+  margin: auto;
+  width: 50%;
+}
 
 #below-image {
   padding-top: 15px;
