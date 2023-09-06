@@ -1,3 +1,4 @@
+"""Webhook for posting to discord."""
 import os
 import requests
 import json
