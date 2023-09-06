@@ -4,11 +4,6 @@ body {
   line-height: 1.42857143;
   font-family: Cormorant;
 }
-
-.center {
-  margin: auto;
-  width: 50%;
-}
 /* Adjustments for evenly spaced and same-sized input fields */
 #converter-wrapper {
     display: grid;
@@ -16,11 +11,8 @@ body {
     gap: 10px;
 }
 
-#converter-wrapper label {
-    display: block;
-}
-
 #converter-wrapper input {
+    display: block;
     width: 100%;
     padding: 8px;
     box-sizing: border-box;
