@@ -48,6 +48,10 @@ def check_if_js_time(time):
 def carpe_diem(time):
   """Seize the day. Create a RepublicanDate and then queries the calendar.db to add the natural details."""
   today = RepublicanDate(time)
+  ordinal = lambda n: "%d%s" % (n,"tsnrhtdd"[(n/10%10!=1)*(n%10<4)*n%10::4])
+  app.logger.info(f"Today's Date: {today.year_arabic} {today.month} {today.day}")
+  if today.month == None:
+    today.month = "Sansculottides"
   statement = 'SELECT id, month_of, item, item_url FROM calendar WHERE day == {} AND month LIKE "{}"'.format(today.day,unidecode(today.month))
   with Session(engine) as session:
     query = session.execute(text(statement)).fetchone()
@@ -56,6 +60,7 @@ def carpe_diem(time):
   today.item = query.item
   today.item_url = query.item_url
   today.image = today.item.lower().replace('the ','').replace(' ','_')
+  today.ordinal = ordinal(today.day)
 
   return today
 
@@ -107,6 +112,8 @@ def today():
   
   session['date'] = date
   today = carpe_diem(date)
+  if today.month == "Sansculottides":
+    return render_template('sansculottides.html', today=today, server_time=server_time)
   return render_template('today.html', today=today, server_time=server_time)
 
 @app.route('/data')
@@ -144,6 +151,9 @@ def specific_date_conversion():
   specific_date = datetime(year=year, month=month, day=day)
 
   today = carpe_diem(specific_date)
+  converted = True
+  if today.month == "Sansculottides":
+    return render_template('sansculottides.html', today=today, converted=converted)
   return render_template('today.html', today=today)
 
 @app.route('/signup')

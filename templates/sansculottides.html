@@ -3,9 +3,9 @@
   <link rel="shortcut icon" href="{{ url_for('static', filename='favicon.ico') }}">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <meta content="The French Republican Daily Calendar" property="og:title" />
-  <meta content="Today is {{ today.weekday.capitalize() }} {{ today.ordinal }} {{ today.month.capitalize() }} in the year {{ today.year_arabic }}.
-  {{ today.month.capitalize() }} is the month of  {{ today.month_of.lower() }}.
-  Today we celebrate {{ today.item.lower() }}." property="og:description" />
+  <meta content="Today is {{ today.weekday.capitalize() }}, the {{ today.ordinal }} of the {{ today.month.capitalize() }} in the year {{ today.year_arabic }}.
+  The {{ today.month.capitalize() }} are {{ today.month_of.lower() }} that serve as a year-end festival.
+  Today we celebrate the concept of {{ today.item.lower() }}." property="og:description" />
   <meta content="https://sansculottid.es/" property="og.url" />
   <meta content="https://sansculottid.es/static/images/{{ today.image }}.jpg" property="og:image" />
   <meta content="#43B581" data-react-helmet="true" name="theme-color" />
@@ -18,25 +18,54 @@
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Cormorant&family=Cormorant+Garamond:wght@400;500;600;700&family=EB+Garamond&display=swap" rel="stylesheet">
+    <style>
+      .first-color{
+        background: #313948
+      }
+      .second-color{
+        background: #AA243C
+      }
+      .third-color{
+        background: #6c6961
+      }
+      h1, h2, h3, p{
+        color: #e5e3d8
+      }
+      a{
+        color: #6c6961
+      }
+      img{
+        box-shadow: 10px 10px 20px #6c6961;
+      }
+    </style>
   </head>
   <div id="wrapper">
     <body class="first-color">
       <div id="civil" class="center">
           <h1>Today is:</h1>
-          <h2>{{ today.weekday.capitalize() }} the {{ today.ordinal }} of {{ today.month.capitalize() }} in the year {{ today.year_arabic }}</h2>
+          <h2>{{ today.weekday.capitalize() }}, the {{ today.ordinal }} of the {{ today.month.capitalize() }} in the year {{ today.year_arabic }}</h2>
       </div>
       <div id="natural" class="center">
-        <b><h3 id="above-image">{{ today.month }} is the month of {{ today.month_of.lower() }}.</h3></b>
+        <b><h3 id="above-image">The {{ today.month.lower() }} are {{ today.month_of.lower() }} that serve as a year-end festival.</h3></b>
         <img src="../static/images/{{ today.image }}.jpg">
         <br>
-        <p id="below-image">Today we celebrate <a href="{{ today.item_url }}" target="_blank" rel="noopener noreferrer">{{ today.item.lower() }}</a>.</p>
+        <p id="below-image">Today we celebrate the concept of <a href="{{ today.item_url }}" target="_blank" rel="noopener noreferrer">{{ today.item.lower() }}</a>.</p>
+        {% if not converted %}
         {% if server_time %}
         <br><br>
         <small><i>This information is based off current UTC time (i.e. Paris mean time) and may not be accurate to your local time.</i></small>
         {% endif %}
+        {% endif %}
       </div>
     </body>
     <br>
+    <style>
+      #footer{
+        border-top: 2px solid #e5e3d8;}
+        a{
+          color: #e5e3d8
+        }
+    </style>
     <footer class="second-color">
       <div id="footer">
         <p> <a href="/about">About</a> | <a href="/converter">Date Converter</a> | <a href="{{ url_for('signup') }}">Discord Webhook</a> | <a rel="me" href="https://worstwizard.online">Blog</a></p> 

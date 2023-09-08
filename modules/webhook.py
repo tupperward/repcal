@@ -19,9 +19,13 @@ def get_data():
 def construct_embed(data, component = False):
   """Construct embed to send to Discord."""
   embed = Embed()
-  embed.title = f"Today is: {data['weekday'].lower()} {data['day']} {data['month']}, year {data['year_arabic']}."
+  embed.title = f"Today is: {data['weekday'].lower()}, the {data['day']} of the {data['month']}, year {data['year_arabic']}."
   embed.color = Colour.green()
   embed.description = f"\n**{data['month']} is the month of {data['month_of'].lower()}.**\nToday we celebrate {data['item'].lower()}.\n\n {data['item_url'].lower()}"
+  if data['month'] == "Sansculottides":
+    embed.title = f"Today is: {data['weekday'].lower()}, {data['ordinal']} of the {data['month']} in the year {data['year_arabic']}."
+    embed.color = Colour.dark_blue()
+    embed.description = f"\n**The {data['month']} are {data['month_of'].lower()} that serve as a year-end festival.**\nToday we celebrate the concept of {data['item'].lower()}.\n\n {data['item_url'].lower()}"
   embed.set_image(url=f"https://{base_url}/static/images/{data['image']}.jpg")
   embed.set_footer(text=f"{data['weekday'].lower()} {data['day']} {data['month']} an {data['year_roman'].upper()}", icon_url=f"https://{base_url}/static/images/apricots.jpg")
   embed.url = f"https://{base_url}"
