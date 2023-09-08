@@ -27,7 +27,7 @@ def construct_embed(data, component = False):
     embed.color = Colour.dark_blue()
     embed.description = f"\n**The {data['month']} are {data['month_of'].lower()} that serve as a year-end festival.**\nToday we celebrate the concept of {data['item'].lower()}.\n\n {data['item_url'].lower()}"
   embed.set_image(url=f"https://{base_url}/static/images/{data['image']}.jpg")
-  embed.set_footer(text=f"{data['weekday'].lower()} {data['day']} {data['month']} an {data['year_roman'].upper()}", icon_url=f"https://{base_url}/static/images/apricots.jpg")
+  embed.set_footer(text=f"{data['weekday'].lower()}, {data['day']} des {data['month']} an {data['year_roman'].upper()}", icon_url=f"https://{base_url}/static/images/apricots.jpg")
   embed.url = f"https://{base_url}"
   embed.type = "rich"
   embed.timestamp = datetime.now()
