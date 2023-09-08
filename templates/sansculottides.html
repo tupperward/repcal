@@ -3,7 +3,7 @@
   <link rel="shortcut icon" href="{{ url_for('static', filename='favicon.ico') }}">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <meta content="The French Republican Daily Calendar" property="og:title" />
-  <meta content="Today is {{ today.weekday.capitalize() }}, the {{ today.ordinal }} of the {{ today.month.capitalize() }} in the year {{ today.year_arabic }}.
+  <meta content="Today is {{ today.weekday.capitalize() }}, the {{ today.ordinal }} of the {{ today.month.lower() }} in the year {{ today.year_arabic }}.
   The {{ today.month.capitalize() }} are {{ today.month_of.lower() }} that serve as a year-end festival.
   Today we celebrate the concept of {{ today.item.lower() }}." property="og:description" />
   <meta content="https://sansculottid.es/" property="og.url" />
@@ -43,7 +43,7 @@
     <body class="first-color">
       <div id="civil" class="center">
           <h1>Today is:</h1>
-          <h2>{{ today.weekday.capitalize() }}, the {{ today.ordinal }} of the {{ today.month.capitalize() }} in the year {{ today.year_arabic }}</h2>
+          <h2>{{ today.weekday.capitalize() }}, the {{ today.ordinal }} of the {{ today.month.lower() }} in the year {{ today.year_arabic }}</h2>
       </div>
       <div id="natural" class="center">
         <b><h3 id="above-image">The {{ today.month.lower() }} are {{ today.month_of.lower() }} that serve as a year-end festival.</h3></b>
