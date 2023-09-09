@@ -18,12 +18,13 @@ def get_data():
 
 def construct_embed(data, component = False):
   """Construct embed to send to Discord."""
+  ordinal = lambda n: "%d%s" % (n,"tsnrhtdd"[(n/10%10!=1)*(n%10<4)*n%10::4])
   embed = Embed()
-  embed.title = f"Today is: {data['weekday'].lower()}, the {data['ordinal']} of the {data['month']}, year {data['year_arabic']}."
+  embed.title = f"Today is: {data['weekday'].lower()}, the {ordinal(int(data['day']))} of the {data['month']}, year {data['year_arabic']}."
   embed.color = Colour.green()
   embed.description = f"\n**{data['month']} is the month of {data['month_of'].lower()}.**\nToday we celebrate {data['item'].lower()}.\n\n {data['item_url'].lower()}"
   if data['month'] == "Sansculottides":
-    embed.title = f"Today is {data['weekday'].lower()}, {data['ordinal']} of the {data['month'].lower()} in the year {data['year_arabic']}."
+    embed.title = f"Today is {data['weekday'].lower()}, {ordinal(int(data['day']))} of the {data['month'].lower()} in the year {data['year_arabic']}."
     embed.color = Colour.dark_blue()
     embed.description = f"\n**The {data['month'].lower()} are {data['month_of'].lower()} that serve as a year-end festival.**\nToday we celebrate the concept of {data['item'].lower()}.\n\n {data['item_url'].lower()}"
   embed.set_image(url=f"https://{base_url}/static/images/{data['image']}.jpg")
