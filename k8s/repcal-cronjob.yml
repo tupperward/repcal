@@ -1,0 +1,21 @@
+---
+apiVersion: batch/v1
+kind: CronJob
+metadata:
+  name: rbh-discord
+  namespace: repcal
+spec:
+  #timeZone: "America/New_York"
+  schedule: 'CRON_TZ=America/New_York 0 8 * * * '
+  jobTemplate:
+    spec:
+      template:
+        spec:
+          containers:
+            - name: discord-webhook
+              image: tupperward/repcal:discord
+              imagePullPolicy: Always
+              env:
+              - name: "DISCORD_WEBHOOK_URL"
+                value: 'https://discord.com/api/webhooks/1073089536072097842/wxbhPksTcy5r7VtoCrcZKPE_QXNJMnkcsTvDeIlrZmSEdM9CCtu4LanGCbCg-K1nrM-G'
+          restartPolicy: OnFailure

@@ -1,0 +1,24 @@
+apiVersion: networking.k8s.io/v1
+kind: Ingress
+metadata:
+  annotations:
+    cert-manager.io/cluster-issuer: prod-issuer
+  name: sansculottides
+  namespace: repcal
+spec:
+  ingressClassName: nginx
+  rules:
+  - host: sansculottid.es
+    http:
+      paths:
+      - backend:
+          service:
+            name: sansculottides
+            port:
+              number: 80
+        path: /
+        pathType: Prefix
+  tls:
+  - hosts:
+    - sansculottid.es
+    secretName: prod-sansculottides-tls

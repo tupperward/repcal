@@ -1,0 +1,33 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  labels:
+    app: sansculottides
+  name: sansculottides
+  namespace: repcal
+spec:
+  replicas: 1
+  revisionHistoryLimit: 10
+  selector:
+    matchLabels:
+      app: sansculottides
+  strategy:
+    rollingUpdate:
+      maxSurge: 25%
+      maxUnavailable: 25%
+    type: RollingUpdate
+  template:
+    metadata:
+      creationTimestamp: null
+      labels:
+        app: sansculottides
+    #namespace: ward
+    spec:
+      containers:
+      - image: tupperward/repcal:v3
+        imagePullPolicy: Always
+        name: sansculottides
+        ports:
+        - containerPort: 80
+          protocol: TCP
+        resources: {}
