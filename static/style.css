@@ -6,23 +6,30 @@ body {
 }
 /* Adjustments for evenly spaced and same-sized input fields */
 #converter-wrapper {
-    display: grid;
-    grid-template-columns: repeat(3, 1fr);
+    display: flex;
     gap: 10px;
+    justify-content: center;
+}
+
+#datepicker-wrapper {
+  justify-content: center;
 }
 
 #converter-wrapper input {
-    display: block;
+    font-family: Cormorant;
     width: 100%;
     padding: 8px;
     box-sizing: border-box;
     border: 1px solid #ccc;
     border-radius: 4px;
+    display: inline-flex; 
+
 }
 #submit-button {
-  display: block;
+  display: inline-flex;
   margin: 20px auto 0; /* Adjusted margin to lower the button */
   text-align: center;
+  font-family: Cormorant;
   padding: 10px 20px; /* Increased padding for a larger button */
   font-size: 16px; /* Adjust font size */
   background-color: #5c715e; /* Use your button color */

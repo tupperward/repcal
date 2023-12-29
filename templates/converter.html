@@ -1,40 +1,40 @@
 <!DOCTYPE html>
 <html>
 <head>
-    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}" />
-    <link rel="preconnect" href="https://fonts.googleapis.com">
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Cormorant&family=Cormorant+Garamond:wght@400;500;600;700&family=EB+Garamond&display=swap" rel="stylesheet">
-    <title>Gregorian Date Converter</title>
+  <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}" />
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Cormorant&family=Cormorant+Garamond:wght@400;500;600;700&family=EB+Garamond&display=swap" rel="stylesheet">
+  <title>Gregorian Date Converter</title>
+
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/flatpickr/dist/flatpickr.min.css">
 </head>
 <body class="first-color">
   <div id="center-wrapper">
     <h1>Enter a Gregorian Date</h1>
-    <form class="center" method="POST" action="/your_date">
-        <div id="converter-wrapper">
-            <div id="year-wrapper">
-                <label for="year">Year:</label>
-                <input type="text" id="year" name="year" placeholder="YYYY" maxlength="4" required>
-            </div>
-
-            <div id="month-wrapper">
-                <label for="month">Month:</label>
-                <input type="text" id="month" name="month" placeholder="MM" maxlength="2" required>
-            </div>
-
-            <div id="day-wrapper">
-                <label for="day">Day:</label>
-                <input type="text" id="day" name="day" placeholder="DD" maxlength="2" required>
-            </div>
+    <form method="POST" action="/your_date">
+      <div id="converter-wrapper">
+        <div id="datepicker-wrapper">
+          <label for="datepicker">Date:</label>
+          <input id="datepicker" name="date" placeholder="YYYY-MM-DD" required>
         </div>
 
         <button id="submit-button" type="submit">Submit</button>
+      </div>
     </form>
   </div>
   <footer class="second-color">
     <div id="footer">
-      <p> <a href="/about">About</a> | <a href="/converter">Date Converter</a> | <a href="{{ url_for('signup') }}">Discord Webhook</a></p> 
+      <p> <a href="/about">About</a> | <a href="/converter">Date Converter</a> | <a href="{{ url_for('signup') }}">Discord Webhook</a></p>
     </div>
   </footer>
+
+  <script src="https://cdn.jsdelivr.net/npm/flatpickr"></script>
+  <script>
+    // Initialize Flatpickr on the "datepicker" input
+    flatpickr('#datepicker', {
+      dateFormat: 'Y-m-d', // Enforce desired format
+    });
+  </script>
 </body>
 </html>
