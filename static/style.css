@@ -18,10 +18,10 @@ body {
 #converter-wrapper input {
     font-family: Cormorant;
     width: 100%;
-    padding: 8px;
+    padding: 10px;
     box-sizing: border-box;
-    border: 1px solid #ccc;
-    border-radius: 4px;
+    border: 1px solid #5c715e;
+    border-radius: 5px;
     display: inline-flex; 
 
 }
