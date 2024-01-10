@@ -145,10 +145,8 @@ def converter():
 @app.route('/your_date', methods=['POST','GET'])
 def specific_date_conversion():
   """Return a page desdribing the date you wanted."""
-  year = int(request.form.get('year'))
-  month = int(request.form.get('month'))
-  day = int(request.form.get('day'))
-  specific_date = datetime(year=year, month=month, day=day)
+  date_string = str(request.form.get('date'))
+  specific_date = datetime.strptime(date_string, "%Y-%m-%d")
 
   today = carpe_diem(specific_date)
   converted = True
