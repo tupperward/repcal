@@ -114,7 +114,10 @@ def today():
   today = carpe_diem(date)
   if today.month == "Sansculottides":
     return render_template('sansculottides.html', today=today, server_time=server_time)
-  return render_template('today.html', today=today, server_time=server_time)
+  elif server_time:
+    return render_template('loading.html')
+  else:
+    return render_template('today.html', today=today, server_time=server_time)
 
 @app.route('/data')
 def data():
