@@ -59,7 +59,7 @@ def carpe_diem(time):
   today.month_of = query.month_of
   today.item = query.item
   today.item_url = query.item_url
-  today.image = today.item.lower().replace('the ','').replace(' ','_')
+  today.image = today.item.lower().replace('the ','').replace(' ','_').replace('-','_')
   today.ordinal = ordinal(today.day)
 
   return today
