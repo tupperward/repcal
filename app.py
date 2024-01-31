@@ -48,7 +48,7 @@ def check_if_js_time(time):
 def carpe_diem(time):
   """Seize the day. Create a RepublicanDate and then queries the calendar.db to add the natural details."""
   today = RepublicanDate(time)
-  ordinal = lambda n: "%d%s" % (n,"tsnrhtdd"[(n/10%10!=1)*(n%10<4)*n%10::4])
+  ordinal = lambda n: f"{n}{['th', 'st', 'nd', 'rd'][((n//10%10!=1)*(n%10<4)*n%10)::4][0]}"
   app.logger.info(f"Today's Date: {today.year_arabic} {today.month} {today.day}")
   if today.month == None:
     today.month = "Sansculottides"
