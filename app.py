@@ -112,9 +112,10 @@ def today():
   
   session['date'] = date
   today = carpe_diem(date)
+
   if today.month == "Sansculottides":
-    return render_template('sansculottides.html', today=today, server_time=server_time)
-  return render_template('today.html', today=today, server_time=server_time)
+    return render_template('sansculottides.html', today=today, server_time=server_time, permalink=url_for('linkable_converted_date', date=date.strftime("%Y-%m-%d")))
+  return render_template('today.html', today=today, server_time=server_time, permalink=url_for('linkable_converted_date', date=date.strftime("%Y-%m-%d")))
 
 @app.route('/data')
 def data():
@@ -148,8 +149,8 @@ def linkable_converted_date(date):
   """Return a linkable page."""
   specific_date = datetime.strptime(date, "%Y-%m-%d")
   today = carpe_diem(specific_date)
-  converted = True
   date_string = specific_date.strftime("%B %dth %Y")
+  converted=True
 
   if today.month == "Sansculottides":
     return render_template('sansculottides.html', today=today, converted=converted, date_string=date_string)

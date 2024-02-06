@@ -31,8 +31,12 @@
         <br>
         <p id="below-image">Today we celebrate <a href="{{ today.item_url }}" target="_blank" rel="noopener noreferrer">{{ today.item.lower() }}</a>.</p>
         {% if server_time %}
-        <br><br>
+        <br>
         <small><i>This information is based off current UTC time (i.e. Paris mean time) and may not be accurate to your local time.</i></small>
+        {% endif %}
+        {% if permalink %}
+        <br>
+        <small><i><a href="{{permalink}}" >Permalink to Today's Date</a></i></small>
         {% endif %}
         {% if converted %}
         <br>
