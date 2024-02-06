@@ -143,7 +143,7 @@ def converter():
   """Date converter so you can see what any given day was."""
   return render_template('converter.html')
 
-
+@app.route('/gregorian_date/<date>', methods=['GET'])
 @app.route('/vulgar_date/<date>', methods=['GET'])
 def linkable_converted_date(date):
   """Return a linkable page."""
