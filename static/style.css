@@ -151,6 +151,14 @@ a:active {
   text-decoration: none;
 }
 
+a:link{
+  color: #5c715e;
+}
+
+a:visited{
+  color:#1f2c21;
+}
+
 h1,
 h2,
 h3,
