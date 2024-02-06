@@ -89,6 +89,7 @@ def local_time():
   session['timezone_offset'] = timezone_offset_hours
   return 'OK'
 
+@app.route('/aujourd_hui', methods=['GET'])
 @app.route('/today', methods=["GET"])
 def today():
   """Finished rendered page."""
@@ -137,12 +138,14 @@ def data():
   }
   json_data = json.dumps(data)
   return json_data
-
+@app.route('/date_transformateur')
 @app.route('/date_converter')
 def converter():
   """Date converter so you can see what any given day was."""
   return render_template('converter.html')
 
+@app.route('/date_vulgaire/<date>')
+@app.route('/date_grégorienne/<date>')
 @app.route('/gregorian_date/<date>', methods=['GET'])
 @app.route('/vulgar_date/<date>', methods=['GET'])
 def linkable_converted_date(date):
@@ -163,6 +166,7 @@ def specific_date_conversion():
 
   return redirect(url_for('linkable_converted_date', date=date_string))
 
+@app.route('/enrôler')
 @app.route('/signup')
 def signup():
   """Signup page to add the webhook to your discord."""
@@ -199,6 +203,7 @@ def create_webhook():
     app.logger.error(f"Failed to create cronjob : {err}")
     return render_template('failure.html', error=err)
   
+@app.route('/succés')
 @app.route('/success')
 def success():
   """Render successful webhook creation page."""
@@ -223,6 +228,7 @@ def success():
   use_webhook(webhook_url=url, message=message, component=True)
   return render_template('success.html')
 
+@app.route('/au_sujet_de')
 @app.route('/about')
 def about():
   """About page for the project."""
