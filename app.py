@@ -142,17 +142,25 @@ def converter():
   """Date converter so you can see what any given day was."""
   return render_template('converter.html')
 
-@app.route('/your_date', methods=['POST','GET'])
-def specific_date_conversion():
-  """Return a page desdribing the date you wanted."""
-  date_string = str(request.form.get('date'))
-  specific_date = datetime.strptime(date_string, "%Y-%m-%d")
 
+@app.route('/<date>', methods=['POST','GET'])
+def linkable_converted_date(date):
+  """Return a linkable page."""
+  specific_date = datetime.strptime(date, "%Y-%m-%d")
   today = carpe_diem(specific_date)
   converted = True
+  date_string = specific_date.strftime("%B %dth %Y")
+
   if today.month == "Sansculottides":
-    return render_template('sansculottides.html', today=today, converted=converted)
-  return render_template('today.html', today=today)
+    return render_template('sansculottides.html', today=today, converted=converted, date_string=date_string)
+  return render_template('today.html', today=today, converted=converted, date_string=date_string)
+
+@app.route('/process_date', methods=['POST','GET'])
+def specific_date_conversion():
+  """Return a page describing the date you wanted."""
+  date_string = str(request.form.get('date'))
+
+  return redirect(url_for('linkable_converted_date', date=date_string))
 
 @app.route('/signup')
 def signup():
