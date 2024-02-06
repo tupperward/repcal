@@ -144,7 +144,7 @@ def converter():
   return render_template('converter.html')
 
 
-@app.route('/<date>', methods=['POST','GET'])
+@app.route('/gregorian_date/<date>', methods=['POST','GET'])
 def linkable_converted_date(date):
   """Return a linkable page."""
   specific_date = datetime.strptime(date, "%Y-%m-%d")
