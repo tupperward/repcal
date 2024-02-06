@@ -138,13 +138,13 @@ def data():
   json_data = json.dumps(data)
   return json_data
 
-@app.route('/converter')
+@app.route('/date_converter')
 def converter():
   """Date converter so you can see what any given day was."""
   return render_template('converter.html')
 
 
-@app.route('/gregorian_date/<date>', methods=['POST','GET'])
+@app.route('/vulgar_date/<date>', methods=['GET'])
 def linkable_converted_date(date):
   """Return a linkable page."""
   specific_date = datetime.strptime(date, "%Y-%m-%d")
