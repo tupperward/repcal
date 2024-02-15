@@ -86,7 +86,8 @@ body {
   text-align: center;
 }
 #thanks #why #how {
-  font-size: large;
+  font-size: 18px;
+  width: 80%;
 }
 img {
   max-width: 100%;

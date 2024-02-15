@@ -33,10 +33,11 @@
         {% if server_time %}
         <br>
         <small><i>This information is based off current UTC time (i.e. Paris mean time) and may not be accurate to your local time.</i></small>
+        <br><a href="/">Refresh Page</a><br>
         {% endif %}
         {% if permalink %}
         <br>
-        <small><i><a href="{{permalink}}" >Permalink to Today's Date</a></i></small>
+        <i><a href="{{permalink}}" >Permalink to Today's Date</a></i>
         {% endif %}
         {% if converted %}
         <br>
