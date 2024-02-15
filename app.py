@@ -239,6 +239,10 @@ def about():
   today = carpe_diem(date)
   return render_template('about.html', today=today)
 
+@app.errorhandler(404)
+def page_not_found(e):
+    return render_template('error.html'), 404
+
 @app.route('/favicon.ico')
 def favicon():
   """Shutup linter."""

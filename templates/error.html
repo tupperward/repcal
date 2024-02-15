@@ -1,0 +1,24 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <title>Error</title>
+    <link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='style.css') }}">
+  </head>
+  <body class="first-color">
+    <style>
+        .container {
+            text-align: center;
+        }
+    </style>
+    <div class="container">
+        <h1>Whoops!</h1>
+        <h4>Looks like this page doesn't exist</h4>
+        <button id="submit-button" onclick='window.location.href="/converter"' class="button">Go back to the date converter</a>
+    </div>
+    <footer class="second-color">
+        <div id="footer">
+            <small> <a href="/about">About</a> | <a href="/date_converter">Convert</a></small> | <a href="/">Today</a> | <small><a href="{{ url_for('signup') }}">Discord</a> | <a href="https://bsky.app/profile/sansculottid.es">Bluesky</a></small> 
+        </div>
+        </footer>
+</body>
+</html>
