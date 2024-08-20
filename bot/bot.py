@@ -1,10 +1,10 @@
-import requests, os, pytz, shutil
+import os, pytz
 from repcal import RepublicanDate as rd
 from datetime import datetime
 from unidecode import unidecode
 from sqlalchemy import create_engine, MetaData, text
 from sqlalchemy.orm import Session
-from bsky_bridge import BskySession, post_image
+from atproto import Client, client_utils
 
 base_url = os.environ.get('BSKY_HANDLE')
 engine = create_engine("sqlite+pysqlite:///calendar.db")
@@ -54,12 +54,21 @@ def post_to_bsky(now):
   password = os.environ.get('BSKY_PASS')
   image_path = f"/images/{today.image}.jpg"
   alt_text = f"An old time-y illustration of a {today.item}."
-  caption = f"Today is {today.weekday.capitalize()} the {today.ordinal} of {today.month} in the year {today.year_arabic}.\n{today.month} is the month of {today.month_of.lower()}.\nToday we celebrate {today.item}.\n\n {today.item_url}"
-  bsky_session = BskySession(handle, password)
+  caption = f"Today is {today.weekday.capitalize()} the {today.ordinal} of {today.month} in the year {today.year_arabic}.\n{today.month} is the month of {today.month_of.lower()}.\nToday we celebrate {today.item.lower()}.\n\n"
+  link = f"More information on {today.item.lower()}"
+  client = Client()
+  client.login(handle,password)
+  text_builder = client_utils.TextBuilder()
 
-  response = post_image(session=bsky_session, post_text=caption, image_path=image_path, alt_text=alt_text)
+  text_builder.text(caption)
+  text_builder.link(link, today.item_url)
 
-  return response
+  with open (image_path, 'rb') as f:
+    img_data = f.read()
+  
+  client.send_image(text=text_builder, image=img_data, image_alt=alt_text)
+
+  return True
 
 if __name__ == "__main__":
   paris_timezone = pytz.timezone('Europe/Paris')
