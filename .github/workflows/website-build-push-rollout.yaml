@@ -11,7 +11,7 @@ on:
     - static/**
     - templates/**
     - modules/**
-    - .github/workflows/**
+    - .github/workflows/website-build-push-rollout.yaml
     branches: [ main ]
   pull_request:
     paths:
@@ -23,7 +23,7 @@ on:
     - static/**
     - templates/**
     - modules/**
-    - .github/workflows/**
+    - .github/workflows/website-build-push-rollout.yaml
     branches: [ main ]
 
 jobs:
