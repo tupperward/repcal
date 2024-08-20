@@ -15,6 +15,7 @@ spec:
         metadata:
           creationTimestamp: null
         spec:
+          restartPolicy: Never
           containers:
           - env:
             - name: BSKY_HANDLE

@@ -4,6 +4,6 @@ COPY calendar.db .
 COPY images /images
 COPY bot.py .
 
-RUN pip install sqlalchemy unidecode repcal pytz bsky-bridge
+RUN pip install sqlalchemy unidecode repcal pytz bsky-bridge Pillow
 
 CMD ["python", "bot.py"]

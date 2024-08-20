@@ -52,9 +52,9 @@ def post_to_bsky(now):
   today = carpe_diem(now)
   handle = os.environ.get('BSKY_HANDLE')
   password = os.environ.get('BSKY_PASS')
-  image_path = f"/images/{today.item}"
+  image_path = f"/images/{today.image}.jpg"
   alt_text = f"An old time-y illustration of a {today.item}."
-  caption = f"Today is {today.weekday.capitalize()} the {today.ordinal} of {today.month} in the year {today.year_arabic}.\n**{today.month} is the month of {today.month_of.lower()}.**\nToday we celebrate {today.item}.\n\n {today.item_url}"
+  caption = f"Today is {today.weekday.capitalize()} the {today.ordinal} of {today.month} in the year {today.year_arabic}.\n{today.month} is the month of {today.month_of.lower()}.\nToday we celebrate {today.item}.\n\n {today.item_url}"
   bsky_session = BskySession(handle, password)
 
   response = post_image(session=bsky_session, post_text=caption, image_path=image_path, alt_text=alt_text)
@@ -63,7 +63,6 @@ def post_to_bsky(now):
 
 if __name__ == "__main__":
   paris_timezone = pytz.timezone('Europe/Paris')
-  timestamp = datetime.datetime.now(paris_timezone)
+  timestamp = datetime.now(paris_timezone)
   response = post_to_bsky(timestamp)
-  print(response.status_code)
-  print(response.text)
+  print(response)
