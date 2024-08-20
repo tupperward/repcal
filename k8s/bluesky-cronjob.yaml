@@ -1,0 +1,35 @@
+apiVersion: batch/v1
+kind: CronJob
+metadata:
+  annotations:
+  name: bsky-bot
+  namespace: repcal
+spec:
+  concurrencyPolicy: Allow
+  failedJobsHistoryLimit: 1
+  jobTemplate:
+    metadata:
+      creationTimestamp: null
+    spec:
+      template:
+        metadata:
+          creationTimestamp: null
+        spec:
+          restartPolicy: Never
+          containers:
+          - env:
+            - name: BSKY_HANDLE
+              value: sansculottid.es
+            - name: BSKY_PASS
+              value: x48p4_baCtgCUt9v88kn
+            image: tupperward/repcal:bsky-bot
+            imagePullPolicy: Always
+            name: bsky-bot
+            terminationMessagePath: /dev/termination-log
+            terminationMessagePolicy: File
+
+  schedule: '0 0 * * * '
+  timeZone: 'Europe/Paris'
+  successfulJobsHistoryLimit: 1
+  suspend: false
+

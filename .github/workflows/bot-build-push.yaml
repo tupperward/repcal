@@ -1,0 +1,43 @@
+name: Webhook Docker Build/Push
+
+on:
+  push:
+    paths:
+      - bot/bot.py
+      - bot/Dockerfile
+      - .github/workflows/bot-build.push.yaml
+    branches: [ main ]
+  pull_request:
+    paths:
+      - bot/bot.py
+      - bot/Dockerfile
+      - .github/workflows/bot-build.push.yaml
+    branches: [ main ]
+
+jobs:
+  build:
+    runs-on: self-hosted
+    permissions:
+      contents: read
+      packages: write
+      id-token: write 
+
+    steps:
+      # Check out the repo for building
+      - name: Check out repository
+        uses: actions/checkout@v3
+        with:
+          repository: ${{ vars.DOCKER_IMAGE }}
+          ref: main
+
+      # Build the image and push to public repo
+      - name: Build and push image
+        uses: mr-smithers-excellent/docker-build-push@v6
+        with:
+          username: ${{ secrets.DOCKERHUB_USERNAME }}
+          password: ${{ secrets.DOCKERHUB_TOKEN }}
+          registry: docker.io
+          directory: ./modules
+          dockerfile: ./modules/Dockerfile
+          image: ${{ vars.DOCKER_IMAGE }}
+          tags: bsky-bot

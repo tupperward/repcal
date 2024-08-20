@@ -5,7 +5,7 @@ from sqlalchemy import create_engine, MetaData, text
 from sqlalchemy.orm import Session
 from unidecode import unidecode 
 from repcal import RepublicanDate as rd
-from datetime import datetime, timedelta
+from datetime import datetime
 import json, secrets, pytz
 
 # Set up Flask as app, generate a secret key using secrets.
