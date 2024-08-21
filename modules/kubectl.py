@@ -3,8 +3,6 @@ import kubernetes.client, kubernetes.config
 from kubernetes.client.rest import ApiException
 import os, random, string
 
-#configuration.api_key['authorization'] = os.environ.get('K8S_API_KEY')
-#configuration.host = os.environ.get('K8S_HOST', default="http://localhost")
 kubernetes.config.load_incluster_config()
 
 def random_characters(k):

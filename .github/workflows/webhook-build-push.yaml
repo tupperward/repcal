@@ -5,13 +5,11 @@ on:
     paths:
       - modules/webhook.py
       - modules/Dockerfile
-      - .github/workflows/webhook-build-push.yaml
     branches: [ main , sansculottides-domain-change ]
   pull_request:
     paths:
       - modules/webhook.py
       - modules/Dockerfile
-      - .github/workflows/webhook-build-push.yaml
     branches: [ main , sansculottides-domain-change ]
 
 jobs:
