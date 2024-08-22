@@ -1,4 +1,4 @@
-name: Webhook Docker Build/Push
+name: Bot Docker Build/Push
 
 on:
   push:
