@@ -28,8 +28,7 @@ spec:
             terminationMessagePath: /dev/termination-log
             terminationMessagePolicy: File
 
-  schedule: '0 0 * * * '
-  timeZone: 'Europe/Paris'
+  schedule: 'CRON_TZ=Europe/Paris 0 0 * * * '
   successfulJobsHistoryLimit: 1
   suspend: false
 
