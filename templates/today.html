@@ -32,7 +32,7 @@
         <p id="below-image">Today we celebrate <a href="{{ today.item_url }}" target="_blank" rel="noopener noreferrer">{{ today.item.lower() }}</a>.</p>
         {% if server_time %}
         <br>
-        <small><i>This information is based off current UTC time (i.e. Paris mean time) and may not be accurate to your local time.</i></small>
+        <small><i>This information is based off current UTC+2 time (i.e. Paris mean time) and may not be accurate to your local time.</i></small>
         <br><button id="submit-button" onclick="window.location.href='/'">Refresh</button><br>
         {% endif %}
         {% if permalink %}
