@@ -113,10 +113,12 @@ def today():
   
   session['date'] = date
   today = carpe_diem(date)
+  permalink=url_for('linkable_converted_date', date=date.strftime("%Y-%m-%d"))
 
-  if today.month == "Sansculottides":
-    return render_template('sansculottides.html', today=today, server_time=server_time, permalink=url_for('linkable_converted_date', date=date.strftime("%Y-%m-%d")))
-  return render_template('today.html', today=today, server_time=server_time, permalink=url_for('linkable_converted_date', date=date.strftime("%Y-%m-%d")))
+  if today.month.lower() == "sansculottides":
+    return render_template('sansculottides.html', today=today, server_time=server_time, permalink=permalink)
+    
+  return render_template('today.html', today=today, server_time=server_time, permalink=permalink)
 
 @app.route('/data')
 def data():
