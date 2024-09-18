@@ -36,7 +36,7 @@ def create_cronjob(url: str, time_zone: str, schedule: str):
         pod_template = kubernetes.client.V1PodTemplateSpec(spec=pod_spec, metadata=metadata)
         job_spec = kubernetes.client.V1JobSpec(template=pod_template)
         job_template = kubernetes.client.V1JobTemplateSpec(spec=job_spec, metadata=metadata)
-        cronjob_spec = kubernetes.client.V1CronJobSpec(time_zone=time_zone, schedule=schedule, job_template=job_template, successful_jobs_history_limit=1)
+        cronjob_spec = kubernetes.client.V1CronJobSpec(time_zone=time_zone, schedule=schedule, job_template=job_template, successful_jobs_history_limit=0)
         body = kubernetes.client.V1CronJob(spec=cronjob_spec, metadata=metadata)
         pretty = 'true'
     
