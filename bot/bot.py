@@ -62,7 +62,7 @@ def post_to_bsky(now):
 
   text_builder.text(caption)
   text_builder.link(link, today.item_url)
-  text_builder.tag(text="JacobinDay", tag="JacobinDay")
+  text_builder.tag(text="\n\n#JacobinDay", tag="JacobinDay")
 
   with open (image_path, 'rb') as f:
     img_data = f.read()
