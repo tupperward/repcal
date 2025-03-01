@@ -48,6 +48,7 @@ def use_webhook(webhook_url, message: Embed, component = False):
   except Exception as err:
     if component:
       current_app.logger.error(f"Could not send discord message: {err}")
+      exit(1)
     else: 
       print(err)
 
