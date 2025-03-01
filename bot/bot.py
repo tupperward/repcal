@@ -54,15 +54,15 @@ def post_to_bsky(now):
   password = os.environ.get('BSKY_PASS')
   image_path = f"/images/{today.image}.jpg"
   alt_text = f"An old time-y illustration of a {today.item}."
-  caption = f"Today is {today.weekday.capitalize()} the {today.ordinal} of {today.month} in the year {today.year_arabic}.\n{today.month} is the month of {today.month_of.lower()}.\nToday we celebrate {today.item.lower()}.\n\n"
-  link = f"More information on {today.item.lower()}"
+  caption = f"Today is {today.weekday.capitalize()} the {today.ordinal} of {today.month} in the year {today.year_arabic}.\n{today.month} is the month of {today.month_of.lower()}.\nToday we celebrate {today.item.lower()}."
+  link = f"\n\nMore information on {today.item.lower()}"
   client = Client()
   client.login(handle,password)
   text_builder = client_utils.TextBuilder()
 
   text_builder.text(caption)
+  text_builder.tag(text=" #JacobinDay ", tag="JacobinDay")
   text_builder.link(link, today.item_url)
-  text_builder.tag(text="\n#JacobinDay", tag="JacobinDay")
 
   with open (image_path, 'rb') as f:
     img_data = f.read()
