@@ -5,8 +5,8 @@ metadata:
   name: rbh-discord
   namespace: repcal
 spec:
-  #timeZone: "America/New_York"
-  schedule: 'CRON_TZ=America/New_York 0 8 * * * '
+  timeZone: "America/New_York"
+  schedule: '0 8 * * * '
   jobTemplate:
     spec:
       template:

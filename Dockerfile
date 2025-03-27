@@ -8,10 +8,12 @@ COPY . /repcal
 
 RUN chown daemon /repcal
 RUN chmod 705 /repcal
+RUN chown daemon /repcal/startup.sh
+RUN chmod 705 /repcal/startup.sh
 RUN pip install -r requirements.txt
 
 ENV TZ="Europe/Paris"
 
 EXPOSE 8000
 USER daemon
-CMD ["sh", "./startup.sh"]
+ENTRYPOINT [ "sh","./startup.sh" ]
