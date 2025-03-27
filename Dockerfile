@@ -1,4 +1,4 @@
-FROM python:3.10-slim-bullseye
+FROM python:alpine
 
 RUN mkdir /repcal
 

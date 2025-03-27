@@ -8,3 +8,5 @@ Dockerfile
 .git
 .dockerignore
 discord
+k8s
+bot
