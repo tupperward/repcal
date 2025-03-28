@@ -1,0 +1,14 @@
+apiVersion: v1
+kind: Service
+metadata:
+  name: sansculottides
+  namespace: repcal
+spec:
+  selector:
+    app: sansculottides  # Ensure this matches your Deployment labels
+  ports:
+    - name: http
+      protocol: TCP
+      port: 80
+      targetPort: 8000
+  type: ClusterIP
