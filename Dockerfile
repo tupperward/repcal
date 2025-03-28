@@ -1,4 +1,4 @@
-FROM python:alpine
+FROM python:3.13-alpine
 
 RUN mkdir /repcal
 
@@ -8,8 +8,7 @@ COPY . /repcal
 
 RUN chown daemon /repcal
 RUN chmod 705 /repcal
-RUN chown daemon /repcal/startup.sh
-RUN chmod 705 /repcal/startup.sh
+
 RUN pip install -r requirements.txt
 
 ENV TZ="Europe/Paris"
