@@ -1,0 +1,18 @@
+apiVersion: batch/v1
+kind: Job
+metadata:
+  name: bsky-bot-manual
+  namespace: repcal
+spec:
+  template:
+    spec:
+      restartPolicy: Never
+      containers:
+        - name: bsky-bot
+          image: tupperward/repcal:bsky-bot
+          imagePullPolicy: Always
+          env:
+            - name: BSKY_HANDLE
+              value: sansculottid.es
+            - name: BSKY_PASS
+              value: x48p4_baCtgCUt9v88kn
