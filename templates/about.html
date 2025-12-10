@@ -12,7 +12,7 @@
     <title>What is the French Republican Calendar?</title>
   </head>
   <body class="first-color">
-    <div class="body">
+  <div id="wrapper">
       <div id="why" class="second-color">
         <h3 id="topic">Revolutionizing Time: The French Republican Calendar</h3>
         <p><a href="https://en.wikipedia.org/wiki/French_Republican_calendar">The French Republican Calendar</a> is  a unique creation that emerged during the French Revolution. Also known as the French Revolutionary Calendar, it revolutionized the way time was perceived and utilized by the French government for approximately 12 years, from late 1793 to 1805. Interestingly, it resurfaced for a brief 18-day period during <a href="https://en.wikipedia.org/wiki/Paris_Commune">the Paris Commune in 1871</a>.</p>
@@ -21,8 +21,6 @@
         <blockquote>The authors of the original calendar thought carefully about when to honor each item. If they did it right, this version should at least be somewhat predictive of what will come into season when. For example, rhubarb almost always appears in the grocery store within a week of Rhubarb Day. Tulips, violets, and lilacs also tend to appear in sync. And for those of us living in northern climes, there is something truly appropriate about assigning coal, peat, and manure (yes, manure) to the depths of January.</blockquote>
         <p>Embrace the revolutionary spirit and let the French Republican Calendar ignite your imagination, inviting you ponder a world where time becomes a catalyst for progress and enlightenment. Also, we invite you to consider <a href="{{today.item_url}}">humble {{today.item.lower()}}</a>, at least for today.</p>
       </div>
-      <br>
-      <br>
       <div id="how" class="second-color">
         <h3>How the Calendar Works</h3>
         <p>The Republican Calendar consisted of 12 months, each with 30 days, totaling 360 days in a year. The months were given names that reflected the natural world and seasonal activities. For example, names such as Vendémiaire (Grape Harvest), Brumaire (Mist), and Thermidor (Heat) were used. Right now it's {{today.month}} ({{today.month_of}}).</p>
@@ -30,11 +28,11 @@
         <p>Each month was further divided into three ten-day weeks called "decades." The days of the week were named after natural elements, such as Primidi (First day), Duodi (Second day), Tridi (Third day), and so on. The current weekday is {{today.weekday}}. The last day of each decade, called "Decadi," was considered a day of rest and reflection. In the natrual calendar, every 5th day celebrates an animal and each 10th celebrates a human-made artifact. The sansculottides each celebrate one intangible facet of the revolutionary spirit.</p>
         <p>The operation of the French Republican Calendar, with its 30-day months, 10-day weeks, and sansculottides, represents an intriguing attempt to redefine time according to the principles of the French Revolution. It serves as a testament to the revolutionary mindset of the era, challenging established norms and envisioning a society that was not only politically transformed but also temporally reimagined.</p>
       </div>
-    </div>
-  </body>
+  </div>
   <footer class="second-color">
-    <div id="footer">
-      <small> <a href="/about">About</a> | <a href="/date_converter">Convert</a></small> | <a href="/">Today</a> | <small><a href="{{ url_for('signup') }}">Discord</a> | <a href="https://bsky.app/profile/sansculottid.es">Bluesky</a></small>
-    </div>
+      <div id="footer">
+        <small> <a href="/about">About</a> | <a href="/date_converter">Convert</a></small> | <a href="/">Today</a> | <small><a href="{{ url_for('signup') }}">Discord</a> | <a href="https://bsky.app/profile/sansculottid.es">Bluesky</a></small>
+      </div>
   </footer>
-</html
+  </body>
+</html>

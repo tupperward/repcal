@@ -9,8 +9,9 @@
 
   <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/flatpickr/dist/flatpickr.min.css">
 </head>
-<body class="first-color">
-  <div id="center-wrapper" class="center">
+<div id="wrapper">
+  <body class="first-color">
+    <div id="center-wrapper" class="center">
     <h1>Enter a Gregorian Date</h1>
     <form method="POST" action="/process_date">
       <div id="converter-wrapper">
@@ -22,7 +23,8 @@
         <button id="submit-button" type="submit">Convert</button>
       </div>
     </form>
-  </div>
+    </div>
+  </body>
   <footer class="second-color">
     <div id="footer">
       <small> <a href="/about">About</a> | <a href="/date_converter">Convert</a></small> | <a href="/">Today</a> | <small><a href="{{ url_for('signup') }}">Discord</a> | <a href="https://bsky.app/profile/sansculottid.es">Bluesky</a></small>
@@ -36,5 +38,5 @@
       dateFormat: 'Y-m-d', // Enforce desired format
     });
   </script>
-</body>
+</div>
 </html>

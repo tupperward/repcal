@@ -234,9 +234,8 @@ def success():
 @app.route('/about')
 def about():
   """About page for the project."""
-  try:
-    date = session.get('date')
-  except:
+  date = session.get('date')
+  if date is None:
     date = datetime.now()
   today = carpe_diem(date)
   return render_template('about.html', today=today)

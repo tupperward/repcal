@@ -2,8 +2,71 @@
 <html>
 <head>
     <title>The French Republican Daily Calendar</title>
-    <script src="{{ url_for('static', filename='get_time.js') }}"></script>
-    <a rel="me" href="https://dice.camp/@tupperward"></a>
     <link rel="shortcut icon" href="{{ url_for('static', filename='favicon.ico') }}">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Cormorant&family=Cormorant+Garamond:wght@400;500;600;700&family=EB+Garamond&display=swap" rel="stylesheet">
+    <a rel="me" href="https://dice.camp/@tupperward"></a>
+    <style>
+        /* Inline CSS to prevent FOUC - matches site color scheme */
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        html, body {
+            height: 100%;
+            width: 100%;
+            overflow: hidden;
+        }
+
+        body {
+            background: #f2f9f1;
+            font-family: Cormorant, serif;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .loading-container {
+            text-align: center;
+            animation: fadeIn 0.3s ease-in;
+        }
+
+        .loading-text {
+            font-size: 24px;
+            color: #5c715e;
+            margin-bottom: 20px;
+            font-weight: 500;
+        }
+
+        .spinner {
+            width: 50px;
+            height: 50px;
+            margin: 0 auto;
+            border: 4px solid #ddeedf;
+            border-top: 4px solid #5c715e;
+            border-radius: 50%;
+            animation: spin 1s linear infinite;
+        }
+
+        @keyframes spin {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; }
+            to { opacity: 1; }
+        }
+    </style>
+    <script src="{{ url_for('static', filename='get_time.js') }}"></script>
 </head>
+<body>
+    <div class="loading-container">
+        <div class="loading-text">Loading calendar...</div>
+        <div class="spinner"></div>
+    </div>
+</body>
 </html>

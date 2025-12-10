@@ -22,18 +22,46 @@
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Cormorant&family=Cormorant+Garamond:wght@400;500;600;700&family=EB+Garamond&display=swap" rel="stylesheet">
 </head>
-<body class="first-color">
-  <style>
+<div id="wrapper">
+  <body class="first-color">
+    <style>
     .input-wrapper {
       display: flex;
       flex-direction: column;
       align-items: center;
+      position: relative;
     }
 
     #submit-button {
       display: block;
       margin: 0 auto;
       text-align: center;
+    }
+
+    /* Create overlay backdrop for clock */
+    .clock-overlay {
+      display: none;
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background-color: rgba(0, 0, 0, 0.5);
+      z-index: 999;
+    }
+
+    .clock-overlay.active {
+      display: block;
+    }
+
+    /* Center the clockpicker */
+    .popover.clockpicker-popover {
+      position: fixed !important;
+      top: 50% !important;
+      left: 50% !important;
+      transform: translate(-50%, -50%) !important;
+      z-index: 1000 !important;
+      margin: 0 !important;
     }
   </style>
   <div id="center-wrapper">
@@ -75,7 +103,7 @@
       </div>
       <div id="time-wrapper" class="input-wrapper">
         <label for="time">Desired Post Time:</label>
-        <br><small>Time webhook will post to your Discord. Clock will appear when you click the form.</small><br>
+        <br><small>Time webhook will post to your Discord. Click to open clock.</small><br>
         <input id="time" name="time" type="text" class="form-control" placeholder="Enter Posting Time" required>
       </div>
       <br><br>
@@ -84,22 +112,38 @@
   </div>
   <br><br>
 
+  <!-- Dark overlay for clock modal -->
+  <div class="clock-overlay" id="clockOverlay"></div>
+
   <!-- Initialize the clockpicker widget -->
   <script>
     $(document).ready(function () {
       $('#time').clockpicker({
-        placement: 'bottom',
-        align: 'right',
         donetext: 'Done',
         autoclose: true,
+        beforeShow: function() {
+          $('#clockOverlay').addClass('active');
+        },
+        afterDone: function() {
+          $('#clockOverlay').removeClass('active');
+        },
+        afterHide: function() {
+          $('#clockOverlay').removeClass('active');
+        }
+      });
+
+      // Close on overlay click
+      $('#clockOverlay').on('click', function() {
+        $('#time').clockpicker('hide');
+        $(this).removeClass('active');
       });
     });
   </script>
-
+  </body>
   <footer class="second-color">
     <div id="footer">
-      <small> <a href="/about">About</a> | <a href="/date_converter">Convert</a></small> | <a href="/">Today</a> | <small><a href="{{ url_for('signup') }}">Discord</a> | <a href="https://bsky.app/profile/sansculottid.es">Bluesky</a></small> 
+      <small> <a href="/about">About</a> | <a href="/date_converter">Convert</a></small> | <a href="/">Today</a> | <small><a href="{{ url_for('signup') }}">Discord</a> | <a href="https://bsky.app/profile/sansculottid.es">Bluesky</a></small>
     </div>
   </footer>
-</body>
+</div>
 </html>
