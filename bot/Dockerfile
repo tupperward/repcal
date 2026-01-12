@@ -1,11 +1,19 @@
 FROM python:3.10-alpine
 
-COPY calendar.db .
-COPY images /images
-COPY bot.py .
+WORKDIR /app
 
-ENV  TZ='Europe/Paris'
+# Copy shared package from parent directory
+COPY repcal_shared/ /app/repcal_shared/
 
-RUN pip install sqlalchemy unidecode repcal pytz atproto
+# Install shared dependencies
+RUN pip install -r repcal_shared/requirements.txt
+
+# Copy bot-specific files
+COPY bot/bot.py .
+
+# Install bot-specific dependencies (requests added for image fetching)
+RUN pip install pytz atproto requests
+
+ENV TZ='Europe/Paris'
 
 CMD ["python", "bot.py"]

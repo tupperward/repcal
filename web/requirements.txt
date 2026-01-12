@@ -1,0 +1,4 @@
+flask
+gunicorn
+discord
+pytz

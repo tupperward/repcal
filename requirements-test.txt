@@ -1,0 +1,21 @@
+# Testing dependencies for repcal project
+
+# Core testing framework
+pytest>=7.4.0
+pytest-cov>=4.1.0          # Coverage reporting
+pytest-mock>=3.11.0        # Mocking fixtures
+
+# For web testing
+flask>=3.0.0               # Flask app dependency
+requests>=2.31.0           # HTTP library
+
+# For testing bot and webhook
+responses>=0.23.0          # Mock HTTP responses
+freezegun>=1.2.0           # Mock datetime
+
+# Code quality
+pytest-xdist>=3.3.0        # Parallel test execution
+pytest-timeout>=2.1.0      # Timeout for tests
+
+# Shared dependencies (also needed for tests)
+-r repcal_shared/requirements.txt

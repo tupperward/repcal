@@ -1,8 +1,0 @@
-flask
-sqlalchemy
-unidecode
-gunicorn
-repcal == 1.2.1
-kubernetes
-discord
-pytz

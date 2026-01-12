@@ -2,3 +2,22 @@
 /__pycache__
 pyvenv.cfg
 .gitignore
+
+# Python artifacts
+__pycache__/
+*.pyc
+*.pyo
+*.pyd
+.Python
+*.so
+*.egg
+*.egg-info/
+dist/
+build/
+repcal_shared/__pycache__/
+.claude
+CLAUDE.md
+
+# Removed duplicates (now fetched from website or shared package)
+bot/calendar.db
+bot/images/
