@@ -19,9 +19,20 @@ spec:
           containers:
           - env:
             - name: BSKY_HANDLE
-              value: sansculottid.es
+              valueFrom:
+                secretKeyRef:
+                  key: bskyUser
+                  name: bsky-secret
             - name: BSKY_PASS
-              value: x48p4_baCtgCUt9v88kn
+              valueFrom:
+                secretKeyRef:
+                  key: bskyPassword
+                  name: bsky-secret
+            - name: BSKY_PDS
+              valueFrom:
+                secretKeyRef:
+                  key: bskyPds
+                  name: bsky-secret
             image: tupperward/repcal:bsky-bot
             imagePullPolicy: Always
             name: bsky-bot
@@ -32,4 +43,3 @@ spec:
   timeZone: "Europe/Paris"
   successfulJobsHistoryLimit: 1
   suspend: false
-

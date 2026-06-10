@@ -10,8 +10,8 @@ base_url = os.environ.get('BSKY_HANDLE')
 engine = create_engine("sqlite+pysqlite:///calendar.db")
 meta = MetaData()
 
-# # # # # Classes # # # # # 
-# This class creates a python object with attributes that match the values of today's 
+# # # # # Classes # # # # #
+# This class creates a python object with attributes that match the values of today's
 class RepublicanDate():
   """Create the date and ingest its attributes."""
 
@@ -28,7 +28,7 @@ class RepublicanDate():
     self.month_of = None
     self.item = None
     self.item_url = None
-    self.is_sansculottides = rd.is_sansculottides(rd_date) 
+    self.is_sansculottides = rd.is_sansculottides(rd_date)
 
 def carpe_diem(time):
   """Seize the day. Create a RepublicanDate and then queries the calendar.db to add the natural details."""
@@ -56,7 +56,7 @@ def post_to_bsky(now):
   alt_text = f"An old time-y illustration of a {today.item}."
   caption = f"Today is {today.weekday.capitalize()} the {today.ordinal} of {today.month} in the year {today.year_arabic}.\n{today.month} is the month of {today.month_of.lower()}.\nToday we celebrate {today.item.lower()}."
   link = f"\n\nMore information on {today.item.lower()}"
-  client = Client()
+  client = Client(base_url=os.environ.get('BSKY_PDS'))
   client.login(handle,password)
   text_builder = client_utils.TextBuilder()
 
@@ -66,7 +66,7 @@ def post_to_bsky(now):
 
   with open (image_path, 'rb') as f:
     img_data = f.read()
-  
+
   client.send_image(text=text_builder, image=img_data, image_alt=alt_text)
 
   return True
