@@ -26,6 +26,8 @@ spec:
       - name: seed-db
         image: tupperward/repcal:v3
         command: ['sh', '-c', 'test -f /data/calendar.db || cp /repcal/calendar.db /data/calendar.db']
+        securityContext:
+          runAsUser: 0
         volumeMounts:
         - name: repcal-db
           mountPath: /data
