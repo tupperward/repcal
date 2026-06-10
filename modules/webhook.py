@@ -6,13 +6,13 @@ from discord import Embed, SyncWebhook, Colour
 from datetime import datetime
 from flask import current_app
 
-base_url = 'sansculottid.es'
+base_url = 'frenchrepublican.info'
 
 # Get data from /data route
 def get_data():
   """Get data from data API."""
   data_url = f'https://{base_url}/data'
-  res = requests.get(data_url).text 
+  res = requests.get(data_url).text
   data = json.loads(res)
   return data
 
@@ -49,7 +49,7 @@ def use_webhook(webhook_url, message: Embed, component = False):
     if component:
       current_app.logger.error(f"Could not send discord message: {err}")
       exit(1)
-    else: 
+    else:
       print(err)
 
 
