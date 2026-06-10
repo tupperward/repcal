@@ -21,13 +21,29 @@ spec:
       creationTimestamp: null
       labels:
         app: sansculottides
-    #namespace: ward
     spec:
+      initContainers:
+      - name: seed-db
+        image: tupperward/repcal:v3
+        command: ['sh', '-c', 'test -f /data/calendar.db || cp /repcal/calendar.db /data/calendar.db']
+        volumeMounts:
+        - name: repcal-db
+          mountPath: /data
       containers:
       - image: tupperward/repcal:v3
         imagePullPolicy: Always
         name: sansculottides
+        env:
+        - name: DB_PATH
+          value: /data/calendar.db
         ports:
         - containerPort: 80
           protocol: TCP
         resources: {}
+        volumeMounts:
+        - name: repcal-db
+          mountPath: /data
+      volumes:
+      - name: repcal-db
+        persistentVolumeClaim:
+          claimName: repcal-db

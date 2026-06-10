@@ -12,8 +12,19 @@ import json, secrets, pytz
 app = Flask(__name__)
 app.secret_key = secrets.token_urlsafe(16)
 app.logger.setLevel('INFO')
-engine = create_engine("sqlite+pysqlite:///calendar.db")
+db_path = os.environ.get('DB_PATH', 'calendar.db')
+engine = create_engine(f"sqlite+pysqlite:///{db_path}")
 meta = MetaData()
+
+with engine.connect() as _conn:
+    _conn.execute(text("""
+        CREATE TABLE IF NOT EXISTS posts (
+            gregorian_date TEXT PRIMARY KEY,
+            at_uri TEXT,
+            bsky_post_uri TEXT
+        )
+    """))
+    _conn.commit()
 
 # # # # # Classes # # # # # 
 # This class creates a python object with attributes that match the values of today's 
@@ -64,6 +75,15 @@ def carpe_diem(time):
 
   return today
 
+def get_post(gregorian_date: str):
+  """Look up Standard.site AT URI and bsky post URI for a given Gregorian date."""
+  with Session(engine) as session:
+    row = session.execute(
+      text("SELECT at_uri, bsky_post_uri FROM posts WHERE gregorian_date = :date"),
+      {"date": gregorian_date}
+    ).fetchone()
+  return row
+
 def is_valid_url(url: str):
   """Validate URL. Uses urlparse to validate that all the components are present in the provided string."""
   parsed_url = urlparse(url)
@@ -113,12 +133,15 @@ def today():
   
   session['date'] = date
   today = carpe_diem(date)
-  permalink=url_for('linkable_converted_date', date=date.strftime("%Y-%m-%d"))
+  gregorian_date = date.strftime("%Y-%m-%d")
+  permalink = url_for('linkable_converted_date', date=gregorian_date)
+  post = get_post(gregorian_date)
+  at_uri = post.at_uri if post else None
 
   if today.month.lower() == "sansculottides":
-    return render_template('sansculottides.html', today=today, server_time=server_time, permalink=permalink)
-    
-  return render_template('today.html', today=today, server_time=server_time, permalink=permalink)
+    return render_template('sansculottides.html', today=today, server_time=server_time, permalink=permalink, at_uri=at_uri)
+
+  return render_template('today.html', today=today, server_time=server_time, permalink=permalink, at_uri=at_uri)
 
 @app.route('/data')
 def data():
@@ -155,11 +178,13 @@ def linkable_converted_date(date):
   specific_date = datetime.strptime(date, "%Y-%m-%d")
   today = carpe_diem(specific_date)
   date_string = specific_date.strftime("%B %dth %Y")
-  converted=True
+  converted = True
+  post = get_post(date)
+  at_uri = post.at_uri if post else None
 
   if today.month == "Sansculottides":
-    return render_template('sansculottides.html', today=today, converted=converted, date_string=date_string)
-  return render_template('today.html', today=today, converted=converted, date_string=date_string)
+    return render_template('sansculottides.html', today=today, converted=converted, date_string=date_string, at_uri=at_uri)
+  return render_template('today.html', today=today, converted=converted, date_string=date_string, at_uri=at_uri)
 
 @app.route('/process_date', methods=['POST','GET'])
 def specific_date_conversion():

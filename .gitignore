@@ -2,3 +2,4 @@
 /__pycache__
 pyvenv.cfg
 .gitignore
+k8s/*-secret.yaml
