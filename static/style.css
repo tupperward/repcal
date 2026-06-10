@@ -442,6 +442,7 @@ blockquote:hover {
 
 #comments {
   padding-bottom: 70px;
+  margin-top: 2em;
 }
 
 sequoia-comments {
