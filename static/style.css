@@ -439,3 +439,13 @@ blockquote:hover {
   background-color: rgba(182, 205, 189, 0.2);
   border-left-color: #5c715e;
 }
+
+#comments {
+  padding-bottom: 70px;
+}
+
+sequoia-comments {
+  display: block;
+  width: 100%;
+  font-family: Cormorant;
+}
