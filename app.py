@@ -137,11 +137,12 @@ def today():
   permalink = url_for('linkable_converted_date', date=gregorian_date)
   post = get_post(gregorian_date)
   at_uri = post.at_uri if post else None
+  bsky_post_uri = post.bsky_post_uri if post else None
 
   if today.month.lower() == "sansculottides":
-    return render_template('sansculottides.html', today=today, server_time=server_time, permalink=permalink, at_uri=at_uri)
+    return render_template('sansculottides.html', today=today, server_time=server_time, permalink=permalink, at_uri=at_uri, bsky_post_uri=bsky_post_uri)
 
-  return render_template('today.html', today=today, server_time=server_time, permalink=permalink, at_uri=at_uri)
+  return render_template('today.html', today=today, server_time=server_time, permalink=permalink, at_uri=at_uri, bsky_post_uri=bsky_post_uri)
 
 @app.route('/data')
 def data():
@@ -181,10 +182,11 @@ def linkable_converted_date(date):
   converted = True
   post = get_post(date)
   at_uri = post.at_uri if post else None
+  bsky_post_uri = post.bsky_post_uri if post else None
 
   if today.month == "Sansculottides":
-    return render_template('sansculottides.html', today=today, converted=converted, date_string=date_string, at_uri=at_uri)
-  return render_template('today.html', today=today, converted=converted, date_string=date_string, at_uri=at_uri)
+    return render_template('sansculottides.html', today=today, converted=converted, date_string=date_string, at_uri=at_uri, bsky_post_uri=bsky_post_uri)
+  return render_template('today.html', today=today, converted=converted, date_string=date_string, at_uri=at_uri, bsky_post_uri=bsky_post_uri)
 
 @app.route('/process_date', methods=['POST','GET'])
 def specific_date_conversion():
