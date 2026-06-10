@@ -6,8 +6,8 @@
   <meta content="Today is {{ today.weekday.capitalize() }}, the {{ today.ordinal }} of the {{ today.month.lower() }} in the year {{ today.year_arabic }}.
   The {{ today.month.capitalize() }} are {{ today.month_of.lower() }} that serve as a year-end festival.
   Today we celebrate the concept of {{ today.item.lower() }}." property="og:description" />
-  <meta content="https://sansculottid.es/" property="og.url" />
-  <meta content="https://sansculottid.es/static/images/{{ today.image }}.jpg" property="og:image" />
+  <meta content="https://frenchrepublican.info/" property="og.url" />
+  <meta content="https://frenchrepublican.info/static/images/{{ today.image }}.jpg" property="og:image" />
   <meta content="#313948" data-react-helmet="true" name="theme-color" />
   <meta name="twitter:card" content="summary_large_image">
   <head>
@@ -18,6 +18,10 @@
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Cormorant&family=Cormorant+Garamond:wght@400;500;600;700&family=EB+Garamond&display=swap" rel="stylesheet">
+    {% if at_uri %}
+    <link rel="site.standard.document" href="{{ at_uri }}">
+    <script type="module" src="{{ url_for('static', filename='sequoia-comments.js') }}"></script>
+    {% endif %}
   </head>
   <div id="wrapper">
     <body class="first-color">
@@ -45,11 +49,17 @@
         <small><i>or in the vulgar era, {{ date_string }}.</i></small>
         {% endif %}
       </div>
+    {% if at_uri %}
+    <div id="comments" class="center">
+      <h3>Comments</h3>
+      <sequoia-comments></sequoia-comments>
+    </div>
+    {% endif %}
     </body>
     <br>
     <footer class="second-color">
       <div id="footer">
-        <small> <a href="/about">About</a> | <a href="/date_converter">Convert</a></small> | <a href="/">Today</a> | <small><a href="{{ url_for('signup') }}">Discord</a> | <a href="https://bsky.app/profile/sansculottid.es">Bluesky</a></small>
+        <small> <a href="/about">About</a> | <a href="/date_converter">Convert</a></small> | <a href="/">Today</a> | <small><a href="{{ url_for('signup') }}">Discord</a> | <a href="https://bsky.app/profile/frenchrepublican.info">Bluesky</a></small>
       </div>
     </footer>
   </div>

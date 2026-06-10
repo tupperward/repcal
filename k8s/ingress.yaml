@@ -3,12 +3,12 @@ kind: Ingress
 metadata:
   annotations:
     cert-manager.io/cluster-issuer: prod-issuer
-  name: sansculottides
+  name: frenchrepublican.info
   namespace: repcal
 spec:
   ingressClassName: nginx
   rules:
-  - host: sansculottid.es
+  - host: frenchrepublican.info
     http:
       paths:
       - backend:
@@ -20,5 +20,5 @@ spec:
         pathType: Prefix
   tls:
   - hosts:
-    - sansculottid.es
-    secretName: prod-sansculottides-tls
+    - frenchrepublican.info
+    secretName: fr-prod-sansculottides-tls
