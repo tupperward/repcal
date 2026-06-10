@@ -75,17 +75,6 @@ def post_to_bsky(now):
     client = Client(base_url=os.environ.get('BSKY_PDS'))
     client.login(handle, password)
 
-    text_builder = client_utils.TextBuilder()
-    text_builder.text(caption)
-    text_builder.tag(text=" #JacobinDay ", tag="JacobinDay")
-    text_builder.link(f"\n\nSee today's page", page_url)
-
-    with open(image_path, 'rb') as f:
-        img_data = f.read()
-
-    bsky_response = client.send_image(text=text_builder, image=img_data, image_alt=alt_text)
-    bsky_post_uri = bsky_response.uri
-
     doc_response = client.com.atproto.repo.create_record(
         models.ComAtprotoRepoCreateRecord.Data(
             repo=client.me.did,
@@ -102,6 +91,17 @@ def post_to_bsky(now):
         )
     )
     at_uri = doc_response.uri
+
+    text_builder = client_utils.TextBuilder()
+    text_builder.text(caption)
+    text_builder.tag(text=" #JacobinDay ", tag="JacobinDay")
+    text_builder.link(f"\n\nSee today's page", page_url)
+
+    with open(image_path, 'rb') as f:
+        img_data = f.read()
+
+    bsky_response = client.send_image(text=text_builder, image=img_data, image_alt=alt_text)
+    bsky_post_uri = bsky_response.uri
 
     with Session(engine) as session:
         session.execute(
