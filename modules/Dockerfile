@@ -1,7 +1,9 @@
 FROM python:3.10-alpine
 
-COPY webhook.py .
+COPY requirements.txt .
+RUN pip install -r requirements.txt
 
-RUN pip install discord requests flask
+COPY app.py .
+COPY modules/webhook.py .
 
 CMD ["python", "webhook.py"]

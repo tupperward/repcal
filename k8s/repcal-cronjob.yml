@@ -25,4 +25,4 @@ spec:
           - name: repcal-db
             persistentVolumeClaim:
               claimName: repcal-db
-          restartPolicy: OnFailure
+          restartPolicy: Never

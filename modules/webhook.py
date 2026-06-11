@@ -1,20 +1,30 @@
 """Webhook for posting to discord."""
 import os
-import requests
-import json
 from discord import Embed, SyncWebhook, Colour
 from datetime import datetime
 from flask import current_app
 
 base_url = 'frenchrepublican.info'
 
-# Get data from /data route
 def get_data():
-  """Get data from data API."""
-  data_url = f'https://{base_url}/data'
-  res = requests.get(data_url).text
-  data = json.loads(res)
-  return data
+  """Get today's date data and AT-URI from the local DB via app."""
+  from app import carpe_diem, get_post
+  now = datetime.now()
+  today = carpe_diem(now)
+  post = get_post(now.strftime('%Y-%m-%d'))
+  return {
+    'day': today.day,
+    'weekday': today.weekday.lower(),
+    'month': today.month,
+    'year_arabic': today.year_arabic,
+    'year_roman': today.year_roman,
+    'month_of': today.month_of,
+    'item': today.item,
+    'item_url': today.item_url,
+    'image': today.image,
+    'at_uri': post[0] if post else None,
+    'bsky_post_uri': post[1] if post else None,
+  }
 
 def construct_embed(data, component = False):
   """Construct embed to send to Discord."""
@@ -50,7 +60,7 @@ def use_webhook(webhook_url, message: Embed, component = False):
       current_app.logger.error(f"Could not send discord message: {err}")
       exit(1)
     else:
-      print(err)
+      raise
 
 
 # Send embed via hook
