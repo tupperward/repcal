@@ -1,0 +1,31 @@
+name: Send Announcement
+
+on:
+  workflow_dispatch:
+
+jobs:
+  announce:
+    runs-on: repcal-runners
+    permissions:
+      contents: read
+
+    steps:
+      - name: Check out repository
+        uses: actions/checkout@v3
+
+      - name: Set up kubectl
+        uses: matootie/dokube@v1.4.0
+        with:
+          personalAccessToken: ${{ secrets.DO_TOKEN }}
+          clusterName: ${{ vars.CLUSTER_NAME }}
+
+      - name: Update announcement ConfigMap
+        run: |
+          kubectl create configmap announcement-text \
+            --from-file=announcement.txt=./announcement.txt \
+            --dry-run=client -o yaml | kubectl apply -f - -n repcal
+
+      - name: Roll announcement Job
+        run: |
+          kubectl delete job announcement -n repcal --ignore-not-found
+          kubectl apply -f k8s/announcement-job.yaml -n repcal
