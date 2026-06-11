@@ -22,6 +22,7 @@ spec:
       labels:
         app: sansculottides
     spec:
+      serviceAccountName: sansculottides
       initContainers:
       - name: seed-db
         image: tupperward/repcal:v3

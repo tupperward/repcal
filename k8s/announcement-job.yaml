@@ -10,9 +10,9 @@ data:
     My most sincere apologies for the recent and sudden changes to this service that have caused downtime. Hosting issues forced me to change domains,
     until I can restore my old domain, https://sansculottid.es, the French Republican Calendar can be found at https://frenchrepubilcan.info.
 
-    But I also come bearing good news. The French Republican Calendar is now a standard.site,
-    any responses to the bot (https://bsky.app/profile/frenchrepublican.info) will be recorded on that date's page.
-    Please be sure to follow on BlueSky or any other app using AT Proto.
+    But I also come bearing good news. The French Republican Calendar is now a standard.site;
+    any responses to the Bluesky bot (https://bsky.app/profile/frenchrepublican.info) will be recorded on that date's page.
+    Please be sure to follow on BlueSky or, now, any other app using AT Proto.
 
     Liberté, égalité, fraternité!
 ---
@@ -22,9 +22,10 @@ metadata:
   name: announcement
   namespace: repcal
 spec:
+  suspend: true
   template:
     spec:
-      serviceAccountName: default
+      serviceAccountName: sansculottides
       containers:
       - name: announcement
         image: tupperward/repcal:announcement
@@ -35,12 +36,20 @@ spec:
           value: /data/announcement.txt
         - name: ANNOUNCEMENT_IMAGE_URL
           value: 'https://frenchrepublican.info/static/images/revolution.jpg'
+        - name: DB_PATH
+          value: /data/calendar.db
         volumeMounts:
         - name: announcement-text
           mountPath: /data/announcement.txt
           subPath: announcement.txt
+        - name: repcal-db
+          mountPath: /data/calendar.db
+          subPath: calendar.db
       volumes:
       - name: announcement-text
         configMap:
           name: announcement-text
+      - name: repcal-db
+        persistentVolumeClaim:
+          claimName: repcal-db
       restartPolicy: Never

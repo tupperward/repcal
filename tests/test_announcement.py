@@ -95,7 +95,7 @@ class TestEmbedOverrides:
         return sent[0] if sent else None
 
     def test_title_is_overridden(self):
-        assert self._run('Some news').title == 'Announcement'
+        assert self._run('Some news').title == 'Une humble annonce'
 
     def test_description_is_announcement_text(self):
         assert self._run('Hello subscribers!').description == 'Hello subscribers!'
@@ -129,7 +129,7 @@ class TestEmbedOverrides:
 
 
 class TestSendBehavior:
-    def test_raises_on_webhook_failure(self):
+    def test_exits_nonzero_on_any_failure(self):
         mock_hook = MagicMock()
         mock_hook.send.side_effect = Exception('404 Unknown Webhook')
 
@@ -137,7 +137,30 @@ class TestSendBehavior:
              patch('announcement.construct_embed', return_value=Embed()), \
              patch('announcement.get_webhook_urls', return_value=['https://discord.com/api/webhooks/bad']), \
              patch('announcement.SyncWebhook.from_url', return_value=mock_hook), \
+             patch('announcement.write_failures_configmap'), \
              patch('builtins.open', mock_open(read_data='msg')), \
              patch('announcement.ANNOUNCEMENT_IMAGE_URL', ''):
-            with pytest.raises(Exception, match='404 Unknown Webhook'):
+            with pytest.raises(SystemExit) as exc:
                 announcement.run()
+            assert exc.value.code == 1
+
+    def test_continues_after_failure_and_writes_configmap(self):
+        mock_hook = MagicMock()
+        mock_hook.send.side_effect = [Exception('404 Unknown Webhook'), None]
+
+        mock_write = MagicMock()
+        with patch('announcement.get_data', return_value={}), \
+             patch('announcement.construct_embed', return_value=Embed()), \
+             patch('announcement.get_webhook_urls', return_value=[
+                 'https://discord.com/api/webhooks/bad',
+                 'https://discord.com/api/webhooks/good',
+             ]), \
+             patch('announcement.SyncWebhook.from_url', return_value=mock_hook), \
+             patch('announcement.write_failures_configmap', mock_write), \
+             patch('builtins.open', mock_open(read_data='msg')), \
+             patch('announcement.ANNOUNCEMENT_IMAGE_URL', ''):
+            with pytest.raises(SystemExit):
+                announcement.run()
+
+        assert mock_hook.send.call_count == 2
+        mock_write.assert_called_once_with(['https://discord.com/api/webhooks/bad'])

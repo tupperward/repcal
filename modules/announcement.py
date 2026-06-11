@@ -29,6 +29,22 @@ def get_webhook_urls():
     return urls
 
 
+def write_failures_configmap(failed_urls):
+    v1 = client.CoreV1Api()
+    namespace = get_namespace()
+    configmap = client.V1ConfigMap(
+        metadata=client.V1ObjectMeta(name='webhook-failures', namespace=namespace),
+        data={'failed_urls': '\n'.join(failed_urls)}
+    )
+    try:
+        v1.patch_namespaced_config_map('webhook-failures', namespace, configmap)
+    except client.ApiException as e:
+        if e.status == 404:
+            v1.create_namespaced_config_map(namespace, configmap)
+        else:
+            raise
+
+
 def run():
     with open(ANNOUNCEMENT_FILE) as f:
         text = f.read().strip()
@@ -42,6 +58,7 @@ def run():
     urls = get_webhook_urls()
     print(f"Sending announcement to {len(urls)} webhooks.")
 
+    failed = []
     for url in urls:
         hook = SyncWebhook.from_url(url)
         try:
@@ -49,7 +66,12 @@ def run():
             print(f"Sent to ...{url[-30:]}")
         except Exception as e:
             print(f"Failed for ...{url[-30:]}: {e}")
-            raise
+            failed.append(url)
+
+    if failed:
+        print(f"{len(failed)} webhook(s) failed.")
+        write_failures_configmap(failed)
+        raise SystemExit(1)
 
 
 if __name__ == "__main__":

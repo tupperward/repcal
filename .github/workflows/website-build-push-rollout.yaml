@@ -10,7 +10,8 @@ on:
     - startup.sh
     - static/**
     - templates/**
-    - modules/**
+    - modules/webhook.py
+    - modules/kubectl.py
     branches: [ main ]
   pull_request:
     paths:
@@ -21,7 +22,8 @@ on:
     - startup.sh
     - static/**
     - templates/**
-    - modules/**
+    - modules/webhook.py
+    - modules/kubectl.py
     branches: [ main ]
 
 jobs:

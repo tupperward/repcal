@@ -19,12 +19,6 @@ jobs:
           personalAccessToken: ${{ secrets.DO_TOKEN }}
           clusterName: ${{ vars.CLUSTER_NAME }}
 
-      - name: Update announcement ConfigMap
-        run: |
-          kubectl create configmap announcement-text \
-            --from-file=announcement.txt=./announcement.txt \
-            --dry-run=client -o yaml | kubectl apply -f - -n repcal
-
       - name: Roll announcement Job
         run: |
           kubectl delete job announcement -n repcal --ignore-not-found
