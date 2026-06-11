@@ -18,6 +18,8 @@ spec:
               env:
               - name: "DISCORD_WEBHOOK_URL"
                 value: 'https://discord.com/api/webhooks/1345290726879264899/pNJGAKztR5IJ23tu2gN01E9ZgkmCx4PNyzIH6Ri8UfzjGs_3Pg5Px8DJqIo9jWUAW6eF'
+              - name: "DB_PATH"
+                value: '/data/calendar.db'
               volumeMounts:
               - name: repcal-db
                 mountPath: /data

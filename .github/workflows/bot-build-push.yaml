@@ -14,7 +14,7 @@ on:
 
 jobs:
   build:
-    runs-on: self-hosted
+    runs-on: repcal-runners
     permissions:
       contents: read
       packages: write
