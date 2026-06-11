@@ -1,6 +1,7 @@
-"""Delete CronJobs whose most recent Job failed."""
+"""Delete CronJobs whose webhook URL is recorded in the webhook-failures ConfigMap."""
 import os
 from kubernetes import client, config
+
 
 def get_namespace():
     try:
@@ -10,38 +11,33 @@ def get_namespace():
         return os.environ.get('NAMESPACE', 'repcal')
 
 
-def is_failed(job):
-    for condition in (job.status.conditions or []):
-        if condition.type == 'Failed' and condition.status == 'True':
-            return True
-    return False
-
-
-def get_owner_cronjob(job):
-    for ref in (job.metadata.owner_references or []):
-        if ref.kind == 'CronJob':
-            return ref.name
-    return None
-
-
 if __name__ == "__main__":
     config.load_incluster_config()
+    v1 = client.CoreV1Api()
     batch = client.BatchV1Api()
     namespace = get_namespace()
 
-    jobs = batch.list_namespaced_job(namespace).items
-    failed_cronjobs = set()
+    try:
+        cm = v1.read_namespaced_config_map('webhook-failures', namespace)
+    except client.ApiException as e:
+        if e.status == 404:
+            print("No webhook-failures ConfigMap found, nothing to prune.")
+            raise SystemExit(0)
+        raise
 
-    for job in jobs:
-        if is_failed(job):
-            cj_name = get_owner_cronjob(job)
-            if cj_name:
-                failed_cronjobs.add(cj_name)
+    failed_urls = set(filter(None, cm.data.get('failed_urls', '').splitlines()))
+    if not failed_urls:
+        print("No failed URLs recorded, nothing to prune.")
+        raise SystemExit(0)
 
-    if not failed_cronjobs:
-        print("No failed CronJobs to prune.")
-    else:
-        for name in failed_cronjobs:
-            batch.delete_namespaced_cron_job(name, namespace)
-            print(f"Deleted CronJob {name}")
-        print(f"Pruned {len(failed_cronjobs)} CronJob(s).")
+    pruned = []
+    for cj in batch.list_namespaced_cron_job(namespace).items:
+        for container in cj.spec.job_template.spec.template.spec.containers:
+            for env_var in (container.env or []):
+                if env_var.name == 'DISCORD_WEBHOOK_URL' and env_var.value in failed_urls:
+                    batch.delete_namespaced_cron_job(cj.metadata.name, namespace)
+                    print(f"Deleted CronJob {cj.metadata.name}")
+                    pruned.append(cj.metadata.name)
+
+    v1.delete_namespaced_config_map('webhook-failures', namespace)
+    print(f"Pruned {len(pruned)} CronJob(s) and cleared webhook-failures ConfigMap.")

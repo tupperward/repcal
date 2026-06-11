@@ -63,11 +63,37 @@ def use_webhook(webhook_url, message: Embed, component = False):
       raise
 
 
-# Send embed via hook
-if __name__ == "__main__":
-  # Construct Webhook
-  webhook_url = os.environ.get('DISCORD_WEBHOOK_URL')
+def _report_failure(webhook_url):
+  from kubernetes import client, config
+  config.load_incluster_config()
+  try:
+    with open('/var/run/secrets/kubernetes.io/serviceaccount/namespace') as f:
+      namespace = f.read().strip()
+  except FileNotFoundError:
+    namespace = os.environ.get('NAMESPACE', 'repcal')
+  v1 = client.CoreV1Api()
+  try:
+    cm = v1.read_namespaced_config_map('webhook-failures', namespace)
+    existing = set(filter(None, cm.data.get('failed_urls', '').splitlines()))
+    existing.add(webhook_url)
+    v1.patch_namespaced_config_map('webhook-failures', namespace,
+      client.V1ConfigMap(data={'failed_urls': '\n'.join(existing)}))
+  except client.ApiException as e:
+    if e.status == 404:
+      v1.create_namespaced_config_map(namespace, client.V1ConfigMap(
+        metadata=client.V1ObjectMeta(name='webhook-failures', namespace=namespace),
+        data={'failed_urls': webhook_url}
+      ))
+    else:
+      raise
 
+
+if __name__ == "__main__":
+  webhook_url = os.environ.get('DISCORD_WEBHOOK_URL')
   data = get_data()
   message = construct_embed(data)
-  use_webhook(webhook_url, message=message)
+  try:
+    use_webhook(webhook_url, message=message)
+  except Exception:
+    _report_failure(webhook_url)
+    raise

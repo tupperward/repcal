@@ -35,7 +35,19 @@ def create_cronjob(url: str, time_zone: str, schedule: str):
         volume_mount = kubernetes.client.V1VolumeMount(name='repcal-db', mount_path='/data')
         container = kubernetes.client.V1Container(image='tupperward/repcal:webhook', env=[webhook_url, db_path], name=f"webhook-{salty}", image_pull_policy='Always', resources=resources, volume_mounts=[volume_mount])
         volume = kubernetes.client.V1Volume(name='repcal-db', persistent_volume_claim=kubernetes.client.V1PersistentVolumeClaimVolumeSource(claim_name='repcal-db'))
-        pod_spec = kubernetes.client.V1PodSpec(containers=[container], volumes=[volume], restart_policy="Never")
+        affinity = kubernetes.client.V1Affinity(
+            pod_affinity=kubernetes.client.V1PodAffinity(
+                required_during_scheduling_ignored_during_execution=[
+                    kubernetes.client.V1PodAffinityTerm(
+                        label_selector=kubernetes.client.V1LabelSelector(
+                            match_labels={"app": "sansculottides"}
+                        ),
+                        topology_key="kubernetes.io/hostname"
+                    )
+                ]
+            )
+        )
+        pod_spec = kubernetes.client.V1PodSpec(containers=[container], volumes=[volume], affinity=affinity, restart_policy="Never", service_account_name="sansculottides", automount_service_account_token=True)
         pod_template = kubernetes.client.V1PodTemplateSpec(spec=pod_spec, metadata=metadata)
         job_spec = kubernetes.client.V1JobSpec(template=pod_template)
         job_template = kubernetes.client.V1JobTemplateSpec(spec=job_spec, metadata=metadata)
