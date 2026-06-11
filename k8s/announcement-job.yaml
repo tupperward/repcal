@@ -7,12 +7,7 @@ data:
   announcement.txt: |
     Mes chers sans-culottes,
 
-    My most sincere apologies for the recent and sudden changes to this service that have caused downtime. Hosting issues forced me to change domains,
-    until I can restore my old domain, https://sansculottid.es, the French Republican Calendar can be found at https://frenchrepubilcan.info.
-
-    But I also come bearing good news. The French Republican Calendar is now a standard.site;
-    any responses to the Bluesky bot (https://bsky.app/profile/frenchrepublican.info) will be recorded on that date's page.
-    Please be sure to follow on BlueSky or, now, any other app using AT Proto.
+    My most sincere apologies for the spamming. Sometimes automation is hard.
 
     Liberté, égalité, fraternité!
 ---
@@ -23,6 +18,7 @@ metadata:
   namespace: repcal
 spec:
   suspend: true
+  backoffLimit: 0
   template:
     spec:
       serviceAccountName: sansculottides

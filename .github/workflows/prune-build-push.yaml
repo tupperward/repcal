@@ -1,0 +1,36 @@
+name: Prune Docker Build/Push
+
+on:
+  push:
+    paths:
+      - modules/prune.py
+      - modules/Dockerfile.prune
+    branches: [ main ]
+  pull_request:
+    paths:
+      - modules/prune.py
+      - modules/Dockerfile.prune
+    branches: [ main ]
+
+jobs:
+  build:
+    runs-on: repcal-runners
+    permissions:
+      contents: read
+      packages: write
+      id-token: write
+
+    steps:
+      - name: Check out repository
+        uses: actions/checkout@v3
+
+      - name: Build and push image
+        uses: mr-smithers-excellent/docker-build-push@v6
+        with:
+          username: ${{ secrets.DOCKERHUB_USERNAME }}
+          password: ${{ secrets.DOCKERHUB_TOKEN }}
+          registry: docker.io
+          directory: .
+          dockerfile: ./modules/Dockerfile.prune
+          image: ${{ vars.DOCKER_IMAGE }}
+          tags: prune

@@ -1,0 +1,21 @@
+apiVersion: batch/v1
+kind: CronJob
+metadata:
+  name: prune-failed-webhooks
+  namespace: repcal
+spec:
+  timeZone: "America/New_York"
+  schedule: '0 10 * * *'
+  jobTemplate:
+    spec:
+      backoffLimit: 0
+      template:
+        spec:
+          serviceAccountName: sansculottides
+          automountServiceAccountToken: true
+          containers:
+          - name: prune
+            image: tupperward/repcal:prune
+            imagePullPolicy: Always
+            command: ["python", "prune.py"]
+          restartPolicy: Never

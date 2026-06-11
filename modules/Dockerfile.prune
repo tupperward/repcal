@@ -1,0 +1,7 @@
+FROM python:3.10-alpine
+
+RUN pip install kubernetes
+
+COPY modules/prune.py .
+
+CMD ["python", "prune.py"]
