@@ -18,6 +18,7 @@
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Cormorant&family=Cormorant+Garamond:wght@400;500;600;700&family=EB+Garamond&display=swap" rel="stylesheet">
+    <script type="module" src="{{ url_for('static', filename='sequoia-subscribe.js') }}"></script>
     {% if at_uri %}
     <link rel="site.standard.document" href="{{ at_uri }}">
     <script type="module" src="{{ url_for('static', filename='sequoia-comments.js') }}"></script>
@@ -42,18 +43,22 @@
         {% if permalink %}
         <br>
         <i><a href="{{permalink}}" >Permalink to Today's Date</a></i>
+        {% if at_uri %}
+        <sequoia-recommend>Recommend Feed</sequoia-recommend>
+        {% endif %}
         {% endif %}
         {% if converted %}
         <br>
         <small><i>or in the vulgar era, {{ date_string }}.</i></small>
         {% endif %}
       </div>
-    {% if at_uri %}
     <div id="comments" class="center">
+      <sequoia-subscribe>Subscribe</sequoia-subscribe>
+      {% if at_uri %}
       <h3>Comments</h3>
       <sequoia-comments post-uri="{{ bsky_post_uri }}"></sequoia-comments>
+      {% endif %}
     </div>
-    {% endif %}
     </body>
     <br>
     <footer class="second-color">

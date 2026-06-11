@@ -271,6 +271,12 @@ def about():
 def page_not_found(e):
     return render_template('error.html'), 404
 
+@app.route('/.well-known/site.standard.publication')
+def well_known_publication():
+  """Standard.site publication discovery endpoint."""
+  publication_uri = os.environ.get('BSKY_PUBLICATION_URI', '')
+  return publication_uri, 200, {'Content-Type': 'text/plain'}
+
 @app.route('/favicon.ico')
 def favicon():
   """Shutup linter."""
