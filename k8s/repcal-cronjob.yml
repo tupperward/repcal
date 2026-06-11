@@ -13,9 +13,16 @@ spec:
         spec:
           containers:
             - name: discord-webhook
-              image: tupperward/repcal:discord
+              image: tupperward/repcal:webhook
               imagePullPolicy: Always
               env:
               - name: "DISCORD_WEBHOOK_URL"
-                value: 'https://discord.com/api/webhooks/1073089536072097842/wxbhPksTcy5r7VtoCrcZKPE_QXNJMnkcsTvDeIlrZmSEdM9CCtu4LanGCbCg-K1nrM-G'
+                value: 'https://discord.com/api/webhooks/1345290726879264899/pNJGAKztR5IJ23tu2gN01E9ZgkmCx4PNyzIH6Ri8UfzjGs_3Pg5Px8DJqIo9jWUAW6eF'
+              volumeMounts:
+              - name: repcal-db
+                mountPath: /data
+          volumes:
+          - name: repcal-db
+            persistentVolumeClaim:
+              claimName: repcal-db
           restartPolicy: OnFailure
