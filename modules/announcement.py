@@ -20,11 +20,13 @@ def get_namespace():
 def get_webhook_urls():
     config.load_incluster_config()
     batch = client.BatchV1Api()
+    seen = set()
     urls = []
     for cj in batch.list_namespaced_cron_job(get_namespace()).items:
         for container in cj.spec.job_template.spec.template.spec.containers:
             for env_var in (container.env or []):
-                if env_var.name == 'DISCORD_WEBHOOK_URL' and env_var.value:
+                if env_var.name == 'DISCORD_WEBHOOK_URL' and env_var.value and env_var.value not in seen:
+                    seen.add(env_var.value)
                     urls.append(env_var.value)
     return urls
 

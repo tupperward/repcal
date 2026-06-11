@@ -26,6 +26,7 @@ spec:
   template:
     spec:
       serviceAccountName: sansculottides
+      automountServiceAccountToken: true
       containers:
       - name: announcement
         image: tupperward/repcal:announcement

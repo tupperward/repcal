@@ -66,6 +66,14 @@ class TestGetWebhookUrls:
              patch('announcement.get_namespace', return_value='repcal'):
             assert announcement.get_webhook_urls() == []
 
+    def test_deduplicates_urls(self):
+        url = 'https://discord.com/api/webhooks/1'
+        cjs = [make_mock_cronjob(url), make_mock_cronjob(url), make_mock_cronjob(url)]
+        with patch('announcement.config.load_incluster_config'), \
+             patch('announcement.client.BatchV1Api', return_value=self._mock_batch(cjs)), \
+             patch('announcement.get_namespace', return_value='repcal'):
+            assert announcement.get_webhook_urls() == [url]
+
     def test_skips_containers_with_no_env(self):
         container = MagicMock()
         container.env = None
